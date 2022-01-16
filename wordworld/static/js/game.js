@@ -431,6 +431,7 @@ const newGame = () => {
     reportGuesses([], []);
     drawHand();
     showBoard();
+    increaseScore(0);
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
 };

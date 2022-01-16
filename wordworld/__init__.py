@@ -1,7 +1,8 @@
 from flask import Flask, send_from_directory, request, jsonify
-from nltk.corpus import words
 
-all_words = set(words.words())
+with open('words.txt', 'r') as fh:
+    all_words = {w.strip() for w in fh.readlines()}
+
 app = Flask(__name__)
 
 
@@ -24,4 +25,4 @@ def send_home():
 @app.route('/check', methods=["POST"])
 def check_words():
     words = request.get_json()
-    return jsonify([word in all_words for word in words])
+    return jsonify([word.upper() in all_words for word in words])
