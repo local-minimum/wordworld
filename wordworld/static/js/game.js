@@ -435,8 +435,8 @@ const newGame = () => {
     drawHand();
     showBoard();
     _STATUS = {
-        gameOver = false,
-        communicating = false,
+        gameOver: false,
+        communicating: false,
     };
 };
 
