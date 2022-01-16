@@ -53,7 +53,7 @@ const getCountPlayedCharacters = () => {
     );
 }
 const getHighscore = () => JSON.parse(window.localStorage.getItem(_HIGHSCORE) ?? '[]');
-const setHighscore = (scores) = window.localStorage.setItem(_HIGHSCORE, JSON.stringify(scores));
+const setHighscore = (scores) => window.localStorage.setItem(_HIGHSCORE, JSON.stringify(scores));
 const getScore = () => JSON.parse(window.localStorage.getItem(_SCORE) ?? '0');
 const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(total));
 
