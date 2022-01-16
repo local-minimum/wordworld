@@ -1,5 +1,5 @@
 from flask import Flask, send_from_directory, request, jsonify
-from nltk.corups import words
+from nltk.corpus import words
 
 all_words = set(words.words())
 app = Flask(__name__)
