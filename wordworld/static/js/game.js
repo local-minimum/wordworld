@@ -245,10 +245,10 @@ const reportGuesses = (candidates, valid, score) => {
             report += '<br>';
         }
         const pts = isAWord ? candidate.length : 0;
-        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&npsp;(${pts} pt${pts === 1 ? '' : 's'})</div>`;
+        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts} pt${pts === 1 ? '' : 's'})</div>`;
     });
     if (score != null) {
-        report += `<div>${score}pt${score === 1 ? '' : 's'}</div>`;
+        report += `<br><div>${score}pt${score === 1 ? '' : 's'}</div>`;
     }
     guesses.innerHTML = report;
 };
@@ -431,10 +431,8 @@ const newGame = () => {
     reportGuesses([], []);
     drawHand();
     showBoard();
-    _STATUS = {
-        gameOver: false,
-        communicating: false,
-    };
+    _STATUS.gameOver = false;
+    _STATUS.communicating = false;
 };
 
 const setup = () => {
