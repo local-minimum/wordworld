@@ -256,7 +256,7 @@ const reportGuesses = (candidates, valid, score) => {
             report += '<br>';
         }
         const pts = isAWord ? candidate.length : 0;
-        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts} pt${pts === 1 ? '' : 's'})</div>`;
+        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts})</div>`;
     });
     if (score != null) {
         report += `<br><div>${score}pt${score === 1 ? '' : 's'}</div>`;
