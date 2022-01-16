@@ -239,21 +239,28 @@ const reportGuesses = (candidates, valid) => {
 
 const checkForValid = (canditates) => {
     _STATUS.communicating = true;
+    axios
+        .post('check', canditates)
+        .then(function (response) {
+            console.log(response.data);
+            // Validate words 
+            const valid = canditates.filter((_, idx) => response.data[idx]);
 
-    // Validate words 
-    const valid = canditates;
+            reportGuesses(canditates, valid);
+            // Score 
+            score = valid.reduce((score, word) => score + word.length, 0);
+            increaseScore(score);
 
-    reportGuesses(canditates, valid);
-    // Score 
-    score = valid.reduce((score, word) => score + word.length, 0);
-    increaseScore(score);
+            // Handle age 
+            handleAge();
 
-    // Handle age 
-    handleAge();
-
-    // Draw Hand
-    drawHand();
-    _STATUS.communicating = false;
+            // Draw Hand
+            drawHand();
+        })
+        .catch(function (error) {
+            console.log(error);
+            _STATUS.communicating = false;
+        });
 };
 
 const submitTiles = () => {
