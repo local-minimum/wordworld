@@ -21,7 +21,8 @@ def send_home():
     return send_from_directory('static', 'index.html')
 
 
-@app.route('/check')
+@app.route('/check', methods=["POST"])
 def check_words():
     words = request.get_json()
+    print(words)
     return jsonify([word in all_words for word in words])
