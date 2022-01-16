@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <title>World of Words</title>
+            <meta charset="utf-8">            
+            <style>
+                @font-face {
+                    font-family: carbon;
+                    src: url(fonts/carbon.ttf);
+                }
+                body {
+                    font-family: carbon;
+                    color: #ffb000;
+                    background-color: #282828;
+                    margin: 4em;
+                }            
+                #score {
+                    margin-left: 3em;
+                }
+                #world-container {
+                    width: 100%;
+                    position: relative;
+                }
+                #world {
+                    display: inline-block;
+                    padding: 0.5em;
+                    border-color: #ffb000;
+                    border-width: 2px;
+                    border-style: dashed;
+                    text-transform: uppercase;
+                    letter-spacing: 0.25em;
+                    line-height: 1.25em;
+                }
+                #selection {
+                    background-color: #ffb000;
+                    color: #282828;
+                }
+                #hand {
+                    margin-top: 0.5em;
+                    text-transform: uppercase;
+                }                
+                #hand > span {
+                    margin-right: 2em;
+                }
+                .hand-old {
+                    background-color: #ffb000;
+                    color: #282828;
+                }
+                #guesses {
+                    margin-top: 1em;
+                    margin-left: 1em;
+                    text-transform: uppercase;
+                }
+                #guesses > div {
+                    display: inline-block;
+                    margin-bottom: 0.25em;
+                }
+                #guesses .ok {
+                    background-color: #ffb000;
+                    color: #282828;
+                }
+                #guesses .nok {
+                    background-color: #282828;
+                    color: #ffb000;
+                }
+            </style>
+            <script src="game.js"></script>
+        </head>
+        <body>
+            <h1>World of Words</h1>
+            <h2 id="score">0000</h2>
+            <div id="world-container">
+                <div id="world">
+                    abc da kladsf<br>
+                    asdf ow<span id="selection">w</span>ed ds<br>
+                    asdfa adsd dd<br>
+                </div>
+            </div>
+            <div id="hud">
+                <div id="hand"></div>
+                <div id="guesses"></div> 
+            </div>
+        </body>
+        <script>
+            document.addEventListener('DOMContentLoaded', setup);
+        </script>
+</html>
