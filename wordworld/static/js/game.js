@@ -236,7 +236,7 @@ const handleAge = () => {
     }
 };
 
-const reportGuesses = (candidates, valid) => {
+const reportGuesses = (candidates, valid, score) => {
     const guesses = document.getElementById('guesses');
     let report = '';
     candidates.forEach(candidate => {
@@ -244,8 +244,10 @@ const reportGuesses = (candidates, valid) => {
         if (report.length > 0) {
             report += '<br>';
         }
-        report += `<div>(${isAWord ? candidate.length : 0})&nbsp;<span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span></div>`;
+        const pts = isAWord ? candidate.length : 0;
+        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&npsp;(${pts} pt${pts === 1 ? '' : 's'})</div>`;
     });
+    report += `<div>${score}pt${score === 1 ? '' : 's'}</div>`;
     guesses.innerHTML = report;
 };
 
@@ -254,25 +256,18 @@ const checkForValid = (canditates) => {
     axios
         .post('check', canditates)
         .then(function (response) {
-            // Validate words 
             const valid = canditates.filter((_, idx) => response.data[idx]);
             const invalid = canditates.filter((_, idx) => !response.data[idx]);
-
-            reportGuesses(canditates, valid);
-            // Score 
             score = valid.reduce((score, word) => score + word.length, 0);
             invalidScore = invalid.reduce((score, word) => score + word.length, 0);
+            reportGuesses(canditates, valid, score);
+            increaseScore(score);
 
             if (invalidScore >= score) {
                 gameOver();
                 return;
             }
-            increaseScore(score);
-
-            // Handle age 
             handleAge();
-
-            // Draw Hand
             drawHand();
 
             // Allow input again
