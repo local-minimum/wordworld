@@ -7,6 +7,7 @@ const _CURSOR_DEFAULT = '{ "x": 4, "y": 4 }';
 const _HAND_POSITION = 'hand.';
 const _CURRENT_GAME = 'game.current';
 const _SCORE = "game.score";
+const _HIGHSCORE = "highscore";
 const _LETTER_FREQUENCIES = {
  e: 11.1607,
  a: 8.4966,
@@ -51,6 +52,10 @@ const getCountPlayedCharacters = () => {
         0,
     );
 }
+const getHighscore = () => JSON.parse(window.localStorage.getItem(_HIGHSCORE) ?? '[]');
+const setHighscore = (scores) = window.localStorage.setItem(_HIGHSCORE, JSON.stringify(scores));
+const getScore = () => JSON.parse(window.localStorage.getItem(_SCORE) ?? '0');
+const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(total));
 
 
 
@@ -117,8 +122,8 @@ const returnTiles = () => {
 }
 
 const increaseScore = (value) => {
-    const total = JSON.parse(window.localStorage.getItem(_SCORE) ?? '0') + value;
-    window.localStorage.setItem(_SCORE, JSON.stringify(total));
+    const total = getScore() + value;
+    setScore(total);
     const score = document.getElementById('score');
     score.innerHTML = String(total).padStart(4, '0');
 }
@@ -213,10 +218,16 @@ const placeWithoutNeighbors = (char) => {
     return true;
 }
 
+const processScores = () => {
+    const scores = getHighscore(); 
+    const score = getScore();
+    // TODO: Find position and update highscores
+}
+
 const gameOver = () => {    
     _STATUS.gameOver = true;
-    
-    // TODO: Highscore
+    processScores();    
+    // TODO: message about scores
 }
 
 const handleAge = () => {
@@ -265,7 +276,7 @@ const checkForValid = (canditates) => {
             reportGuesses(canditates, valid, score);
             increaseScore(score);
 
-            if (invalidScore >= score) {
+            if (invalidScore > score) {
                 gameOver();
                 return;
             }
