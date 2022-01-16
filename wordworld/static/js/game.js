@@ -1,9 +1,9 @@
 const _SIZE = 'settings.boardSize';
-const _SIZE_DEFAULT = '13';
+const _SIZE_DEFAULT = '9';
 const _HAND_SIZE = 'settings.handSize';
 const _HAND_SIZE_DEFAULT = '5';
 const _CURSOR = 'game.cursor';
-const _CURSOR_DEFAULT = '{ "x": 6, "y": 6 }';
+const _CURSOR_DEFAULT = '{ "x": 4, "y": 4 }';
 const _HAND_POSITION = 'hand.';
 const _CURRENT_GAME = 'game.current';
 const _SCORE = "game.score";
@@ -86,12 +86,9 @@ const playTile = (handPosition) => {
     const hand = getHandPosition(handPosition);
     const game = getGame();    
     const cursor = getCursor();
-    if (hand.empty) {
-        game[hand.position.y][hand.position.x] = null;
-        setHandPosition(handPosition, hand.character, false, hand.age);
-        setGame(game);
-    } else if (
-        game[cursor.y]?.[cursor.x] == null
+    if (
+        !hand.empty
+        && game[cursor.y]?.[cursor.x] == null
         && (getCountPlayedCharacters() === 0 || hasNeighbors(game, cursor.x, cursor.y))
     ) {
         if (game[cursor.y] == null) {
@@ -103,6 +100,21 @@ const playTile = (handPosition) => {
     }
     showHand();
 };
+
+const returnTiles = () => {
+    const handSize = getHandSize();
+    const game = getGame();
+    for (let i = 0; i<handSize; i++) {
+        const hand = getHandPosition(i);
+        if (hand.empty) {
+            game[hand.position.y][hand.position.x] = null;
+            setHandPosition(i, hand.character, false, hand.age);
+        }
+    }
+    setGame(game);
+    showHand();
+    showBoard();
+}
 
 const increaseScore = (value) => {
     const total = JSON.parse(window.localStorage.getItem(_SCORE) ?? '0') + value;
@@ -244,10 +256,17 @@ const checkForValid = (canditates) => {
         .then(function (response) {
             // Validate words 
             const valid = canditates.filter((_, idx) => response.data[idx]);
+            const invalid = canditates.filter((_, idx) => !response.data[idx]);
 
             reportGuesses(canditates, valid);
             // Score 
             score = valid.reduce((score, word) => score + word.length, 0);
+            invalidScore = invalid.reduce((score, word) => score + word.length, 0);
+
+            if (invalidScore >= score) {
+                gameOver();
+                return;
+            }
             increaseScore(score);
 
             // Handle age 
@@ -322,8 +341,9 @@ const showHand = () => {
     const handSize = getHandSize();
     for (let i=0; i<handSize; i++) {
         const h = getHandPosition(i);        
-        const character = h.age > 1 ? `<span class="hand-old">${h.character}</span>` : h.character;
-        handContents += `<span id="hand-${i}">${i+1}: ${h.empty ? '.' : character}</span>`
+        const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
+        const character = `<span class="${spannClass}">${h.character}</span>`;
+        handContents += `<span id="hand-${i}"><sub>(${i+1})</sub> ${character}</span>`
     }
     hand.innerHTML = handContents;
 };
@@ -365,26 +385,37 @@ const handleKeyPress = (evt) => {
             evt.preventDefault();
             break;
         case 49: // 1
+            evt.preventDefault();
             playTile(0);
             break;
         case 50: // 2
+            evt.preventDefault();
             playTile(1);
             break;
         case 51: // 3
+            evt.preventDefault();
             playTile(2);
             break;
         case 52: // 4
+            evt.preventDefault();
             playTile(3);
             break;
         case 53: // 5
+            evt.preventDefault();
             playTile(4);
             break;
         case 32: // SPACE
+            evt.preventDefault();
             submitTiles();
             break;
         case 82: // R
+            evt.preventDefault();
             newGame();
             return;
+        case 67: // C
+            evt.preventDefault();
+            returnTiles();
+            break;
         default:
             console.log(evt);
             return;
