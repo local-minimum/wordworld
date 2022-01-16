@@ -247,7 +247,9 @@ const reportGuesses = (candidates, valid, score) => {
         const pts = isAWord ? candidate.length : 0;
         report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&npsp;(${pts} pt${pts === 1 ? '' : 's'})</div>`;
     });
-    report += `<div>${score}pt${score === 1 ? '' : 's'}</div>`;
+    if (score != null) {
+        report += `<div>${score}pt${score === 1 ? '' : 's'}</div>`;
+    }
     guesses.innerHTML = report;
 };
 
