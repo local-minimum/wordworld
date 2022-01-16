@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify
 from nltk.corpus import words
+import logging
 
 all_words = set(words.words())
 app = Flask(__name__)
@@ -23,6 +24,7 @@ def send_home():
 
 @app.route('/check', methods=["POST"])
 def check_words():
+    logging.warning("Checks")
     words = request.get_json()
-    print(words)
+    logging.warning(words)
     return jsonify([word in all_words for word in words])
