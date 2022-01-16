@@ -1,8 +1,8 @@
 from flask import Flask, send_from_directory, request, jsonify
-import enchant
+from nltk.corups import words
 
+all_words = set(words.words())
 app = Flask(__name__)
-dictionary = enchant.Dict("en_US")
 
 
 @app.route('/fonts/<path:path>')
@@ -24,4 +24,4 @@ def send_home():
 @app.route('/check')
 def check_words():
     words = request.get_json()
-    return jsonify([dictionary.check(word) for word in words])
+    return jsonify([word in all_words for word in words])
