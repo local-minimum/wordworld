@@ -1,0 +1,6 @@
+version: '3.3'
+services:
+  wordworld:
+    build: .
+    ports: ["5032:80"]
+    restart: "unless-stopped"
