@@ -431,9 +431,13 @@ const newGame = () => {
     for (let i=0; i<handSize; i++) {
         setHandPosition(i, '.', true, 0);
     }
-    // Construct bag
+    reportGuesses([], []);
     drawHand();
     showBoard();
+    _STATUS = {
+        gameOver = false,
+        communicating = false,
+    };
 };
 
 const setup = () => {
