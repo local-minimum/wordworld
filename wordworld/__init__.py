@@ -1,6 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify
 
-with open('words.txt', 'r') as fh:
+with open('/app/wordworld/words.txt', 'r') as fh:
     all_words = {w.strip() for w in fh.readlines()}
 
 app = Flask(__name__)
