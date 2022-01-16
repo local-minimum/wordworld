@@ -242,7 +242,6 @@ const checkForValid = (canditates) => {
     axios
         .post('check', canditates)
         .then(function (response) {
-            console.log(response.data);
             // Validate words 
             const valid = canditates.filter((_, idx) => response.data[idx]);
 
@@ -256,9 +255,14 @@ const checkForValid = (canditates) => {
 
             // Draw Hand
             drawHand();
+
+            // Allow input again
+            _STATUS.communicating = false;
         })
         .catch(function (error) {
-            console.log(error);
+            console.error(error);
+
+            // Allow input again
             _STATUS.communicating = false;
         });
 };
