@@ -6,6 +6,13 @@ const _CURSOR = 'game.cursor';
 const _CURSOR_DEFAULT = '{ "x": 4, "y": 4 }';
 const _HAND_POSITION = 'hand.';
 const _CURRENT_GAME = 'game.current';
+
+const _ACHIVEMENT_LONGEST_CURRENT = 'achivement.longest.current';
+const _ACHIVEMENT_LONGEST = 'achivement.longest';
+const _ACHIVEMENT_ROUND_CURRENT = 'achivement.round.current';
+const _ACHIVEMENT_ROUND = 'achivement.round';
+const _ACHIVEMENT_COMPLETION = 'achivement.completion';
+
 const _SCORE = "game.score";
 const _HIGHSCORE = "highscore";
 const _LETTER_FREQUENCIES = {
@@ -58,6 +65,16 @@ const getScore = () => JSON.parse(window.localStorage.getItem(_SCORE) ?? '0');
 const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(total));
 const getHandSize = () => JSON
     .parse(window.localStorage.getItem(_HAND_SIZE) ?? _HAND_SIZE_DEFAULT);
+const getLongestWord = (current) => window
+    .localStorage.getItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST);
+const setLongestWord = (current, word) => window
+    .localStorage.setItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST, word);
+const getBestRound = (current) => JSON.parse(window
+    .localStorage.getItem(current ? _ACHIVEMENT_ROUND_CURRENT : _ACHIVEMENT_ROUND));
+const setBestRound = (current, score) => window
+    .localStorage.setItem(current ? _ACHIVEMENT_ROUND_CURRENT: _ACHIVEMENT_ROUND, JSON.stringify(score));
+const getBestCompletion = () => JSON.parse(window.localStorage.getItem(_ACHIVEMENT_COMPLETION));
+const setBestCompletion = (percent) => window.localStorage.setItem(_ACHIVEMENT_COMPLETION, JSON.stringify(percent));
 
 
 
@@ -247,13 +264,24 @@ const gameOver = () => {
     _STATUS.gameOver = true;
     showBoard();
     processScores();    
+    const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
+    const bestPercent = getBestCompletion()
+    if (bestPercent === percent) {
+        setBestCompletion(percent);
+    }
+    const recordPercent = bestPercent === percent ? '&nbsp;RECORD' : '';
+    const currentLongest = getLongestWord(true);
+    const longestRecord = getLongestWord(false) === currentLongest ? '&nbsp;RECORD' : '';
+    const currentRound = getBestRound(true);
+    const roundRecord = getBestRound(false) === currentRound ? '&nbsp;RECORD' : '';
     const div = document.getElementById('game-over');
     let content = "<h2>Game Over<h2><h3>Summary<h3>"
-    const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     content += '<ul>'
     content += `<li>${getScore()} points</li>`;
-    content += `<li>${percent} percent of board completed</li>`;
-    content += `</ul>`
+    content += `<li>${percent} percent of board completed${recordPercent}</li>`;
+    content += `<li>'${currentLongest}' was longest word${longestRecord}</li>`;
+    content += `<li>${currentRound} was best round score${roundRecord}</li>`;
+    content += `</ul>`;
 
     div.innerHTML = content;
 }
@@ -277,6 +305,21 @@ const handleAge = () => {
 
 const reportGuesses = (candidates, valid, score) => {
     const guesses = document.getElementById('guesses');
+    const longest = candidates
+        .filter((_, idx) => valid[idx])
+        .sort((a, b) => b.length - a.length)[0];
+    let lenthRecord = false;
+    if (longest != null) {
+        const currentLongest = getLongestWord(true);
+        const totalLongest = getLongestWord(false);
+        if (longest.length > currentLongest.length) {
+            setLongestWord(true, longest);
+        }
+        if (longest.length > totalLongest.length) {
+            setLongestWord(false, longest);
+        }
+        lenthRecord = true;
+    }
     let report = '';
     candidates.forEach(candidate => {
         const isAWord = valid.some(w => w === candidate);
@@ -284,10 +327,18 @@ const reportGuesses = (candidates, valid, score) => {
             report += '<br>';
         }
         const pts = isAWord ? candidate.length : -candidate.length;
-        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts})</div>`;
+        const wordRecord = isAWord && lenthRecord && longest === candidate ? '&nbsp;RECORD' : '';
+        report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts})${wordRecord}</div>`;
     });
     if (score != null) {
-        report += `<br><div>${score}pt${score === 1 ? '' : 's'}</div>`;
+        const currentBest = getBestRound(true);
+        const totalBest = getBestRound(false);
+        if (score > currentBest) { setBestRound(score); }
+        let record = '';
+        if (score > totalBest) {
+            record = '&nbsp;RECORD'
+        }
+        report += `<br><div>${score}pt${score === 1 ? '' : 's'}${record}</div>`;
     }
     guesses.innerHTML = report;
 };
