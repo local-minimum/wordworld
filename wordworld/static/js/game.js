@@ -232,7 +232,7 @@ const gameOver = () => {
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     content += '<ul>'
     content += `<li>${getScore()} points</li>`;
-    content += `<li>${percent} of board</li>`;
+    content += `<li>${percent}% of board completed</li>`;
     content += `</ul>`
 
     div.innerHTML = content;
