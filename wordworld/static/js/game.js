@@ -66,14 +66,14 @@ const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(t
 const getHandSize = () => JSON
     .parse(window.localStorage.getItem(_HAND_SIZE) ?? _HAND_SIZE_DEFAULT);
 const getLongestWord = (current) => window
-    .localStorage.getItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST);
+    .localStorage.getItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST) ?? '';
 const setLongestWord = (current, word) => window
     .localStorage.setItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST, word);
 const getBestRound = (current) => JSON.parse(window
-    .localStorage.getItem(current ? _ACHIVEMENT_ROUND_CURRENT : _ACHIVEMENT_ROUND));
+    .localStorage.getItem(current ? _ACHIVEMENT_ROUND_CURRENT : _ACHIVEMENT_ROUND)) ?? 0;
 const setBestRound = (current, score) => window
     .localStorage.setItem(current ? _ACHIVEMENT_ROUND_CURRENT: _ACHIVEMENT_ROUND, JSON.stringify(score));
-const getBestCompletion = () => JSON.parse(window.localStorage.getItem(_ACHIVEMENT_COMPLETION));
+const getBestCompletion = () => JSON.parse(window.localStorage.getItem(_ACHIVEMENT_COMPLETION)) ?? 0;
 const setBestCompletion = (percent) => window.localStorage.setItem(_ACHIVEMENT_COMPLETION, JSON.stringify(percent));
 
 
