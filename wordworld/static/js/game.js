@@ -333,10 +333,11 @@ const reportGuesses = (candidates, valid, score) => {
     if (score != null) {
         const currentBest = getBestRound(true);
         const totalBest = getBestRound(false);
-        if (score > currentBest) { setBestRound(score); }
+        if (score > currentBest) { setBestRound(true, score); }
         let record = '';
         if (score > totalBest) {
             record = '&nbsp;RECORD'
+            setBestRound(false, score);
         }
         report += `<br><div>${score}pt${score === 1 ? '' : 's'}${record}</div>`;
     }
