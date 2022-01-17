@@ -169,7 +169,7 @@ const verticalWord =  (game, origin) => {
 const wordsFromPlaced = () => {
     const game = getGame();
     const handSize = getHandSize();
-    const placed = [];
+    let placed = [];
     for (let i = 0; i < handSize; i++) {
         const h = getHandPosition(i);
         if (h.empty && !!h.position) {
