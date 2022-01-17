@@ -1,7 +1,7 @@
 const _SIZE = 'settings.boardSize';
 const _SIZE_DEFAULT = '9';
 const _HAND_SIZE = 'settings.handSize';
-const _HAND_SIZE_DEFAULT = '5';
+const _HAND_SIZE_DEFAULT = '6';
 const _CURSOR = 'game.cursor';
 const _CURSOR_DEFAULT = '{ "x": 4, "y": 4 }';
 const _HAND_POSITION = 'hand.';
@@ -56,6 +56,8 @@ const getHighscore = () => JSON.parse(window.localStorage.getItem(_HIGHSCORE) ??
 const setHighscore = (scores) => window.localStorage.setItem(_HIGHSCORE, JSON.stringify(scores));
 const getScore = () => JSON.parse(window.localStorage.getItem(_SCORE) ?? '0');
 const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(total));
+const getHandSize = () => JSON
+    .parse(window.localStorage.getItem(_HAND_SIZE) ?? _HAND_SIZE_DEFAULT);
 
 
 
@@ -88,6 +90,8 @@ const setHandPosition = (handPosition, character, empty, age, position) => windo
 
 const playTile = (handPosition) => {
     if (_STATUS.gameOver || _STATUS.communicating) return;
+    const handSize = getHandSize();
+    if (handPosition >= handSize) return;
     const hand = getHandPosition(handPosition);
     const game = getGame();    
     const cursor = getCursor();
@@ -329,9 +333,6 @@ const drawFromBag = () => {
     
 };
 
-const getHandSize = () => JSON
-    .parse(window.localStorage.getItem(_HAND_SIZE) ?? _HAND_SIZE_DEFAULT);
-
 const returnToHand = () => {
     const game = getGame();
     const handSize = getHandSize();
@@ -427,6 +428,14 @@ const handleKeyPress = (evt) => {
         case 53: // 5
             evt.preventDefault();
             playTile(4);
+            break;
+        case 54: // 6
+            evt.preventDefault();
+            playTile(5);
+            break;
+        case 55: // 7
+            evt.preventDefault();
+            playTile(6);
             break;
         case 32: // SPACE
             evt.preventDefault();
