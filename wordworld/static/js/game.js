@@ -539,6 +539,8 @@ const newGame = () => {
     drawHand();
     showBoard();
     increaseScore(0);
+    setBestRound(true, 0);
+    setLongestWord(true, '');
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
     document.getElementById('game-over').innerHTML = "";
