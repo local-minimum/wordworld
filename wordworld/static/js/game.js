@@ -269,11 +269,11 @@ const gameOver = () => {
     if (bestPercent === percent) {
         setBestCompletion(percent);
     }
-    const recordPercent = bestPercent === percent ? '&nbsp;RECORD' : '';
+    const recordPercent = bestPercent === percent ? '&nbsp;<sub>RECORD</sub>' : '';
     const currentLongest = getLongestWord(true);
-    const longestRecord = getLongestWord(false) === currentLongest ? '&nbsp;RECORD' : '';
+    const longestRecord = getLongestWord(false) === currentLongest ? '&nbsp;<sub>RECORD</sub>' : '';
     const currentRound = getBestRound(true);
-    const roundRecord = getBestRound(false) === currentRound ? '&nbsp;RECORD' : '';
+    const roundRecord = getBestRound(false) === currentRound ? '&nbsp;<sub>RECORD</sub>' : '';
     const div = document.getElementById('game-over');
     let content = "<h2>Game Over<h2><h3>Summary<h3>"
     content += '<ul>'
@@ -327,7 +327,7 @@ const reportGuesses = (candidates, valid, score) => {
             report += '<br>';
         }
         const pts = isAWord ? candidate.length : -candidate.length;
-        const wordRecord = isAWord && lenthRecord && longest === candidate ? '&nbsp;RECORD' : '';
+        const wordRecord = isAWord && lenthRecord && longest === candidate ? '&nbsp;<sub>RECORD</sub>' : '';
         report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts})${wordRecord}</div>`;
     });
     if (score != null) {
@@ -336,7 +336,7 @@ const reportGuesses = (candidates, valid, score) => {
         if (score > currentBest) { setBestRound(true, score); }
         let record = '';
         if (score > totalBest) {
-            record = '&nbsp;RECORD'
+            record = '&nbsp;<sub>RECORD</sub>'
             setBestRound(false, score);
         }
         report += `<br><div>${score}pt${score === 1 ? '' : 's'}${record}</div>`;
