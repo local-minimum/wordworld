@@ -370,7 +370,7 @@ const showHand = () => {
         const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
         const character = `<span class="${spannClass}">${h.character}</span>`;
         handContents += `<span id="hand-${i}"><sub>(${i+1})</sub> ${character}</span>`
-        if (i !== 0 && i % lineAt === 0) {
+        if (i == 2) {
             handContents += '<br>';
         }
     }
