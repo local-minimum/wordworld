@@ -280,7 +280,7 @@ const reportGuesses = (candidates, valid, score) => {
 const checkForValid = (canditates) => {
     _STATUS.communicating = true;
     axios
-        .post('check', canditates)
+        .post('/wordz/check', canditates)
         .then(function (response) {
             const valid = canditates.filter((_, idx) => response.data[idx]);
             const invalid = canditates.filter((_, idx) => !response.data[idx]);
