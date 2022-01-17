@@ -279,8 +279,8 @@ const gameOver = () => {
     content += '<ul>'
     content += `<li>${getScore()} points</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
-    content += `<li>'${currentLongest}' was longest word${longestRecord}</li>`;
-    content += `<li>${currentRound} was best round score${roundRecord}</li>`;
+    content += `<li>'${currentLongest}' was the longest word${longestRecord}</li>`;
+    content += `<li>${currentRound} was the best round score${roundRecord}</li>`;
     content += `</ul>`;
 
     div.innerHTML = content;
