@@ -227,7 +227,15 @@ const processScores = () => {
 const gameOver = () => {    
     _STATUS.gameOver = true;
     processScores();    
-    // TODO: message about scores
+    const div = document.getElementById('game-over');
+    let content = "<h3>Game Over<h3><h4>Summary<h4>"
+    const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
+    content += '<ul>'
+    content += `<li>${getScore()} points</li>`;
+    content += `<li>${percent} of board</li>`;
+    content += `</ul>`
+
+    div.innerHTML = content;
 }
 
 const handleAge = () => {
@@ -255,7 +263,7 @@ const reportGuesses = (candidates, valid, score) => {
         if (report.length > 0) {
             report += '<br>';
         }
-        const pts = isAWord ? candidate.length : 0;
+        const pts = isAWord ? candidate.length : -candidate.length;
         report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts})</div>`;
     });
     if (score != null) {
@@ -271,12 +279,13 @@ const checkForValid = (canditates) => {
         .then(function (response) {
             const valid = canditates.filter((_, idx) => response.data[idx]);
             const invalid = canditates.filter((_, idx) => !response.data[idx]);
-            score = valid.reduce((score, word) => score + word.length, 0);
-            invalidScore = invalid.reduce((score, word) => score + word.length, 0);
+            let score = valid.reduce((score, word) => score + word.length, 0);
+            const invalidScore = invalid.reduce((score, word) => score + word.length, 0);
+            score -= invalidScore;
             reportGuesses(canditates, valid, score);
             increaseScore(score);
 
-            if (invalidScore > score) {
+            if (score < 0) {
                 gameOver();
                 return;
             }
@@ -445,6 +454,7 @@ const newGame = () => {
     increaseScore(0);
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
+    document.getElementById('game-over').innerHTML = "";
 };
 
 const setup = () => {

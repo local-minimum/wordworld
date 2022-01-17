@@ -67,6 +67,10 @@
                     background-color: #282828;
                     color: #ffb000;
                 }
+                #game-over {
+                    font-size: 80%;
+                    max-width: 600px;
+                }
                 #rules {
                     font-size: 80%;
                     max-width: 600px;
@@ -78,11 +82,13 @@
         <body>
             <h1>World of Words</h1>
             <h2 id="score">0000</h2>
+            <div id="game-over"></div>
             <div id="world-container">
                 <div id="world">
-                    abc da kladsf<br>
-                    asdf ow<span id="selection">w</span>ed ds<br>
-                    asdfa adsd dd<br>
+                    something..<br>
+                    went <span id="selection">w</span>rong.<br>
+                    loading the<br>
+                    game.......<br>
                 </div>
             </div>
             <div id="hud">
@@ -99,7 +105,7 @@
                     <li>Characters stay in hand for two rounds</li>
                     <li>If a character is not played at end of second round it is placed at random next to no other tile</li>
                     <li>If said character can't be placed, then it's game over</li>
-                    <li>Total word length of accepted words must not be shorter than the not accepted or it's game over.</li>
+                    <li>Total round score may not fall below zero, then it's game over</li>
                 </ul>
             </div>
 
