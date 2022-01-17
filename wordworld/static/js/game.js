@@ -226,13 +226,14 @@ const processScores = () => {
 
 const gameOver = () => {    
     _STATUS.gameOver = true;
+    showBoard();
     processScores();    
     const div = document.getElementById('game-over');
-    let content = "<h3>Game Over<h3><h4>Summary<h4>"
+    let content = "<h2>Game Over<h2><h3>Summary<h3>"
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     content += '<ul>'
     content += `<li>${getScore()} points</li>`;
-    content += `<li>${percent}% of board completed</li>`;
+    content += `<li>${percent} percent of board completed</li>`;
     content += `</ul>`
 
     div.innerHTML = content;
@@ -291,7 +292,7 @@ const checkForValid = (canditates) => {
             }
             handleAge();
             drawHand();
-
+            showBoard();
             // Allow input again
             _STATUS.communicating = false;
         })
@@ -305,7 +306,13 @@ const checkForValid = (canditates) => {
 
 const submitTiles = () => {
     const canditates = wordsFromPlaced();
-    checkForValid(canditates);
+    if (canditates.length === 0) {
+        handleAge();
+        drawHand();
+        showBoard();
+    } else {
+        checkForValid(canditates);
+    }
 };
 
 const drawFromBag = () => {
