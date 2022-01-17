@@ -364,7 +364,7 @@ const showHand = () => {
     const hand = document.getElementById('hand');
     let handContents = '';
     const handSize = getHandSize();
-    const lineAt = 3;
+    const lineAt = 2;
     for (let i=0; i<handSize; i++) {
         const h = getHandPosition(i);        
         const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
