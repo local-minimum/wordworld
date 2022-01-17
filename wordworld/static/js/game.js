@@ -364,11 +364,15 @@ const showHand = () => {
     const hand = document.getElementById('hand');
     let handContents = '';
     const handSize = getHandSize();
+    const lineAt = 3;
     for (let i=0; i<handSize; i++) {
         const h = getHandPosition(i);        
         const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
         const character = `<span class="${spannClass}">${h.character}</span>`;
         handContents += `<span id="hand-${i}"><sub>(${i+1})</sub> ${character}</span>`
+        if (i !== 0 && i % lineAt === 0) {
+            handContents += '<br>';
+        }
     }
     hand.innerHTML = handContents;
 };
