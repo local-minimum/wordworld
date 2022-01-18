@@ -265,9 +265,10 @@ const gameOver = () => {
     _STATUS.gameOver = true;
     setGameOver(true);
     showBoard();
+    increaseScore(0);
     // Streak
     const inStreak = isInStreak(getGameName(), getPrevGameName());
-    const streakDays = inStreak ? getStreakDays() : 1;
+    const streakDays = inStreak ? getStreakDays() + 1 : 1;
     setStreakDays(streakDays);
     // Score
     const bestScore = getHighscore(); 
