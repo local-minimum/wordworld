@@ -125,7 +125,7 @@ const setHandPosition = (handPosition, character, empty, age, position) => windo
 
 const getTilesInHand = () => {
     const handSize = getHandSize();
-    const tiles = 0;
+    let tiles = 0;
     for (let i=0; i<handSize; i++) {
         const hand = getHandPosition(i);
         if (!hand.empty) {
