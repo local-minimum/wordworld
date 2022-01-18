@@ -271,10 +271,9 @@ const gameOver = () => {
     const streakDays = inStreak === null ? getStreakDays() : (inStreak ? getStreakDays() + 1 : 1);
     if (inStreak !== null) {
         setStreakDays(streakDays);
-    } else {
-        setPrevGameName('');
     }
-
+    // Ensure refresh doesn't spoil stats
+    setPrevGameName('');
     // Score
     const bestScore = getHighscore(); 
     const score = getScore();
