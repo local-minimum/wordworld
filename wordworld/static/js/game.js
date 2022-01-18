@@ -268,8 +268,13 @@ const gameOver = () => {
     increaseScore(0);
     // Streak
     const inStreak = isInStreak(getGameName(), getPrevGameName());
-    const streakDays = inStreak ? getStreakDays() + 1 : 1;
-    setStreakDays(streakDays);
+    const streakDays = inStreak === null ? getStreakDays() : (inStreak ? getStreakDays() + 1 : 1);
+    if (inStreak !== null) {
+        setStreakDays(streakDays);
+    } else {
+        setPrevGameName('');
+    }
+
     // Score
     const bestScore = getHighscore(); 
     const score = getScore();
@@ -288,10 +293,10 @@ const gameOver = () => {
     }
     // Wins
     const win = percent >= 50 && score >= 40;
-    const streakWins = win ? getStreakWins() + 1 : 0;
-    setStreakWins(streakWins);
-    const wins = getWins() + (win ? 1 : 0);
-    setWins(wins);
+    const streakWins = win ? (inStreak === null ? getStreakWins() : getStreakWins() + 1) : 0;
+    if (inStreak !== null) setStreakWins(streakWins);
+    const wins = getWins() + (inStreak === null ?  0 : (win ? 1 : 0));
+    if (inStreak !== null) setWins(wins);
     // Achievments
     const currentLongest = getLongestWord(true);
     const longestRecord = getLongestWord(false) === currentLongest ? '<span class="record">RECORD</span>' : '';
@@ -584,7 +589,7 @@ const setup = () => {
     const name = generateGameName();
     const cachedGame = getGameName();
     if (name !== cachedGame) {
-        setPrevGameName(cachedGame);
+        setPrevGameName(cachedGame.length === 0 ? 'GAME: -42' : cachedGame);
         newGame(name);
     } else {
         const revealed = getCountPlayedCharacters() + getHandSize();

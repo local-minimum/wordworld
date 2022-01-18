@@ -15,6 +15,6 @@ function gameNameToNumber(name) {
 }
 
 function isInStreak(current, previous) {
-    if (previous.length === 0) return false;
+    if (previous.length === 0) return null;
     return (gameNameToNumber(current) - gameNameToNumber(previous)) === 1;
 }
