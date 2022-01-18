@@ -143,7 +143,7 @@ const returnTiles = () => {
 }
 
 const increaseScore = (value) => {
-    const total = getScore() + value;
+    const total = Math.max(0, getScore() + value);
     setScore(total);
     const score = document.getElementById('score');
     score.innerHTML = String(total).padStart(4, '0');
@@ -256,6 +256,7 @@ const gameOver = () => {
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     const bestPercent = getBestCompletion()
     let recordPercent = '';
+    console.log('Percents', percent, bestPercent);
     if (percent > bestPercent) {
         setBestCompletion(percent);
         recordPercent = '<span class="record">RECORD</span>';
