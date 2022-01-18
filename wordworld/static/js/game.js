@@ -163,7 +163,7 @@ const horizontalWord = (game, origin) => {
         word += row[maxX];
         maxX += 1;
     };
-    return { word, min: minX + 1, max: maxX - 1 };
+    return { word, min: minX + 1, max: maxX - 1, y: origin.y };
 }
 
 const verticalWord =  (game, origin) => {
@@ -180,7 +180,7 @@ const verticalWord =  (game, origin) => {
         word += game[maxY][x];
         maxY += 1;
     }
-    return { word, min: minY + 1, max: maxY - 1 };
+    return { word, min: minY + 1, max: maxY - 1, x: origin.x };
 }
 
 const wordsFromPlaced = () => {
@@ -198,28 +198,16 @@ const wordsFromPlaced = () => {
     while (i < placed.length) {
         const position = placed[i];
         const hor = horizontalWord(game, position);
-        if (hor.word.length > 1) {
-            words.push(hor.word);
-            for (let j = i + 1; j < placed.length; j++) {
-                const other = placed[j];
-                if (other.y === position.y && other.x >= hor.min && other.x <= hor.max) {
-                    placed = placed.filter((_, idx) => idx !== j);
-                }
-            }
+        if (!words.some(w => w.word === hor.word && w.min === hor.min && w.max === hor.max && w.y === hor.y)) {
+            words.push(hor);
         }
         const ver = verticalWord(game, position);
-        if (ver.word.length > 1) {
-            words.push(ver.word);
-            for (let j = i + 1; j < placed.length; j++) {
-                const other = placed[j];
-                if (other.x === position.x && other.y >= ver.min && other.y <= ver.max) {
-                    placed = placed.filter((_, idx) => idx !== j);
-                }
-            }
+        if (!words.some(w => w.word === ver.word && w.min === ver.min && w.max === ver.max && w.y === ver.y)) {
+            words.push(ver);
         }
         i += 1;
     }
-    return words;
+    return words.map(w => w.word);
 }
 
 const hasNeighbors = (game, x, y) => {
