@@ -198,16 +198,17 @@ const wordsFromPlaced = () => {
     while (i < placed.length) {
         const position = placed[i];
         const hor = horizontalWord(game, position);
-        if (!words.some(w => w.word === hor.word && w.min === hor.min && w.max === hor.max && w.y === hor.y)) {
+        if (hor.word.length > 1 && !words.some(w => w.word === hor.word && w.min === hor.min && w.max === hor.max && w.y === hor.y)) {
             words.push(hor);
         }
         const ver = verticalWord(game, position);
-        if (!words.some(w => w.word === ver.word && w.min === ver.min && w.max === ver.max && w.y === ver.y)) {
+        if (ver.word.length > 1 && !words.some(w => w.word === ver.word && w.min === ver.min && w.max === ver.max && w.y === ver.y)) {
             words.push(ver);
         }
         i += 1;
     }
-    return words.map(w => w.word);
+    return words
+        .map(w => w.word);
 }
 
 const hasNeighbors = (game, x, y) => {
@@ -267,7 +268,11 @@ const gameOver = () => {
     content += '<ul>'
     content += `<li>${getScore()} points</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
-    content += `<li>'${currentLongest}' was the longest word${longestRecord}</li>`;
+    if (currentLongest.length === 0) {
+        content += `<li>No valid words!</li>`;
+    } else {
+        content += `<li>'${currentLongest}' was the longest word${longestRecord}</li>`;
+    }
     content += `<li>${currentRound} was the best round score${roundRecord}</li>`;
     content += `</ul>`;
 
