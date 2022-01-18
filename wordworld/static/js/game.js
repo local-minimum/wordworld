@@ -123,6 +123,18 @@ const setHandPosition = (handPosition, character, empty, age, position) => windo
     JSON.stringify({ empty, character, position, age }),
 );
 
+const getTilesInHand = () => {
+    const handSize = getHandSize();
+    const tiles = 0;
+    for (let i=0; i<handSize; i++) {
+        const hand = getHandPosition(i);
+        if (!hand.empty) {
+            tiles += 1;
+        }
+    }
+    return tiles;
+}
+
 const playTile = (handPosition) => {
     if (_STATUS.gameOver || _STATUS.communicating) return;
     const handSize = getHandSize();
@@ -591,7 +603,7 @@ const setup = () => {
         setPrevGameName(cachedGame.length === 0 ? 'GAME: -42' : cachedGame);
         newGame(name);
     } else {
-        const revealed = getCountPlayedCharacters() + getHandSize();
+        const revealed = getCountPlayedCharacters() + getTilesInHand();
         _STATUS.rng = getPRNG(name, revealed);
         _STATUS.gameOver = getGameOver();
     }
