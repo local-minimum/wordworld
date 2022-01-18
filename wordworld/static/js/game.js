@@ -6,6 +6,8 @@ const _CURSOR = 'game.cursor';
 const _CURSOR_DEFAULT = '{ "x": 4, "y": 4 }';
 const _HAND_POSITION = 'hand.';
 const _CURRENT_GAME = 'game.current';
+const _CURRENT_NAME = 'game.current.name';
+const _CURRENT_GAME_OVER = 'game.current.over';
 
 const _ACHIVEMENT_LONGEST_CURRENT = 'achivement.longest.current';
 const _ACHIVEMENT_LONGEST = 'achivement.longest';
@@ -50,6 +52,10 @@ const _STATUS = {
 
 const getGame = () => JSON.parse(window.localStorage.getItem(_CURRENT_GAME) ?? '[]');
 const setGame = (game) => window.localStorage.setItem(_CURRENT_GAME, JSON.stringify(game));
+const setGameOver = (go) => window.localStorage.setItem(_CURRENT_GAME_OVER, JSON.stringify(go));
+const getGameOver = () =>  JSON.parse(window.localStorage.getItem(_CURRENT_GAME_OVER) ?? 'false');
+const getGameName = () => window.localStorage.getItem(_CURRENT_NAME) ?? '';
+const setGameName = (name) => window.localStorage.setItem(_CURRENT_NAME, name);
 const getGameSize = () => JSON.parse(window.localStorage.getItem(_SIZE) ?? _SIZE_DEFAULT);
 const getCursor = () =>  JSON.parse(window.localStorage.getItem(_CURSOR) ?? _CURSOR_DEFAULT);
 const getCountPlayedCharacters = () => {
@@ -245,6 +251,7 @@ const placeWithoutNeighbors = (char) => {
 
 const gameOver = () => {    
     _STATUS.gameOver = true;
+    setGameOver(true);
     showBoard();
     const bestScore = getHighscore(); 
     const score = getScore();
@@ -385,7 +392,7 @@ const submitTiles = () => {
 const drawFromBag = () => {
     const sum = Object.values(_LETTER_FREQUENCIES)
         .reduce((acc, value) => acc + value, 0);
-    let value = Math.random() * sum;
+    let value = _STATUS.rng() * sum;
     return Object
         .keys(_LETTER_FREQUENCIES)
         .find(k => {
@@ -508,10 +515,6 @@ const handleKeyPress = (evt) => {
             evt.preventDefault();
             submitTiles();
             break;
-        case 82: // R
-            evt.preventDefault();
-            newGame();
-            return;
         case 67: // C
             evt.preventDefault();
             returnTiles();
@@ -523,7 +526,9 @@ const handleKeyPress = (evt) => {
     showBoard();
 };
 
-const newGame = () => {
+const newGame = (name) => {
+    setGameName(name);
+    setGameOver(false);
     window.localStorage.removeItem(_CURRENT_GAME);
     window.localStorage.removeItem(_CURSOR);
     window.localStorage.removeItem(_SCORE);
@@ -539,11 +544,24 @@ const newGame = () => {
     setLongestWord(true, '');
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
+    _STATUS.rng = getPRNG(name);
     document.getElementById('game-over').innerHTML = "";
 };
 
 const setup = () => {
+    const name = generateGameName();
+    const currentName = getGameName();
+    if (name !== currentName) {
+        newGame(name);
+    } else {
+        const revealed = getCountPlayedCharacters() + getHandSize();
+        _STATUS.rng = getPRNG(name, revealed);
+        _STATUS.gameOver = getGameOver();
+    }
     showHand();
     showBoard();
+    if (_STATUS.gameOver) {
+        gameOver();
+    }
     document.onkeydown = handleKeyPress;
 };
