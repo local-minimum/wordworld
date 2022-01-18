@@ -263,7 +263,6 @@ const gameOver = () => {
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     const bestPercent = getBestCompletion()
     let recordPercent = '';
-    console.log('Percents', percent, bestPercent);
     if (percent > bestPercent) {
         setBestCompletion(percent);
         recordPercent = '<span class="record">RECORD</span>';
@@ -310,7 +309,6 @@ const reportGuesses = (candidates, valid, score) => {
     const longest = candidates
         .filter((_, idx) => valid[idx])
         .sort((a, b) => b.length - a.length)[0];
-    console.log('Longest', longest);
     let lengthRecord = false;
     if (longest != null) {
         const currentLongest = getLongestWord(true);
@@ -532,6 +530,9 @@ const newGame = (name) => {
     window.localStorage.removeItem(_CURRENT_GAME);
     window.localStorage.removeItem(_CURSOR);
     window.localStorage.removeItem(_SCORE);
+    _STATUS.gameOver = false;
+    _STATUS.communicating = false;
+    _STATUS.rng = getPRNG(name);
     const handSize = getHandSize();
     for (let i=0; i<handSize; i++) {
         setHandPosition(i, '.', true, 0);
@@ -542,9 +543,6 @@ const newGame = (name) => {
     increaseScore(0);
     setBestRound(true, 0);
     setLongestWord(true, '');
-    _STATUS.gameOver = false;
-    _STATUS.communicating = false;
-    _STATUS.rng = getPRNG(name);
     document.getElementById('game-over').innerHTML = "";
 };
 
