@@ -356,8 +356,7 @@ const handleAge = () => {
 
 const reportGuesses = (candidates, valid, score) => {
     const guesses = document.getElementById('guesses');
-    const longest = candidates
-        .filter((_, idx) => valid[idx])
+    const longest = valid 
         .sort((a, b) => b.length - a.length)[0];
     let lengthRecord = false;
     if (longest != null) {
