@@ -1,13 +1,20 @@
 const DAY = 1000 * 60 * 60 * 24;
+const START = new Date(2022, 1, 18);
 
-function getDOY() {
+function getGameID() {
     const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 0);
-    return Math.floor((now - start) / DAY);
+    return Math.floor((now - START) / DAY);
 }
 
 function generateGameName() {
-    const now = new Date();
-    return `${now.getFullYear()}: ${getDOY()}`;
+    return `GAME: ${getGameID()}`;
 }
 
+function gameNameToNumber(name) {
+    return Number.parseInt(name.split(':')[1].trim());
+}
+
+function isInStreak(current, previous) {
+    if (previous.length === 0) return false;
+    return (gameNameToNumber(current) - gameNameToNumber(previous)) === 1;
+}

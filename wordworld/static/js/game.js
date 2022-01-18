@@ -8,12 +8,16 @@ const _HAND_POSITION = 'hand.';
 const _CURRENT_GAME = 'game.current';
 const _CURRENT_NAME = 'game.current.name';
 const _CURRENT_GAME_OVER = 'game.current.over';
+const _PREVIOUS_NAME = 'game.previous.name';
 
 const _ACHIVEMENT_LONGEST_CURRENT = 'achivement.longest.current';
 const _ACHIVEMENT_LONGEST = 'achivement.longest';
 const _ACHIVEMENT_ROUND_CURRENT = 'achivement.round.current';
 const _ACHIVEMENT_ROUND = 'achivement.round';
 const _ACHIVEMENT_COMPLETION = 'achivement.completion';
+const _STREAK_DAYS_IN_A_ROW = 'streak.days';
+const _STREAK_WINS = 'streak.wins';
+const _WINS = 'wins';
 
 const _SCORE = "game.score";
 const _HIGHSCORE = "highscore";
@@ -56,6 +60,8 @@ const setGameOver = (go) => window.localStorage.setItem(_CURRENT_GAME_OVER, JSON
 const getGameOver = () =>  JSON.parse(window.localStorage.getItem(_CURRENT_GAME_OVER) ?? 'false');
 const getGameName = () => window.localStorage.getItem(_CURRENT_NAME) ?? '';
 const setGameName = (name) => window.localStorage.setItem(_CURRENT_NAME, name);
+const getPrevGameName = () => window.localStorage.getItem(_PREVIOUS_NAME) ?? '';
+const setPrevGameName = (name) => window.localStorage.setItem(_PREVIOUS_NAME, name);
 const getGameSize = () => JSON.parse(window.localStorage.getItem(_SIZE) ?? _SIZE_DEFAULT);
 const getCursor = () =>  JSON.parse(window.localStorage.getItem(_CURSOR) ?? _CURSOR_DEFAULT);
 const getCountPlayedCharacters = () => {
@@ -81,6 +87,12 @@ const setBestRound = (current, score) => window
     .localStorage.setItem(current ? _ACHIVEMENT_ROUND_CURRENT: _ACHIVEMENT_ROUND, JSON.stringify(score));
 const getBestCompletion = () => JSON.parse(window.localStorage.getItem(_ACHIVEMENT_COMPLETION)) ?? 0;
 const setBestCompletion = (percent) => window.localStorage.setItem(_ACHIVEMENT_COMPLETION, JSON.stringify(percent));
+const getStreakDays = () => JSON.parse(window.localStorage.getItem(_STREAK_DAYS_IN_A_ROW));
+const setStreakDays = (days) => window.localStorage.setItem(_STREAK_DAYS_IN_A_ROW, JSON.stringify(days));
+const getStreakWins = () => JSON.parse(window.localStorage.getItem(_STREAK_WINS));
+const setStreakWins = (days) => window.localStorage.setItem(_STREAK_WINS, JSON.stringify(days));
+const getWins = () => JSON.parse(window.localStorage.getItem(_WINS));
+const setWins = (count) => window.localStorage.setItem(_WINS, JSON.stringify(count));
 
 
 
@@ -253,6 +265,11 @@ const gameOver = () => {
     _STATUS.gameOver = true;
     setGameOver(true);
     showBoard();
+    // Streak
+    const inStreak = isInStreak(getGameName(), getPrevGameName());
+    const streakDays = inStreak ? getStreakDays() : 1;
+    setStreakDays(streakDays);
+    // Score
     const bestScore = getHighscore(); 
     const score = getScore();
     let highScore = '';
@@ -260,6 +277,7 @@ const gameOver = () => {
         setHighscore(score);
         highScore = '<span class="record">HIGHSCORE!</p>';
     }
+    // Coverage
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     const bestPercent = getBestCompletion()
     let recordPercent = '';
@@ -267,10 +285,18 @@ const gameOver = () => {
         setBestCompletion(percent);
         recordPercent = '<span class="record">RECORD</span>';
     }
+    // Wins
+    const win = percent >= 50 && score >= 40;
+    const streakWins = win ? getStreakWins() + 1 : 0;
+    setStreakWins(streakWins);
+    const wins = getWins() + (win ? 1 : 0);
+    setWins(wins);
+    // Achievments
     const currentLongest = getLongestWord(true);
     const longestRecord = getLongestWord(false) === currentLongest ? '<span class="record">RECORD</span>' : '';
     const currentRound = getBestRound(true);
     const roundRecord = getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
+    // Produce content
     const div = document.getElementById('game-over');
     let content = "<h2>Game Over<h2><h3>Summary<h3>"
     content += '<ul>'
@@ -282,6 +308,13 @@ const gameOver = () => {
         content += `<li>'${currentLongest}' was the longest word${longestRecord}</li>`;
     }
     content += `<li>${currentRound} was the best round score${roundRecord}</li>`;
+    content += `<li>Played ${streakDays} days in a row</li>`;
+    if (win) {
+        content += `<li>Scored a WIN! ${streakWins} win${streakWins > 1 ? 's' : ''} in a row</li>`
+    } else {
+        content += '<li>No win today, unfortunately.</li>'
+    }
+    content += `<li>A total of ${wins} win${wins !== 1 ? 's': ''} scored</li>`;
     content += `</ul>`;
 
     div.innerHTML = content;
@@ -548,8 +581,9 @@ const newGame = (name) => {
 
 const setup = () => {
     const name = generateGameName();
-    const currentName = getGameName();
-    if (name !== currentName) {
+    const cachedGame = getGameName();
+    if (name !== cachedGame) {
+        setPrevGameName(cachedGame);
         newGame(name);
     } else {
         const revealed = getCountPlayedCharacters() + getHandSize();
