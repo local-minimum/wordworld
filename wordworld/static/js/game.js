@@ -59,8 +59,8 @@ const getCountPlayedCharacters = () => {
         0,
     );
 }
-const getHighscore = () => JSON.parse(window.localStorage.getItem(_HIGHSCORE) ?? '[]');
-const setHighscore = (scores) => window.localStorage.setItem(_HIGHSCORE, JSON.stringify(scores));
+const getHighscore = () => JSON.parse(window.localStorage.getItem(_HIGHSCORE) ?? '0');
+const setHighscore = (score) => window.localStorage.setItem(_HIGHSCORE, JSON.stringify(score));
 const getScore = () => JSON.parse(window.localStorage.getItem(_SCORE) ?? '0');
 const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(total));
 const getHandSize = () => JSON
@@ -243,16 +243,16 @@ const placeWithoutNeighbors = (char) => {
     return true;
 }
 
-const processScores = () => {
-    const scores = getHighscore(); 
-    const score = getScore();
-    // TODO: Find position and update highscores
-}
-
 const gameOver = () => {    
     _STATUS.gameOver = true;
     showBoard();
-    processScores();    
+    const bestScore = getHighscore(); 
+    const score = getScore();
+    let highScore = '';
+    if (score > bestScore) {
+        setHighscore(score);
+        highScore = '&nbsp;HIGHSCORE!';
+    }
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     const bestPercent = getBestCompletion()
     if (bestPercent === percent) {
@@ -266,7 +266,7 @@ const gameOver = () => {
     const div = document.getElementById('game-over');
     let content = "<h2>Game Over<h2><h3>Summary<h3>"
     content += '<ul>'
-    content += `<li>${getScore()} points</li>`;
+    content += `<li>${score} points${highScore}</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
     if (currentLongest.length === 0) {
         content += `<li>No valid words!</li>`;
@@ -310,8 +310,8 @@ const reportGuesses = (candidates, valid, score) => {
         }
         if (longest.length > totalLongest.length) {
             setLongestWord(false, longest);
+            lenthRecord = true;
         }
-        lenthRecord = true;
     }
     let report = '';
     candidates.forEach(candidate => {
