@@ -1,5 +1,5 @@
 const DAY = 1000 * 60 * 60 * 24;
-const START = new Date(2022, 1, 18);
+const START = new Date(2022, 0, 18);
 
 function getGameID() {
     const now = new Date();
