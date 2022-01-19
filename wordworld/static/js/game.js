@@ -480,13 +480,17 @@ const drawHand = () => {
 };
 
 const showHand = () => {
+    const isPlaying = !_STATUS.gameOver;
     const hand = document.getElementById('hand');
     let handContents = '';
     const handSize = getHandSize();
     for (let i=0; i<handSize; i++) {
         const h = getHandPosition(i);        
         const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
-        const character = `<span class="${spannClass}">${h.character}</span>`;
+        let character = `<span class="${spannClass}">${h.character}</span>`;
+        if (isPlaying) {
+            character = buttonize(character, `playTile(${i});showBoard();`);
+        } 
         handContents += `<span id="hand-${i}"><sub>(${i+1})</sub> ${character}</span>`
         if (i == 2) {
             handContents += '<br>';
