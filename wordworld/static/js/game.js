@@ -94,7 +94,7 @@ const setStreakWins = (days) => window.localStorage.setItem(_STREAK_WINS, JSON.s
 const getWins = () => JSON.parse(window.localStorage.getItem(_WINS));
 const setWins = (count) => window.localStorage.setItem(_WINS, JSON.stringify(count));
 
-const buttonize = (content, callback) => `<button onclick="${callback}">${content}</button`;
+const buttonize = (content, callback) => `<span onclick="${callback}">${content}</span>`;
 
 const showBoard = () => {
     const board = document.getElementById('world');
