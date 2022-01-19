@@ -94,13 +94,14 @@ const setStreakWins = (days) => window.localStorage.setItem(_STREAK_WINS, JSON.s
 const getWins = () => JSON.parse(window.localStorage.getItem(_WINS));
 const setWins = (count) => window.localStorage.setItem(_WINS, JSON.stringify(count));
 
-
+const buttonize = (content, callback) => `<button onclick="${callback}">${content}</button`;
 
 const showBoard = () => {
     const board = document.getElementById('world');
     const size = getGameSize();
     const cursor = getCursor(); 
     const game = getGame();
+    const playing = !_STATUS.gameOver;
     let data = '';
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
@@ -108,6 +109,7 @@ const showBoard = () => {
             if (cursor.x === x && cursor.y === y) {
                 position = `<span id="selection">${position}</span>`;
             }
+            position = playing ? buttonize(position, `moveCursor(${x}, ${y});`) : position;
             data += position;
         }
         data += '<br>'
@@ -481,12 +483,11 @@ const showHand = () => {
     const hand = document.getElementById('hand');
     let handContents = '';
     const handSize = getHandSize();
-    const lineAt = 2;
     for (let i=0; i<handSize; i++) {
         const h = getHandPosition(i);        
         const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
         const character = `<span class="${spannClass}">${h.character}</span>`;
-        handContents += `<span id="hand-${i}"><sup>(${i+1})</sup> ${character}</span>`
+        handContents += `<span id="hand-${i}"><sub>(${i+1})</sub> ${character}</span>`
         if (i == 2) {
             handContents += '<br>';
         }
@@ -494,40 +495,35 @@ const showHand = () => {
     hand.innerHTML = handContents;
 };
 
-const handleKeyPress = (evt) => {
+const moveCursor = (x, y) => {
+    if (_STATUS.gameOver) return;
     const size = getGameSize();
+    window.localStorage.setItem(
+        _CURSOR,
+        JSON.stringify({
+            x: Math.max(0, Math.min(size - 1, x)),
+            y: Math.max(0, Math.min(size - 1, y)),
+        }),
+    )
+}
+
+const handleKeyPress = (evt) => {
     const cursor = getCursor();
     switch (evt.which ?? evt.keyCode) {
         case 38: // UP
-            if (_STATUS.gameOver) return;
-            window.localStorage.setItem(
-                _CURSOR,
-                JSON.stringify({ x: cursor.x, y: Math.max(0, cursor.y - 1)}),
-            );
+            moveCursor(cursor.x, cursor.y - 1);
             evt.preventDefault();
             break;
         case 40: // DOWN
-            if (_STATUS.gameOver) return;
-            window.localStorage.setItem(
-                _CURSOR,
-                JSON.stringify({ x: cursor.x, y: Math.min(size - 1, cursor.y + 1)}),
-            );
+            moveCursor(cursor.x, cursor.y + 1);
             evt.preventDefault();
             break;
         case 37: // LEFT
-            if (_STATUS.gameOver) return;
-            window.localStorage.setItem(
-                _CURSOR,
-                JSON.stringify({ x: Math.max(0, cursor.x - 1), y: cursor.y}),
-            );
+            moveCursor(cursor.x - 1, cursor.y);
             evt.preventDefault();
             break;
         case 39: // RIGHT
-            if (_STATUS.gameOver) return;
-            window.localStorage.setItem(
-                _CURSOR,
-                JSON.stringify({ x: Math.min(size - 1, cursor.x + 1), y: cursor.y}),
-            );
+            moveCursor(cursor.x + 1, cursor.y);
             evt.preventDefault();
             break;
         case 49: // 1
