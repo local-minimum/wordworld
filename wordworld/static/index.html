@@ -85,6 +85,14 @@
                 .nav-btn {
                     cursor: pointer;
                 }
+                .action-buttons > button {
+                    border-width: 0;
+                    border-radius: 3px;
+                    color: #282828;
+                    background-color: #ffb000;
+                    padding: 0.25em 1em;
+                    cursor: pointer;
+                }
             </style>
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script src="/wordz/js/rnd.js"></script>
@@ -107,11 +115,13 @@
                 <div id="hand"></div>
                 <div id="guesses"></div> 
             </div>
+            <div class="action-buttons">
+                <button onclick="returnTiles();showBoard();">(C)lear placed</button>
+                <button onclick="submitTiles();showBoard();">Submit (space)</button>
+            </div>
             <div id="rules">
                 <h3>How to play</h3>
                 <ul>
-                    <li>(C)lear tiles placed current round.</li>
-                    <li>(Space) submit round.</li>
                     <li>Must place tiles next to existing tiles.</li>
                     <li>Characters stay in hand for two rounds</li>
                     <li>If a character is not played at end of second round it is placed at random next to no other tile</li>
@@ -119,6 +129,15 @@
                     <li>Total round score may not fall below zero, then it's game over</li>
                     <li>Wins are personal things, but we track games with 40pts and over 50 percent board coverage</li>
                 </ul>
+                <p>
+                    So basically you are constructing a crossword but without the need
+                    to leave any space and you may include things that are not words,
+                    but you really shouldn't as it will cost you points and may const
+                    you the entire game.
+
+                    Your guesses are submitted to the server, but all other data resides
+                    in your browser and we don't track anything that you do. 
+                </p>
             </div>
 
         </body>
