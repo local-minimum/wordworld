@@ -94,6 +94,22 @@
                     cursor: pointer;
                     font-family: carbon;
                 }
+                .float-box {
+                    position: absolute;
+                    top: 1em;
+                    left: 1em;
+                    right: 1em;
+                    bottom: 1em;
+                    border-color: #ffb000;
+                    border-width: 2px;
+                    border-style: dashed;
+                    padding: 1em;
+                    z-index: 1000;
+                    background-color: #282828;
+                }
+                .hidden {
+                    display: none;
+                }
             </style>
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script src="/wordz/js/rnd.js"></script>
@@ -119,16 +135,18 @@
             <div class="action-buttons">
                 <button onclick="returnTiles();showBoard();">(C)lear placed</button>
                 <button onclick="submitTiles();showBoard();">Submit (space)</button>
+                <button onclick="document.getElementById('rules').className='float-box';">Rules</button>
             </div>
-            <div id="rules">
+            <div id="rules" class="hidden">
                 <h3>How to play</h3>
                 <ul>
                     <li>Must place tiles next to existing tiles.</li>
-                    <li>Characters stay in hand for two rounds</li>
-                    <li>If a character is not played at end of second round it is placed at random next to no other tile</li>
-                    <li>If said character can't be placed, then it's game over</li>
-                    <li>Total round score may not fall below zero, then it's game over</li>
-                    <li>Wins are personal things, but we track games with 40pts and over 50 percent board coverage</li>
+                    <li>Characters stay in hand for two rounds.</li>
+                    <li>If a character is not played at end of second round it is placed at random next to no other tile.</li>
+                    <li>If said character can't be placed, then it's game over.</li>
+                    <li>Total round score may not fall below zero, then it's game over.</li>
+                    <li>Wins are personal things, but we track games with 40pts and over 50 percent board coverage.</li>
+                    <li>Superb wins are those with over 80 percent coverage and 100pts.</li>
                 </ul>
                 <p>
                     So basically you are constructing a crossword but without the need
@@ -139,6 +157,9 @@
                     Your guesses are submitted to the server, but all other data resides
                     in your browser and we don't track anything that you do. 
                 </p>
+                <div class="action-buttons">
+                    <button onclick="document.getElementById('rules').className = 'hidden';">Close</button>
+                </div>
             </div>
 
         </body>
