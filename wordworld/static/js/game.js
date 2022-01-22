@@ -158,7 +158,7 @@ const getInvalidPlacements = () => {
             for (let j=0; j < neighbors.length; j++) {
                 const npos = neighbors[j];
                 if (!placed.some(p => p.x === npos.x && p.y === npos.y)) {
-                    placed = placed.splice(i, 1);
+                    placed.splice(i, 1);
                     truncated = true;                    
                 }
             }
