@@ -137,7 +137,7 @@ const getPlacedTilePositions = () => {
     for (let i=0;i<handSize; i++) {
         const hand = getHandPosition(i);
         if (hand.empty && hand.position != null) {
-            handPosition.push(hand.position);
+            position.push(hand.position);
         }
     }
     return positions;
