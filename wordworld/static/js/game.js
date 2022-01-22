@@ -118,12 +118,12 @@ const showBoard = (foci = null) => {
 };
 
 const boardFlasher = (foci) => {
-    if (_STATUS.flash > 6) {
+    if (_STATUS.flash === undefined) {
+        _STATUS.flash = 0;
+    } else if (_STATUS.flash > 6) {
         showBoard();
         delete _STATUS['flash'];
         return;
-    } else if (_STATUS.flash === undefined) {
-        _STATUS.flash = 0;
     } else {
         _STATUS.flash += 1;
     }
@@ -197,7 +197,6 @@ const playTile = (handPosition) => {
     if (
         !hand.empty
         && game[cursor.y]?.[cursor.x] == null
-        && (getCountPlayedCharacters() === 0 || hasNeighbors(game, cursor.x, cursor.y))
     ) {
         if (game[cursor.y] == null) {
             game[cursor.y] = [];
@@ -488,6 +487,11 @@ const checkForValid = (canditates) => {
 };
 
 const submitTiles = () => {
+    const invalids = getInvalidPlacements();
+    if (invalids.length > 0) {
+        boardFlasher(invalids);
+        return
+    }
     const canditates = wordsFromPlaced();
     if (canditates.length === 0) {
         handleAge();
