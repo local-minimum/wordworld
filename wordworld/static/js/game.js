@@ -96,7 +96,7 @@ const setWins = (count) => window.localStorage.setItem(_WINS, JSON.stringify(cou
 
 const buttonize = (content, callback) => `<span class="nav-btn" onclick="${callback}">${content}</span>`;
 
-const showBoard = () => {
+const showBoard = (foci = null) => {
     const board = document.getElementById('world');
     const size = getGameSize();
     const cursor = getCursor(); 
@@ -106,7 +106,7 @@ const showBoard = () => {
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
             position = game[y]?.[x] ?? '.'; 
-            if (cursor.x === x && cursor.y === y) {
+            if (foci == null ? cursor.x === x && cursor.y === y : foci.some(pos => pos.x === x && pos.y === y)) {
                 position = `<span id="selection">${position}</span>`;
             }
             position = playing ? buttonize(position, `moveCursor(${x}, ${y});showBoard();`) : position;
@@ -116,6 +116,56 @@ const showBoard = () => {
     }
     board.innerHTML = data;
 };
+
+const boardFlasher = (foci) => {
+    if (_STATUS.flash > 6) {
+        showBoard();
+        delete _STATUS['flash'];
+        return;
+    } else if (_STATUS.flash === undefined) {
+        _STATUS.flash = 0;
+    } else {
+        _STATUS.flash += 1;
+    }
+    showBoard(_STATUS.flash % 2 === 0 ? foci : []);
+    window.setTimeout(() => boardFlasher(foci), 500);
+}
+
+const getPlacedTilePositions = () => {
+    const handSize = getHandSize();
+    const positions = [];
+    for (let i=0;i<handSize; i++) {
+        const hand = getHandPosition(i);
+        if (hand.empty && hand.position != null) {
+            handPosition.push(hand.position);
+        }
+    }
+    return positions;
+}
+
+const getInvalidPlacements = () => {
+    const placed = getPlacedTilePositions();
+    const game = getGame();
+    if (placed.length > 0 && placed.length == getCountPlayedCharacters()) {
+        placed.splice(0, 1);
+    }
+    let truncated = true;
+    while (truncated && placed.length > 0) {
+        truncated = false;
+        for (let i=placed.length-1; i>=0; i--) {
+            const pos = placed[i];
+            const neighbors = getNeighborPositions(game, pos.x, pos.y);
+            for (let j=0; j < neighbors.length; j++) {
+                const npos = neighbors[j];
+                if (!placed.some(p => p.x === npos.x && p.y === npos.y)) {
+                    placed = placed.splice(i, 1);
+                    truncated = true;                    
+                }
+            }
+        }
+    }
+    return placed;
+}
 
 const getHandPosition = (handPosition) => JSON
     .parse(window.localStorage.getItem(_HAND_POSITION + handPosition) ?? '{"character": ".", "empty": true, "age": 0}');
@@ -241,6 +291,16 @@ const wordsFromPlaced = () => {
     }
     return words
         .map(w => w.word);
+}
+
+const getNeighborPositions = (game, x, y) => {
+    const neighbours = [];
+    if (y > 0 && game[y - 1]?.[x] != null) { neighbours.push({ x, y: y - 1 }); }
+    if (game[y + 1]?.[x] != null) { neighbours.push({ x, y: y + 1 }); }
+    const row = game[y] ?? [];
+    if (x > 0 && row[x - 1] != null) { neighbours.push({ x: x - 1, y }); }
+    if (row[x + 1] != null) { neighbours.push({ x: x + 1, y }); };
+    return neighbours;
 }
 
 const hasNeighbors = (game, x, y) => {
