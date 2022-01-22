@@ -343,6 +343,7 @@ const gameOver = () => {
     showBoard();
     increaseScore(0);
     // Streak
+    // inStreak null means have not played just refreshing
     const inStreak = isInStreak(getGameName(), getPrevGameName());
     const streakDays = inStreak === null ? getStreakDays() : (inStreak ? getStreakDays() + 1 : 1);
     if (inStreak !== null) {
@@ -354,7 +355,7 @@ const gameOver = () => {
     const bestScore = getHighscore(); 
     const score = getScore();
     let highScore = '';
-    if (score > bestScore) {
+    if (score >= bestScore) {
         setHighscore(score);
         highScore = '<span class="record">HIGHSCORE!</p>';
     }
@@ -362,13 +363,13 @@ const gameOver = () => {
     const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
     const bestPercent = getBestCompletion()
     let recordPercent = '';
-    if (percent > bestPercent) {
+    if (percent >= bestPercent) {
         setBestCompletion(percent);
         recordPercent = '<span class="record">RECORD</span>';
     }
     // Wins
-    const win = percent >= 50 && score >= 40;
-    const superWin = percent >= 80 && score >= 100;
+    const win = score >= 50;
+    const superWin = score >= 100;
     const streakWins = win ? (inStreak === null ? getStreakWins() : getStreakWins() + 1) : 0;
     if (inStreak !== null) setStreakWins(streakWins);
     const wins = getWins() + (inStreak === null ?  0 : (win ? 1 : 0));
