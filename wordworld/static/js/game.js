@@ -395,7 +395,7 @@ const gameOver = () => {
     content += `<li>${currentRound} was the best round score${roundRecord}</li>`;
     content += `<li>Played ${streakDays} days in a row</li>`;
     if (superWin) {
-        content += `<li>Scored a SUPEREB WIN! ${streakWins} win${streakWins > 1 ? 's' : ''} wins in a row</li>`
+        content += `<li>Scored a SUPEREB WIN! ${streakWins} win${streakWins != 1 ? 's' : ''} in a row</li>`
     } else if (win) {
         content += `<li>Scored a WIN! ${streakWins} win${streakWins > 1 ? 's' : ''} in a row</li>`
     } else {
