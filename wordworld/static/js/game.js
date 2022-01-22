@@ -127,8 +127,8 @@ const boardFlasher = (foci) => {
     } else {
         _STATUS.flash += 1;
     }
-    showBoard(_STATUS.flash % 2 === 0 ? foci : []);
-    window.setTimeout(() => boardFlasher(foci), 500);
+    showBoard(_STATUS.flash % 2 === 1 ? foci : []);
+    window.setTimeout(() => boardFlasher(foci), 250);
 }
 
 const getPlacedTilePositions = () => {
