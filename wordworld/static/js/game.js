@@ -18,6 +18,7 @@ const _ACHIVEMENT_COMPLETION = 'achivement.completion';
 const _STREAK_DAYS_IN_A_ROW = 'streak.days';
 const _STREAK_WINS = 'streak.wins';
 const _WINS = 'wins';
+const _SUPER_WINS = 'wins.super';
 
 const _SCORE = "game.score";
 const _HIGHSCORE = "highscore";
@@ -91,8 +92,10 @@ const getStreakDays = () => JSON.parse(window.localStorage.getItem(_STREAK_DAYS_
 const setStreakDays = (days) => window.localStorage.setItem(_STREAK_DAYS_IN_A_ROW, JSON.stringify(days));
 const getStreakWins = () => JSON.parse(window.localStorage.getItem(_STREAK_WINS));
 const setStreakWins = (days) => window.localStorage.setItem(_STREAK_WINS, JSON.stringify(days));
-const getWins = () => JSON.parse(window.localStorage.getItem(_WINS));
+const getWins = () => JSON.parse(window.localStorage.getItem(_WINS) ?? '0');
 const setWins = (count) => window.localStorage.setItem(_WINS, JSON.stringify(count));
+const getSuperWins = () => JSON.parse(window.localStorage.getItem(_SUPER_WINS) ?? '0');
+const setSuperWins = (count) => window.localStorage.setItem(_SUPER_WINS, JSON.stringify(count));
 
 const buttonize = (content, callback) => `<span class="nav-btn" onclick="${callback}">${content}</span>`;
 
@@ -365,10 +368,13 @@ const gameOver = () => {
     }
     // Wins
     const win = percent >= 50 && score >= 40;
+    const superWin = percent >= 80 && score >= 100;
     const streakWins = win ? (inStreak === null ? getStreakWins() : getStreakWins() + 1) : 0;
     if (inStreak !== null) setStreakWins(streakWins);
     const wins = getWins() + (inStreak === null ?  0 : (win ? 1 : 0));
+    const superWins = getSuperWins() + (inStreak === null ?  0 : (superWin ? 1 : 0));
     if (inStreak !== null) setWins(wins);
+    if (inStreak !== null) setSuperWins(superWins);
     // Achievments
     const currentLongest = getLongestWord(true);
     const longestRecord = getLongestWord(false) === currentLongest ? '<span class="record">RECORD</span>' : '';
@@ -387,12 +393,14 @@ const gameOver = () => {
     }
     content += `<li>${currentRound} was the best round score${roundRecord}</li>`;
     content += `<li>Played ${streakDays} days in a row</li>`;
-    if (win) {
+    if (superWin) {
+        content += `<li>Scored a SUPEREB WIN! ${streakWins} win${streakWins > 1 ? 's' : ''} wins in a row</li>`
+    } else if (win) {
         content += `<li>Scored a WIN! ${streakWins} win${streakWins > 1 ? 's' : ''} in a row</li>`
     } else {
-        content += '<li>No win today, unfortunately.</li>'
+        content += '<li>No win today, unfortunately</li>'
     }
-    content += `<li>A total of ${wins} win${wins !== 1 ? 's': ''} scored</li>`;
+    content += `<li>A total of ${superWins} superb and ${wins - superWins} normal win${wins !== 1 ? 's': ''} scored</li>`;
     content += `</ul>`;
 
     div.innerHTML = content;
