@@ -210,6 +210,7 @@ const playTile = (handPosition) => {
     } else if (hand.position != null){
         game[hand.position.y][hand.position.x] = null;
         setHandPosition(handPosition, hand.character, false, hand.age);
+        setGame(game);
     }
     showHand();
 };
