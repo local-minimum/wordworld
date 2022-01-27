@@ -513,14 +513,14 @@ const submitTiles = () => {
 
 const startThink = () => {
     _STATUS.communicating = true;
-    const game = document.getElementById('game');
-    game.className = "active-animation";
+    const world = document.getElementById('world');
+    world.className = "active-animation";
 };
 
 const endThink = () => {
     _STATUS.communicating = false;
-    const game = document.getElementById('game');
-    game.className = "paused-animation";
+    const world = document.getElementById('world');
+    world.className = "paused-animation";
 };
 
 const drawFromBag = () => {
