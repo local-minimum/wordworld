@@ -465,7 +465,6 @@ const reportGuesses = (candidates, valid, score) => {
 };
 
 const checkForValid = (canditates) => {
-    _STATUS.communicating = true;
     axios
         .post('/wordz/check', canditates)
         .then(function (response) {
@@ -484,31 +483,44 @@ const checkForValid = (canditates) => {
             handleAge();
             drawHand();
             showBoard();
-            // Allow input again
-            _STATUS.communicating = false;
+            endThink();
         })
         .catch(function (error) {
             console.error(error);
-
-            // Allow input again
-            _STATUS.communicating = false;
+            endThink();
         });
 };
 
 const submitTiles = () => {
+    if (_STATUS.communicating) return;
+    startThink();
     const invalids = getInvalidPlacements();
     if (invalids.length > 0) {
         boardFlasher(invalids);
-        return
+        endThink();
+        return        
     }
     const canditates = wordsFromPlaced();
     if (canditates.length === 0) {
         handleAge();
         drawHand();
         showBoard();
+        endThink();
     } else {
         checkForValid(canditates);
     }
+};
+
+const startThink = () => {
+    _STATUS.communicating = true;
+    const game = document.getElementById('game');
+    game.className = "active-animation";
+};
+
+const endThink = () => {
+    _STATUS.communicating = false;
+    const game = document.getElementById('game');
+    game.className = "paused-animation";
 };
 
 const drawFromBag = () => {
