@@ -572,7 +572,7 @@ const newGame = (name) => {
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
     _STATUS.rng = getPRNG(name);
-    const handSize = getHandSize();
+    const handSize = wordzStore.getHandSize();
     for (let i=0; i<handSize; i++) {
         wordzStore.setHandPosition(i, '.', true, 0);
     }
