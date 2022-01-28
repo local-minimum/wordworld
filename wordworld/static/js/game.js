@@ -378,8 +378,9 @@ const reportGuesses = (candidates, valid, score) => {
 };
 
 const checkForValid = (canditates) => {
+    const mode = wordzStore.getMode();
     axios
-        .post('/wordz/check', canditates)
+        .post(mode.indexOf('swe') === 0 ? '/wordz/kolla' : '/wordz/check', canditates)
         .then(function (response) {
             const valid = canditates.filter((_, idx) => response.data[idx]);
             const invalid = canditates.filter((_, idx) => !response.data[idx]);
