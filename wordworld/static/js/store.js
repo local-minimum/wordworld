@@ -1,10 +1,8 @@
 window.wordzStore = {
+    _MODE: '',
     _SIZE: 'settings.boardSize',
-    _SIZE_DEFAULT: '9',
     _HAND_SIZE: 'settings.handSize',
-    _HAND_SIZE_DEFAULT: '6',
     _CURSOR: 'game.cursor',
-    _CURSOR_DEFAULT: '{ "x": 4, "y": 4 }',
     _HAND_POSITION: 'hand.',
     _CURRENT_GAME: 'game.current',
     _CURRENT_NAME: 'game.current.name',
@@ -22,22 +20,26 @@ window.wordzStore = {
     _SCORE: "game.score",
     _HIGHSCORE: "highscore",
 
+    // Mode
+    getMode: function() { return this._MODE; },
+    setMode: function(mode) { this._MODE = mode; },
+
     // Game
-    getGame: function() { return JSON.parse(window.localStorage.getItem(this._CURRENT_GAME) ?? '[]'); },
-    setGame: function(game) { return window.localStorage.setItem(this._CURRENT_GAME, JSON.stringify(game)); },
-    setGameOver: function(go) { return window.localStorage.setItem(this._CURRENT_GAME_OVER, JSON.stringify(go)); },
-    getGameOver: function() { return  JSON.parse(window.localStorage.getItem(this._CURRENT_GAME_OVER) ?? 'false'); },
-    getGameName: function() { return window.localStorage.getItem(this._CURRENT_NAME) ?? ''; },
-    setGameName: function(name) { return window.localStorage.setItem(this._CURRENT_NAME, name); },
-    getPrevGameName: function() { return window.localStorage.getItem(this._PREVIOUS_NAME) ?? ''; },
-    setPrevGameName: function(name) { return window.localStorage.setItem(this._PREVIOUS_NAME, name); },
-    getGameSize: function() { return JSON.parse(window.localStorage.getItem(this._SIZE) ?? this._SIZE_DEFAULT); },
+    getGame: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._CURRENT_GAME}`) ?? '[]'); },
+    setGame: function(game) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_GAME}`, JSON.stringify(game)); },
+    setGameOver: function(go) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_GAME_OVER}`, JSON.stringify(go)); },
+    getGameOver: function() { return  JSON.parse(window.localStorage.getItem(`${this._MODE}${this._CURRENT_GAME_OVER}`) ?? 'false'); },
+    getGameName: function() { return window.localStorage.getItem(`${this._MODE}${this._CURRENT_NAME}`) ?? ''; },
+    setGameName: function(name) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_NAME}`, name); },
+    getPrevGameName: function() { return window.localStorage.getItem(`${this._MODE}${this._PREVIOUS_NAME}`) ?? ''; },
+    setPrevGameName: function(name) { return window.localStorage.setItem(`${this._MODE}${this._PREVIOUS_NAME}`, name); },
+    getGameSize: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SIZE}`) ?? '0'); },
 
     // Progress
     resetProgress: function() {
-        window.localStorage.removeItem(this._CURRENT_GAME);
-        window.localStorage.removeItem(this._CURSOR);
-        window.localStorage.removeItem(this._SCORE);
+        window.localStorage.removeItem(`${this._MODE}${this._CURRENT_GAME}`);
+        window.localStorage.removeItem(`${this._MODE}${this._CURSOR}`);
+        window.localStorage.removeItem(`${this._MODE}${this._SCORE}`);
     },
     getCountPlayedCharacters: function() {
         const game = this.getGame();
@@ -48,12 +50,16 @@ window.wordzStore = {
     },
    
     // Cursor
-    getCursor: function() { return  JSON.parse(window.localStorage.getItem(this._CURSOR) ?? this._CURSOR_DEFAULT); },
+    getCursorStart: function() {
+        const size = this.getGameSize();
+        const pos = Math.floor((size - 1) / 2);
+        return { x: pos, y: pos };
+    },
+    getCursor: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._CURSOR}`) ?? 'null') ?? this.getCursorStart(); },
     moveCursor: function(x, y) {
-        if (_STATUS.gameOver) return;
         const size = this.getGameSize();
         window.localStorage.setItem(
-            this._CURSOR,
+            `${this._MODE}${this._CURSOR}`,
             JSON.stringify({
                 x: Math.max(0, Math.min(size - 1, x)),
                 y: Math.max(0, Math.min(size - 1, y)),
@@ -62,9 +68,9 @@ window.wordzStore = {
     },
 
     // Hand
-    getHandSize: function() { return JSON
-        .parse(window.localStorage.getItem(this._HAND_SIZE) ?? this._HAND_SIZE_DEFAULT); },
-
+    getHandSize: function() {
+        return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._HAND_SIZE}`) ?? '6');
+    },
     getPlacedTilePositions: function() {
         const handSize = this.getHandSize();
         const positions = [];
@@ -77,11 +83,11 @@ window.wordzStore = {
         return positions;
     },
     getHandPosition: function(handPosition) { return JSON
-        .parse(window.localStorage.getItem(this._HAND_POSITION + handPosition) ?? '{"character": ".", "empty": true, "age": 0}');
+        .parse(window.localStorage.getItem(`${this._MODE}${this._HAND_POSITION}${handPosition}`) ?? '{"character": ".", "empty": true, "age": 0}');
     },
     setHandPosition: function(handPosition, character, empty, age, position) {
         return window.localStorage.setItem(
-            this._HAND_POSITION + handPosition,
+            `${this._MODE}${this._HAND_POSITION}${handPosition}`,
             JSON.stringify({ empty, character, position, age }),
         );
     },
@@ -98,24 +104,24 @@ window.wordzStore = {
     },
 
     // Score
-    getScore: function() { return JSON.parse(window.localStorage.getItem(this._SCORE) ?? '0'); },
-    setScore: function(total) { return window.localStorage.setItem(this._SCORE, JSON.stringify(total)); },
+    getScore: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SCORE}`) ?? '0'); },
+    setScore: function(total) { return window.localStorage.setItem(`${this._MODE}${this._SCORE}`, JSON.stringify(total)); },
 
     // Stats
-    getHighscore: function() { return JSON.parse(window.localStorage.getItem(this._HIGHSCORE) ?? '0'); },
-    setHighscore: function(score) { return window.localStorage.setItem(this._HIGHSCORE, JSON.stringify(score)); },
-    getLongestWord: function(current) { return window.localStorage.getItem(current ? this._ACHIVEMENT_LONGEST_CURRENT : this._ACHIVEMENT_LONGEST) ?? ''; },
-    setLongestWord: function(current, word) { return window.localStorage.setItem(current ? this._ACHIVEMENT_LONGEST_CURRENT : this._ACHIVEMENT_LONGEST, word); },
-    getBestRound: function(current) { return JSON.parse(window.localStorage.getItem(current ? this._ACHIVEMENT_ROUND_CURRENT : this._ACHIVEMENT_ROUND)) ?? 0; },
-    setBestRound: function(current, score) { return window.localStorage.setItem(current ? this._ACHIVEMENT_ROUND_CURRENT: this._ACHIVEMENT_ROUND, JSON.stringify(score)); },
-    getBestCompletion: function() { return JSON.parse(window.localStorage.getItem(this._ACHIVEMENT_COMPLETION)) ?? 0; },
-    setBestCompletion: function(percent) { return window.localStorage.setItem(this._ACHIVEMENT_COMPLETION, JSON.stringify(percent)); },
-    getStreakDays: function() { return JSON.parse(window.localStorage.getItem(this._STREAK_DAYS_IN_A_ROW)); },
-    setStreakDays: function(days) { return window.localStorage.setItem(this._STREAK_DAYS_IN_A_ROW, JSON.stringify(days)); },
-    getStreakWins: function() { return JSON.parse(window.localStorage.getItem(this._STREAK_WINS)); },
-    setStreakWins: function(days) { return window.localStorage.setItem(this._STREAK_WINS, JSON.stringify(days)); },
-    getWins: function() { return JSON.parse(window.localStorage.getItem(this._WINS) ?? '0'); },
-    setWins: function(count) { return window.localStorage.setItem(this._WINS, JSON.stringify(count)); },
-    getSuperWins: function() { return JSON.parse(window.localStorage.getItem(this._SUPER_WINS) ?? '0'); },
-    setSuperWins: function(count) { return window.localStorage.setItem(this._SUPER_WINS, JSON.stringify(count)); },
+    getHighscore: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._HIGHSCORE}`) ?? '0'); },
+    setHighscore: function(score) { return window.localStorage.setItem(`${this._MODE}${this._HIGHSCORE}`, JSON.stringify(score)); },
+    getLongestWord: function(current) { return window.localStorage.getItem(`${this._MODE}${current ? this._ACHIVEMENT_LONGEST_CURRENT : this._ACHIVEMENT_LONGEST}`) ?? ''; },
+    setLongestWord: function(current, word) { return window.localStorage.setItem(`${this._MODE}${current ? this._ACHIVEMENT_LONGEST_CURRENT : this._ACHIVEMENT_LONGEST}`, word); },
+    getBestRound: function(current) { return JSON.parse(window.localStorage.getItem(`${this._MODE}${current ? this._ACHIVEMENT_ROUND_CURRENT : this._ACHIVEMENT_ROUND}`)) ?? 0; },
+    setBestRound: function(current, score) { return window.localStorage.setItem(`${this._MODE}${current ? this._ACHIVEMENT_ROUND_CURRENT: this._ACHIVEMENT_ROUND}`, JSON.stringify(score)); },
+    getBestCompletion: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._ACHIVEMENT_COMPLETION}`)) ?? 0; },
+    setBestCompletion: function(percent) { return window.localStorage.setItem(`${this._MODE}${this._ACHIVEMENT_COMPLETION}`, JSON.stringify(percent)); },
+    getStreakDays: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._STREAK_DAYS_IN_A_ROW}`)); },
+    setStreakDays: function(days) { return window.localStorage.setItem(`${this._MODE}${this._STREAK_DAYS_IN_A_ROW}`, JSON.stringify(days)); },
+    getStreakWins: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._STREAK_WINS}`)); },
+    setStreakWins: function(days) { return window.localStorage.setItem(`${this._MODE}${this._STREAK_WINS}`, JSON.stringify(days)); },
+    getWins: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._WINS}`) ?? '0'); },
+    setWins: function(count) { return window.localStorage.setItem(`${this._MODE}${this._WINS}`, JSON.stringify(count)); },
+    getSuperWins: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SUPER_WINS}`) ?? '0'); },
+    setSuperWins: function(count) { return window.localStorage.setItem(`${this._MODE}${this._SUPER_WINS}`, JSON.stringify(count)); },
 }

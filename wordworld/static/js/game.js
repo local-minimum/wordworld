@@ -497,23 +497,28 @@ const showHand = () => {
     hand.innerHTML = handContents;
 };
 
+const moveCursor = (x, y) => {
+    if (_STATUS.gameOver) return;
+    return wordzStore.moveCursor(x, y);
+}
+
 const handleKeyPress = (evt) => {
     const cursor = wordzStore.getCursor();
     switch (evt.which ?? evt.keyCode) {
         case 38: // UP
-            wordzStore.moveCursor(cursor.x, cursor.y - 1);
+            moveCursor(cursor.x, cursor.y - 1);
             evt.preventDefault();
             break;
         case 40: // DOWN
-            wordzStore.moveCursor(cursor.x, cursor.y + 1);
+            moveCursor(cursor.x, cursor.y + 1);
             evt.preventDefault();
             break;
         case 37: // LEFT
-            wordzStore.moveCursor(cursor.x - 1, cursor.y);
+            moveCursor(cursor.x - 1, cursor.y);
             evt.preventDefault();
             break;
         case 39: // RIGHT
-            wordzStore.moveCursor(cursor.x + 1, cursor.y);
+            moveCursor(cursor.x + 1, cursor.y);
             evt.preventDefault();
             break;
         case 49: // 1
