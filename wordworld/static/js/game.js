@@ -104,13 +104,17 @@ const showBoard = (foci = null) => {
     const size = getGameSize();
     const cursor = getCursor(); 
     const game = getGame();
+    const placedPositions = getPlacedTilePositions();
     const playing = !_STATUS.gameOver;
     let data = '';
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
             position = game[y]?.[x] ?? '.'; 
+            isCurrent = position  !== '.' && placedPositions.some((pos) => pos.x === x && pos.y === y);
             if (foci == null ? cursor.x === x && cursor.y === y : foci.some(pos => pos.x === x && pos.y === y)) {
-                position = `<span id="selection">${position}</span>`;
+                position = `<span id="selection"${isCurrent ? ' class="current-round-letter"' : ''}>${position}</span>`;
+            } else if (isCurrent) {
+                position = `<span class="current-round-letter">${position}</span>`
             }
             position = playing ? buttonize(position, `moveCursor(${x}, ${y});showBoard();`) : position;
             data += position;
