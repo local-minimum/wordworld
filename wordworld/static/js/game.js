@@ -427,10 +427,11 @@ const returnToHand = () => {
 
 const drawHand = () => {
     const handSize = wordzStore.getHandSize();
+    const mode = wordzStore.getMode();
     for (let i=0; i<handSize; i++) {
         const h = wordzStore.getHandPosition(i);
         if (h.empty) {
-            const character = drawFromBag();
+            const character = drawFromBag(mode);
             wordzStore.setHandPosition(i, character, false, 1);
         }
     }
