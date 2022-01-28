@@ -587,7 +587,7 @@ const newGame = (name) => {
 
 const setup = () => {
     const name = generateGameName();
-    const cachedGame = getGameName();
+    const cachedGame = wordzStore.getGameName();
     if (name !== cachedGame) {
         wordzStore.setPrevGameName(cachedGame.length === 0 ? 'GAME: -42' : cachedGame);
         newGame(name);
