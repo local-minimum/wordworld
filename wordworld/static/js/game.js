@@ -112,7 +112,7 @@ const showBoard = (foci = null) => {
             position = game[y]?.[x] ?? '.'; 
             isCurrent = position  !== '.' && placedPositions.some((pos) => pos.x === x && pos.y === y);
             if (foci == null ? cursor.x === x && cursor.y === y : foci.some(pos => pos.x === x && pos.y === y)) {
-                position = `<span id="selection"${isCurrent ? ' class="current-round-letter"' : ''}>${position}</span>`;
+                position = `<span id="selection" class=${isCurrent ? '"current-round-letter"' : '"other-round-letter"'}>${position}</span>`;
             } else if (isCurrent) {
                 position = `<span class="current-round-letter">${position}</span>`
             } else {
