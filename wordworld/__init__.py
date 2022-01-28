@@ -41,4 +41,4 @@ def check_words():
 @app.route('/kolla', methods=["POST"])
 def kolla_ord():
     words = request.get_json()
-    return jsonify([word.upper() in alla_ord for word in words])
+    return jsonify([word.lower() in alla_ord for word in words])
