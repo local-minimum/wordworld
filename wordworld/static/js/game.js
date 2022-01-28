@@ -115,6 +115,8 @@ const showBoard = (foci = null) => {
                 position = `<span id="selection"${isCurrent ? ' class="current-round-letter"' : ''}>${position}</span>`;
             } else if (isCurrent) {
                 position = `<span class="current-round-letter">${position}</span>`
+            } else {
+                position = `<span class="other-round-letter">${position}</span>`
             }
             position = playing ? buttonize(position, `moveCursor(${x}, ${y});showBoard();`) : position;
             data += position;
