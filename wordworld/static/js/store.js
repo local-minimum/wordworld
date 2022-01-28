@@ -33,7 +33,7 @@ window.wordzStore = {
     setGameName: function(name) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_NAME}`, name); },
     getPrevGameName: function() { return window.localStorage.getItem(`${this._MODE}${this._PREVIOUS_NAME}`) ?? ''; },
     setPrevGameName: function(name) { return window.localStorage.setItem(`${this._MODE}${this._PREVIOUS_NAME}`, name); },
-    getGameSize: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SIZE}`) ?? '0'); },
+    getGameSize: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SIZE}`) ?? '9'); },
 
     // Progress
     resetProgress: function() {
