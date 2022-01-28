@@ -154,6 +154,7 @@
             <script src="/wordz/js/rnd.js"></script>
             <script src="/wordz/js/utils.js"></script>
             <script src="/wordz/js/store.js"></script>
+            <script src="/wordz/js/letters.js"></script>
             <script src="/wordz/js/game.js"></script>
         </head>
         <body>
@@ -176,6 +177,9 @@
                 <button onclick="returnTiles();showBoard();">(C)lear placed</button>
                 <button onclick="submitTiles();showBoard();">Submit (space)</button>
                 <button onclick="document.getElementById('rules').className='float-box';">Rules</button>
+                <br>
+                <button onclick="wordzStore.setMode('');setup();">English</button>
+                <button onclick="wordzStore.setMode('SWE-');setup();">Svenska</button>
             </div>
             <div id="rules" class="hidden">
                 <h3>How to play</h3>

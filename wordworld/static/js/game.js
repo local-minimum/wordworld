@@ -1,31 +1,3 @@
-const _LETTER_FREQUENCIES = {
- e: 11.1607,
- a: 8.4966,
- r: 7.5809,
- i: 7.5448,
- o: 7.1635,
- t: 6.9509,
- n: 6.6544,
- s: 5.7375,
- l: 5.4893,
- c: 4.5488,
- u: 3.6308,
- d: 3.3844,
- p: 3.1671,
- m: 3.0129,
- h: 3.0034,
- g: 2.4705,
- b: 2.0720,
- f: 1.8121,
- y: 1.7779,
- w: 1.2899,
- k: 1.1016,
- v: 1.0074,
- x: 0.2902,
- z: 0.2722,
- j: 0.1965,
- q: 0.1962,
-};
 const _STATUS = {
     gameOver: false,
     communicating: false,
@@ -380,7 +352,7 @@ const reportGuesses = (candidates, valid, score) => {
 const checkForValid = (canditates) => {
     const mode = wordzStore.getMode();
     axios
-        .post(mode.indexOf('swe') === 0 ? '/wordz/kolla' : '/wordz/check', canditates)
+        .post(mode.indexOf('SWE') === 0 ? '/wordz/kolla' : '/wordz/check', canditates)
         .then(function (response) {
             const valid = canditates.filter((_, idx) => response.data[idx]);
             const invalid = canditates.filter((_, idx) => !response.data[idx]);
@@ -437,19 +409,6 @@ const endThink = () => {
     world.className = "paused-animation";
 };
 
-const drawFromBag = () => {
-    const sum = Object.values(_LETTER_FREQUENCIES)
-        .reduce((acc, value) => acc + value, 0);
-    let value = _STATUS.rng() * sum;
-    return Object
-        .keys(_LETTER_FREQUENCIES)
-        .find(k => {
-            value -= _LETTER_FREQUENCIES[k];
-            if (value <= 0) return true;
-            return false;
-        });
-    
-};
 
 const returnToHand = () => {
     const game = wordzStore.getGame();
@@ -571,7 +530,8 @@ const newGame = (name) => {
     wordzStore.resetProgress();
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
-    _STATUS.rng = getPRNG(name);
+    const mode = wordzStore.getMode();
+    _STATUS.rng = getPRNG(`${mode}${name}`);
     const handSize = wordzStore.getHandSize();
     for (let i=0; i<handSize; i++) {
         wordzStore.setHandPosition(i, '.', true, 0);
@@ -592,8 +552,9 @@ const setup = () => {
         wordzStore.setPrevGameName(cachedGame.length === 0 ? 'GAME: -42' : cachedGame);
         newGame(name);
     } else {
+        const mode = wordzStore.getMode();
         const revealed = wordzStore.getCountPlayedCharacters() + wordzStore.getTilesInHand();
-        _STATUS.rng = getPRNG(name, revealed);
+        _STATUS.rng = getPRNG(`${mode}${name}`, revealed);
         _STATUS.gameOver = wordzStore.getGameOver();
     }
     showHand();
