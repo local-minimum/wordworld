@@ -67,7 +67,7 @@ const showMessageOnBoard = (msg) => {
     let data = '';
     for (let y=0; y<size; y++) {
         line = lines[y - yOff];
-        const xOff = Math.floor((size - line.length) / 2);
+        const xOff = Math.floor((size - (line?.length ?? 0)) / 2);
         for (let x=0; x<size; x++) {
             const ch = line?.[x - xOff];
             if (ch != null) {
