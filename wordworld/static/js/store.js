@@ -25,10 +25,10 @@ window.wordzStore = {
     getMode: function() { return this._MODE; },
     setMode: function(mode) {
         this._MODE = mode;
-        window.localStorage.setItem(_LAST_MODE, mode);
+        window.localStorage.setItem(this._LAST_MODE, mode);
     },
     restoreMode: function() {
-        this._MODE = window.localStorage.getItem(_LAST_MODE) ?? ''
+        this._MODE = window.localStorage.getItem(this._LAST_MODE) ?? ''
     },
 
     // Game
