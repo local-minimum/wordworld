@@ -77,6 +77,7 @@ const showMessageOnBoard = (msg) => {
             }
         }
     }
+    const board = document.getElementById('world');
     board.innerHTML = data;
 };
 
@@ -602,6 +603,8 @@ const MODE_AS_GAME_NAME = {
 
 const displayModeName = () => {
     const mode = wordzStore.getMode();
+    document.getElementById('game-name').innerHTML = MODE_AS_GAME_NAME[mode];
+
     startThink();
     // Display mode name in game
     showMessageOnBoard(MODE_AS_MODE_NAME[mode]);
@@ -621,7 +624,6 @@ const setup = (mode) => {
     } else {
         wordzStore.restoreMode();
     }
-    document.getElementById('game-name').innerHTML = MODE_AS_GAME_NAME[mode];
     displayModeName();
 
     // Cleanup
