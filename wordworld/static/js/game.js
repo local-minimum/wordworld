@@ -159,6 +159,19 @@ const returnTiles = () => {
     showBoard();
 }
 
+const showCoverage = () => {
+    const coverage = wordzStore.getCoverage();
+    const coverageText = `${coverage}%`;
+    const tOff = Math.floor((10 - text.length) / 2);
+    let text = '' ;
+    for (let i = 0; i<10; i++) {
+        const ch = coverageText[i - tOff] ?? ' ';
+        const cls = (i + 1) * 10 <= coverage ? 'has-coverage' : '';
+        tOff += `<span class=${cls}>${ch}</span>`;
+    }
+    document.getElementById('coverage').innerHTML = text;
+}
+
 const increaseScore = (value) => {
     const total = Math.max(0, wordzStore.getScore() + value);
     wordzStore.setScore(total);
@@ -292,7 +305,7 @@ const gameOver = () => {
         highScore = '<span class="record">HIGHSCORE!</p>';
     }
     // Coverage
-    const percent = Math.round(100 * wordzStore.getCountPlayedCharacters() / Math.pow(wordzStore.getGameSize(), 2));
+    const percent = wordzStore.getCoverage();
     const bestPercent = wordzStore.getBestCompletion()
     let recordPercent = '';
     if (percent >= bestPercent) {

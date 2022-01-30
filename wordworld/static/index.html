@@ -157,6 +157,16 @@
                     display: inline-block;
                     margin-left: 2em;
                 }
+                #coverage {
+                    font-size: 0.8em;
+                    border-width: 2px;
+                    border-color: #ffb000;
+                    border-style: solid;
+                }
+                .has-coverage {
+                    color: #282828;
+                    background-color: #ffb000;
+                }
             </style>
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script src="/wordz/js/rnd.js"></script>
@@ -178,6 +188,7 @@
                 </div>
             </div>
             <div id="hud">
+                <div id="coverage"></div>
                 <div id="hand"></div>
                 <div id="guesses"></div> 
             </div>

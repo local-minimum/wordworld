@@ -55,6 +55,9 @@ window.wordzStore = {
             0,
         );
     },
+    getCoverage: function() {
+        return Math.round(100 * this.getCountPlayedCharacters() / Math.pow(this.getGameSize(), 2));
+    },
    
     // Cursor
     getCursorStart: function() {
