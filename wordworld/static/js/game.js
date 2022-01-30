@@ -341,6 +341,12 @@ const share = () => {
         data += '\n';
     }
     navigator.clipboard.writeText(data);
+    _STATUS.communicating = true;
+    showMessageOnBoard('Copied to clipboard');    
+    window.setTimeout(() => {
+        _STATUS.communicating = false;
+        showBoard();
+    }, 1000);
 };
 
 const gameOver = () => {    
