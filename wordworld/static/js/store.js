@@ -1,5 +1,6 @@
 window.wordzStore = {
     _MODE: '',
+    _LAST_MODE: 'settings.mode',
     _SIZE: 'settings.boardSize',
     _HAND_SIZE: 'settings.handSize',
     _CURSOR: 'game.cursor',
@@ -22,7 +23,13 @@ window.wordzStore = {
 
     // Mode
     getMode: function() { return this._MODE; },
-    setMode: function(mode) { this._MODE = mode; },
+    setMode: function(mode) {
+        this._MODE = mode;
+        window.localStorage.setItem(_LAST_MODE, mode);
+    },
+    restoreMode: function() {
+        this._MODE = window.localStorage.getItem(_LAST_MODE) ?? ''
+    },
 
     // Game
     getGame: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._CURRENT_GAME}`) ?? '[]'); },
@@ -101,6 +108,12 @@ window.wordzStore = {
             }
         }
         return tiles;
+    },
+    clearHand: function() {
+        const handSize = this.getHandSize();
+        for (let i=0; i<handSize; i++) {
+            this.setHandPosition(i, '.', true, 0);
+        }
     },
 
     // Score

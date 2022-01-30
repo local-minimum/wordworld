@@ -158,7 +158,7 @@
             <script src="/wordz/js/game.js"></script>
         </head>
         <body>
-            <h1>Some Wordz a Day</h1>
+            <h1 id="game-name">Word Crux</h1>
             <h2 id="score">0000</h2>
             <div id="game-over"></div>
             <div id="world-container">
@@ -178,8 +178,8 @@
                 <button onclick="submitTiles();showBoard();">Submit (space)</button>
                 <button onclick="document.getElementById('rules').className='float-box';">Rules</button>
                 <br><br>
-                <button onclick="wordzStore.setMode('');setup();">English</button>
-                <button onclick="wordzStore.setMode('SWE-');setup();">Svenska</button>
+                <button onclick="setup('');">English</button>
+                <button onclick="setup('SWE-');">Svenska</button>
             </div>
             <div id="rules" class="hidden">
                 <h3>How to play</h3>
@@ -212,6 +212,12 @@
 
         </body>
         <script>
-            document.addEventListener('DOMContentLoaded', setup);
+            document.addEventListener(
+                'DOMContentLoaded',
+                () => {
+                    setup();
+                    document.onkeydown = handleKeyPress;
+                }
+            );
         </script>
 </html>

@@ -33,6 +33,53 @@ const showBoard = (foci = null) => {
     board.innerHTML = data;
 };
 
+const showMessageOnBoard = (msg) => {
+    const size = wordzStore.getGameSize();
+    const words = msg.split(' ');    
+    let lines = [];
+    let line  = 0;
+    let cols = 0;
+    for (let i = 0; i<words.length; i++) {
+        const word = words[i];
+        if (cols == 0) {
+            if (word.length < size) {
+                lines.push([word]);
+                cols = word.length
+            } else {
+                left = word.splice(0, size - 1);
+                lines.push([left, '-']);
+                line += 1;
+                cols = 0;
+                i -= 1;
+            }
+        } else if (cols + word.length < size + 1) {
+            lines[line].push(' ');
+            lines[line].push(word)
+            cols += 1 +  word.length;
+        } else {
+            cols = 0;
+            i -= 1;
+            line += 1;
+        }
+    }
+    lines = lines.map(l => l.join(''));
+    const yOff = Math.floor((size - lines.length) / 2);
+    let data = '';
+    for (let y=0; y<size; y++) {
+        line = lines[y - yOff];
+        const xOff = Math.floor((size - line.length) / 2);
+        for (let x=0; x<size; x++) {
+            const ch = line?.[x - xOff];
+            if (ch != null) {
+                data += ch;
+            } else {
+                data += '.';
+            }
+        }
+    }
+    board.innerHTML = data;
+};
+
 const boardFlasher = (foci) => {
     if (_STATUS.flash === undefined) {
         _STATUS.flash = 0;
@@ -533,10 +580,7 @@ const newGame = (name) => {
     _STATUS.communicating = false;
     const mode = wordzStore.getMode();
     _STATUS.rng = getPRNG(`${mode}${name}`);
-    const handSize = wordzStore.getHandSize();
-    for (let i=0; i<handSize; i++) {
-        wordzStore.setHandPosition(i, '.', true, 0);
-    }
+    wordzStore.clearHand();
     reportGuesses([], []);
     drawHand();
     showBoard();
@@ -546,7 +590,44 @@ const newGame = (name) => {
     document.getElementById('game-over').innerHTML = "";
 };
 
-const setup = () => {
+const MODE_AS_MODE_NAME = {
+    '': 'English',
+    'SWE-': 'Svenska',
+};
+
+const MODE_AS_GAME_NAME = {
+    '': 'Word Crux',
+    'SWE-': 'Ordkrux',
+};
+
+const displayModeName = () => {
+    const mode = wordzStore.getMode();
+    startThink();
+    // Display mode name in game
+    showMessageOnBoard(MODE_AS_MODE_NAME[mode]);
+    window.setTimeout(
+        () => {
+            endThink();
+            showBoard();
+        },
+        2000,
+    );
+}
+
+const setup = (mode) => {
+    // Game mode
+    if (mode != null) {
+        wordzStore.setMode(mode);
+    } else {
+        wordzStore.restoreMode();
+    }
+    document.getElementById('game-name').innerHTML = MODE_AS_GAME_NAME[mode];
+    displayModeName();
+
+    // Cleanup
+    reportGuesses([], []);
+
+    // New or old game
     const name = generateGameName();
     const cachedGame = wordzStore.getGameName();
     if (name !== cachedGame) {
@@ -557,11 +638,14 @@ const setup = () => {
         const revealed = wordzStore.getCountPlayedCharacters() + wordzStore.getTilesInHand();
         _STATUS.rng = getPRNG(`${mode}${name}`, revealed);
         _STATUS.gameOver = wordzStore.getGameOver();
+        _STATUS.communicating = false;
     }
+
+    // Show current status
     showHand();
-    showBoard();
     if (_STATUS.gameOver) {
         gameOver();
+    } else {
+        document.getElementById('game-over').innerHTML = "";
     }
-    document.onkeydown = handleKeyPress;
 };
