@@ -604,6 +604,7 @@ const MODE_AS_GAME_NAME = {
 const displayModeName = () => {
     const mode = wordzStore.getMode();
     document.getElementById('game-name').innerHTML = MODE_AS_GAME_NAME[mode];
+    document.title = MODE_AS_GAME_NAME[mode];
 
     startThink();
     // Display mode name in game
