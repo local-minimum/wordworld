@@ -28,7 +28,7 @@ const showBoard = (foci = null) => {
             position = playing ? buttonize(position, `moveCursor(${x}, ${y});showBoard();`) : position;
             data += position;
         }
-        data += '<br>'
+        data += '<br>';
     }
     board.innerHTML = data;
 };
@@ -76,6 +76,7 @@ const showMessageOnBoard = (msg) => {
                 data += '.';
             }
         }
+        data += '<br>';
     }
     const board = document.getElementById('world');
     board.innerHTML = data;
