@@ -73,7 +73,7 @@ const showMessageOnBoard = (msg) => {
             if (ch == null) {
                 ch = '.';
             }
-            data += <span class="other-round-letter">${ch}</span>;
+            data += `<span class="other-round-letter">${ch}</span>`;
         }
         data += '<br>';
     }
