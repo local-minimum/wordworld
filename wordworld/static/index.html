@@ -9,7 +9,7 @@
                     src: url(/wordz/fonts/carbon.ttf);
                 }
                 body {
-                    font-family: carbon;
+                    font-family: monospace;
                     color: #ffb000;
                     background-color: #282828;
                     margin: 4em;
@@ -153,6 +153,8 @@
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script src="/wordz/js/rnd.js"></script>
             <script src="/wordz/js/utils.js"></script>
+            <script src="/wordz/js/store.js"></script>
+            <script src="/wordz/js/letters.js"></script>
             <script src="/wordz/js/game.js"></script>
         </head>
         <body>
@@ -175,6 +177,9 @@
                 <button onclick="returnTiles();showBoard();">(C)lear placed</button>
                 <button onclick="submitTiles();showBoard();">Submit (space)</button>
                 <button onclick="document.getElementById('rules').className='float-box';">Rules</button>
+                <br><br>
+                <button onclick="wordzStore.setMode('');setup();">English</button>
+                <button onclick="wordzStore.setMode('SWE-');setup();">Svenska</button>
             </div>
             <div id="rules" class="hidden">
                 <h3>How to play</h3>
@@ -195,6 +200,10 @@
 
                     Your guesses are submitted to the server, but all other data resides
                     in your browser and we don't track anything that you do. 
+                </p>
+                <p>
+                    Current round letters have a border. You can regret a placement by 
+                    clicking on it's hand position or using the number shortcut.
                 </p>
                 <div class="action-buttons">
                     <button onclick="document.getElementById('rules').className = 'hidden';">Close</button>

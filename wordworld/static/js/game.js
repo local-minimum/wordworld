@@ -1,110 +1,17 @@
-const _SIZE = 'settings.boardSize';
-const _SIZE_DEFAULT = '9';
-const _HAND_SIZE = 'settings.handSize';
-const _HAND_SIZE_DEFAULT = '6';
-const _CURSOR = 'game.cursor';
-const _CURSOR_DEFAULT = '{ "x": 4, "y": 4 }';
-const _HAND_POSITION = 'hand.';
-const _CURRENT_GAME = 'game.current';
-const _CURRENT_NAME = 'game.current.name';
-const _CURRENT_GAME_OVER = 'game.current.over';
-const _PREVIOUS_NAME = 'game.previous.name';
-
-const _ACHIVEMENT_LONGEST_CURRENT = 'achivement.longest.current';
-const _ACHIVEMENT_LONGEST = 'achivement.longest';
-const _ACHIVEMENT_ROUND_CURRENT = 'achivement.round.current';
-const _ACHIVEMENT_ROUND = 'achivement.round';
-const _ACHIVEMENT_COMPLETION = 'achivement.completion';
-const _STREAK_DAYS_IN_A_ROW = 'streak.days';
-const _STREAK_WINS = 'streak.wins';
-const _WINS = 'wins';
-const _SUPER_WINS = 'wins.super';
-
-const _SCORE = "game.score";
-const _HIGHSCORE = "highscore";
-const _LETTER_FREQUENCIES = {
- e: 11.1607,
- a: 8.4966,
- r: 7.5809,
- i: 7.5448,
- o: 7.1635,
- t: 6.9509,
- n: 6.6544,
- s: 5.7375,
- l: 5.4893,
- c: 4.5488,
- u: 3.6308,
- d: 3.3844,
- p: 3.1671,
- m: 3.0129,
- h: 3.0034,
- g: 2.4705,
- b: 2.0720,
- f: 1.8121,
- y: 1.7779,
- w: 1.2899,
- k: 1.1016,
- v: 1.0074,
- x: 0.2902,
- z: 0.2722,
- j: 0.1965,
- q: 0.1962,
-};
 const _STATUS = {
     gameOver: false,
     communicating: false,
 };
 
-const getGame = () => JSON.parse(window.localStorage.getItem(_CURRENT_GAME) ?? '[]');
-const setGame = (game) => window.localStorage.setItem(_CURRENT_GAME, JSON.stringify(game));
-const setGameOver = (go) => window.localStorage.setItem(_CURRENT_GAME_OVER, JSON.stringify(go));
-const getGameOver = () =>  JSON.parse(window.localStorage.getItem(_CURRENT_GAME_OVER) ?? 'false');
-const getGameName = () => window.localStorage.getItem(_CURRENT_NAME) ?? '';
-const setGameName = (name) => window.localStorage.setItem(_CURRENT_NAME, name);
-const getPrevGameName = () => window.localStorage.getItem(_PREVIOUS_NAME) ?? '';
-const setPrevGameName = (name) => window.localStorage.setItem(_PREVIOUS_NAME, name);
-const getGameSize = () => JSON.parse(window.localStorage.getItem(_SIZE) ?? _SIZE_DEFAULT);
-const getCursor = () =>  JSON.parse(window.localStorage.getItem(_CURSOR) ?? _CURSOR_DEFAULT);
-const getCountPlayedCharacters = () => {
-    const game = getGame();
-    return game.reduce(
-        (total, row) => total + (row == null ? 0 : row.reduce((sum, item) => sum + (item == null ? 0 : 1), 0)),
-        0,
-    );
-}
-const getHighscore = () => JSON.parse(window.localStorage.getItem(_HIGHSCORE) ?? '0');
-const setHighscore = (score) => window.localStorage.setItem(_HIGHSCORE, JSON.stringify(score));
-const getScore = () => JSON.parse(window.localStorage.getItem(_SCORE) ?? '0');
-const setScore = (total) => window.localStorage.setItem(_SCORE, JSON.stringify(total));
-const getHandSize = () => JSON
-    .parse(window.localStorage.getItem(_HAND_SIZE) ?? _HAND_SIZE_DEFAULT);
-const getLongestWord = (current) => window
-    .localStorage.getItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST) ?? '';
-const setLongestWord = (current, word) => window
-    .localStorage.setItem(current ? _ACHIVEMENT_LONGEST_CURRENT : _ACHIVEMENT_LONGEST, word);
-const getBestRound = (current) => JSON.parse(window
-    .localStorage.getItem(current ? _ACHIVEMENT_ROUND_CURRENT : _ACHIVEMENT_ROUND)) ?? 0;
-const setBestRound = (current, score) => window
-    .localStorage.setItem(current ? _ACHIVEMENT_ROUND_CURRENT: _ACHIVEMENT_ROUND, JSON.stringify(score));
-const getBestCompletion = () => JSON.parse(window.localStorage.getItem(_ACHIVEMENT_COMPLETION)) ?? 0;
-const setBestCompletion = (percent) => window.localStorage.setItem(_ACHIVEMENT_COMPLETION, JSON.stringify(percent));
-const getStreakDays = () => JSON.parse(window.localStorage.getItem(_STREAK_DAYS_IN_A_ROW));
-const setStreakDays = (days) => window.localStorage.setItem(_STREAK_DAYS_IN_A_ROW, JSON.stringify(days));
-const getStreakWins = () => JSON.parse(window.localStorage.getItem(_STREAK_WINS));
-const setStreakWins = (days) => window.localStorage.setItem(_STREAK_WINS, JSON.stringify(days));
-const getWins = () => JSON.parse(window.localStorage.getItem(_WINS) ?? '0');
-const setWins = (count) => window.localStorage.setItem(_WINS, JSON.stringify(count));
-const getSuperWins = () => JSON.parse(window.localStorage.getItem(_SUPER_WINS) ?? '0');
-const setSuperWins = (count) => window.localStorage.setItem(_SUPER_WINS, JSON.stringify(count));
 
 const buttonize = (content, callback) => `<span class="nav-btn" onclick="${callback}">${content}</span>`;
 
 const showBoard = (foci = null) => {
     const board = document.getElementById('world');
-    const size = getGameSize();
-    const cursor = getCursor(); 
-    const game = getGame();
-    const placedPositions = getPlacedTilePositions();
+    const size = wordzStore.getGameSize();
+    const cursor = wordzStore.getCursor(); 
+    const game = wordzStore.getGame();
+    const placedPositions = wordzStore.getPlacedTilePositions();
     const playing = !_STATUS.gameOver;
     let data = '';
     for (let y=0; y<size; y++) {
@@ -140,22 +47,10 @@ const boardFlasher = (foci) => {
     window.setTimeout(() => boardFlasher(foci), 250);
 }
 
-const getPlacedTilePositions = () => {
-    const handSize = getHandSize();
-    const positions = [];
-    for (let i=0;i<handSize; i++) {
-        const hand = getHandPosition(i);
-        if (hand.empty && hand.position != null) {
-            positions.push(hand.position);
-        }
-    }
-    return positions;
-}
-
 const getInvalidPlacements = () => {
-    const placed = getPlacedTilePositions();
-    const game = getGame();
-    if (placed.length > 0 && placed.length == getCountPlayedCharacters()) {
+    const placed = wordzStore.getPlacedTilePositions();
+    const game = wordzStore.getGame();
+    if (placed.length > 0 && placed.length == wordzStore.getCountPlayedCharacters()) {
         placed.splice(0, 1);
     }
     let truncated = true;
@@ -176,33 +71,13 @@ const getInvalidPlacements = () => {
     return placed;
 }
 
-const getHandPosition = (handPosition) => JSON
-    .parse(window.localStorage.getItem(_HAND_POSITION + handPosition) ?? '{"character": ".", "empty": true, "age": 0}');
-
-const setHandPosition = (handPosition, character, empty, age, position) => window.localStorage.setItem(
-    _HAND_POSITION + handPosition,
-    JSON.stringify({ empty, character, position, age }),
-);
-
-const getTilesInHand = () => {
-    const handSize = getHandSize();
-    let tiles = 0;
-    for (let i=0; i<handSize; i++) {
-        const hand = getHandPosition(i);
-        if (!hand.empty) {
-            tiles += 1;
-        }
-    }
-    return tiles;
-}
-
 const playTile = (handPosition) => {
     if (_STATUS.gameOver || _STATUS.communicating) return;
-    const handSize = getHandSize();
+    const handSize = wordzStore.getHandSize();
     if (handPosition >= handSize) return;
-    const hand = getHandPosition(handPosition);
-    const game = getGame();    
-    const cursor = getCursor();
+    const hand = wordzStore.getHandPosition(handPosition);
+    const game = wordzStore.getGame();    
+    const cursor = wordzStore.getCursor();
     if (
         !hand.empty
         && game[cursor.y]?.[cursor.x] == null
@@ -211,34 +86,34 @@ const playTile = (handPosition) => {
             game[cursor.y] = [];
         }
         game[cursor.y][cursor.x] = hand.character;
-        setHandPosition(handPosition, hand.character, true, hand.age, cursor);
-        setGame(game);
+        wordzStore.setHandPosition(handPosition, hand.character, true, hand.age, cursor);
+        wordzStore.setGame(game);
     } else if (hand.position != null){
         game[hand.position.y][hand.position.x] = null;
-        setHandPosition(handPosition, hand.character, false, hand.age);
-        setGame(game);
+        wordzStore.setHandPosition(handPosition, hand.character, false, hand.age);
+        wordzStore.setGame(game);
     }
     showHand();
 };
 
 const returnTiles = () => {
-    const handSize = getHandSize();
-    const game = getGame();
+    const handSize = wordzStore.getHandSize();
+    const game = wordzStore.getGame();
     for (let i = 0; i<handSize; i++) {
-        const hand = getHandPosition(i);
+        const hand = wordzStore.getHandPosition(i);
         if (hand.empty) {
             game[hand.position.y][hand.position.x] = null;
-            setHandPosition(i, hand.character, false, hand.age);
+            wordzStore.setHandPosition(i, hand.character, false, hand.age);
         }
     }
-    setGame(game);
+    wordzStore.setGame(game);
     showHand();
     showBoard();
 }
 
 const increaseScore = (value) => {
-    const total = Math.max(0, getScore() + value);
-    setScore(total);
+    const total = Math.max(0, wordzStore.getScore() + value);
+    wordzStore.setScore(total);
     const score = document.getElementById('score');
     score.innerHTML = String(total).padStart(4, '0');
 }
@@ -278,11 +153,11 @@ const verticalWord =  (game, origin) => {
 }
 
 const wordsFromPlaced = () => {
-    const game = getGame();
-    const handSize = getHandSize();
+    const game = wordzStore.getGame();
+    const handSize = wordzStore.getHandSize();
     let placed = [];
     for (let i = 0; i < handSize; i++) {
-        const h = getHandPosition(i);
+        const h = wordzStore.getHandPosition(i);
         if (h.empty && !!h.position) {
             placed.push(h.position);
         }
@@ -325,8 +200,8 @@ const hasNeighbors = (game, x, y) => {
 }
 
 const placeWithoutNeighbors = (char) => {
-    const size = getGameSize();
-    const game = getGame();
+    const size = wordzStore.getGameSize();
+    const game = wordzStore.getGame();
     const canditates = []
     for (let y = 0; y<size; y++) {
         for (let x = 0; x<size; x++) {
@@ -343,54 +218,54 @@ const placeWithoutNeighbors = (char) => {
         game[position.y] = [];
     }
     game[position.y][position.x] = char;
-    setGame(game);
+    wordzStore.setGame(game);
     return true;
 }
 
 const gameOver = () => {    
     _STATUS.gameOver = true;
-    setGameOver(true);
+    wordzStore.setGameOver(true);
     showBoard();
     increaseScore(0);
     // Streak
     // inStreak null means have not played just refreshing
-    const inStreak = isInStreak(getGameName(), getPrevGameName());
-    const streakDays = inStreak === null ? getStreakDays() : (inStreak ? getStreakDays() + 1 : 1);
+    const inStreak = isInStreak(wordzStore.getGameName(), wordzStore.getPrevGameName());
+    const streakDays = inStreak === null ? wordzStore.getStreakDays() : (inStreak ? wordzStore.getStreakDays() + 1 : 1);
     if (inStreak !== null) {
-        setStreakDays(streakDays);
+        wordzStore.setStreakDays(streakDays);
     }
     // Ensure refresh doesn't spoil stats
-    setPrevGameName('');
+    wordzStore.setPrevGameName('');
     // Score
-    const bestScore = getHighscore(); 
-    const score = getScore();
+    const bestScore = wordzStore.getHighscore(); 
+    const score = wordzStore.getScore();
     let highScore = '';
     if (score >= bestScore) {
-        setHighscore(score);
+        wordzStore.setHighscore(score);
         highScore = '<span class="record">HIGHSCORE!</p>';
     }
     // Coverage
-    const percent = Math.round(100 * getCountPlayedCharacters() / Math.pow(getGameSize(), 2));
-    const bestPercent = getBestCompletion()
+    const percent = Math.round(100 * wordzStore.getCountPlayedCharacters() / Math.pow(wordzStore.getGameSize(), 2));
+    const bestPercent = wordzStore.getBestCompletion()
     let recordPercent = '';
     if (percent >= bestPercent) {
-        setBestCompletion(percent);
+        wordzStore.setBestCompletion(percent);
         recordPercent = '<span class="record">RECORD</span>';
     }
     // Wins
     const win = score >= 50;
     const superWin = score >= 100;
-    const streakWins = win ? (inStreak === null ? getStreakWins() : getStreakWins() + 1) : 0;
-    if (inStreak !== null) setStreakWins(streakWins);
-    const wins = getWins() + (inStreak === null ?  0 : (win ? 1 : 0));
-    const superWins = getSuperWins() + (inStreak === null ?  0 : (superWin ? 1 : 0));
-    if (inStreak !== null) setWins(wins);
-    if (inStreak !== null) setSuperWins(superWins);
+    const streakWins = win ? (inStreak === null ? wordzStore.getStreakWins() : wordzStore.getStreakWins() + 1) : 0;
+    if (inStreak !== null) wordzStore.setStreakWins(streakWins);
+    const wins = wordzStore.getWins() + (inStreak === null ?  0 : (win ? 1 : 0));
+    const superWins = wordzStore.getSuperWins() + (inStreak === null ?  0 : (superWin ? 1 : 0));
+    if (inStreak !== null) wordzStore.setWins(wins);
+    if (inStreak !== null) wordzStore.setSuperWins(superWins);
     // Achievments
-    const currentLongest = getLongestWord(true);
-    const longestRecord = getLongestWord(false) === currentLongest ? '<span class="record">RECORD</span>' : '';
-    const currentRound = getBestRound(true);
-    const roundRecord = getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
+    const currentLongest = wordzStore.getLongestWord(true);
+    const longestRecord = wordzStore.getLongestWord(false) === currentLongest ? '<span class="record">RECORD</span>' : '';
+    const currentRound = wordzStore.getBestRound(true);
+    const roundRecord = wordzStore.getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
     // Produce content
     const div = document.getElementById('game-over');
     let content = "<h2>Game Over<h2><h3>Summary<h3>"
@@ -418,15 +293,15 @@ const gameOver = () => {
 }
 
 const handleAge = () => {
-    const handSize = getHandSize();
+    const handSize = wordzStore.getHandSize();
     for (let i = 0; i<handSize; i++) {
-        const h = getHandPosition(i);
+        const h = wordzStore.getHandPosition(i);
         if (h.empty) continue;
         if (h.age === 1) {
-            setHandPosition(i, h.character, false, 2);
+            wordzStore.setHandPosition(i, h.character, false, 2);
         } else {
             if (placeWithoutNeighbors(h.character)) {
-                setHandPosition(i, '.', true);
+                wordzStore.setHandPosition(i, '.', true);
             } else {
                 gameOver();
             }
@@ -440,13 +315,13 @@ const reportGuesses = (candidates, valid, score) => {
         .sort((a, b) => b.length - a.length)[0];
     let lengthRecord = false;
     if (longest != null) {
-        const currentLongest = getLongestWord(true);
-        const totalLongest = getLongestWord(false);
+        const currentLongest = wordzStore.getLongestWord(true);
+        const totalLongest = wordzStore.getLongestWord(false);
         if (longest.length > currentLongest.length) {
-            setLongestWord(true, longest);
+            wordzStore.setLongestWord(true, longest);
         }
         if (longest.length > totalLongest.length) {
-            setLongestWord(false, longest);
+            wordzStore.setLongestWord(false, longest);
             lengthRecord = true;
         }
     }
@@ -461,13 +336,13 @@ const reportGuesses = (candidates, valid, score) => {
         report += `<div><span class="${isAWord ? 'ok' : 'nok'}">${candidate}</span>&nbsp;(${pts})${wordRecord}</div>`;
     });
     if (score != null) {
-        const currentBest = getBestRound(true);
-        const totalBest = getBestRound(false);
-        if (score > currentBest) { setBestRound(true, score); }
+        const currentBest = wordzStore.getBestRound(true);
+        const totalBest = wordzStore.getBestRound(false);
+        if (score > currentBest) { wordzStore.setBestRound(true, score); }
         let record = '';
         if (score > totalBest) {
             record = '<span class="record">RECORD</span>'
-            setBestRound(false, score);
+            wordzStore.setBestRound(false, score);
         }
         report += `<br><div>${score}pt${score === 1 ? '' : 's'}${record}</div>`;
     }
@@ -475,8 +350,9 @@ const reportGuesses = (candidates, valid, score) => {
 };
 
 const checkForValid = (canditates) => {
+    const mode = wordzStore.getMode();
     axios
-        .post('/wordz/check', canditates)
+        .post(mode.indexOf('SWE') === 0 ? '/wordz/kolla' : '/wordz/check', canditates)
         .then(function (response) {
             const valid = canditates.filter((_, idx) => response.data[idx]);
             const invalid = canditates.filter((_, idx) => !response.data[idx]);
@@ -533,42 +409,30 @@ const endThink = () => {
     world.className = "paused-animation";
 };
 
-const drawFromBag = () => {
-    const sum = Object.values(_LETTER_FREQUENCIES)
-        .reduce((acc, value) => acc + value, 0);
-    let value = _STATUS.rng() * sum;
-    return Object
-        .keys(_LETTER_FREQUENCIES)
-        .find(k => {
-            value -= _LETTER_FREQUENCIES[k];
-            if (value <= 0) return true;
-            return false;
-        });
-    
-};
 
 const returnToHand = () => {
-    const game = getGame();
-    const handSize = getHandSize();
+    const game = wordzStore.getGame();
+    const handSize = wordzStore.getHandSize();
     for (let i=0; i<handSize; i++) {
-        const h = getHandPosition(i);
+        const h = wordzStore.getHandPosition(i);
         if (h.empty && !!h.position) {
             game[h.position.y][h.position.x] = undefined;
-            setHandPosition(i, h.character, false, h.age);
+            wordzStore.setHandPosition(i, h.character, false, h.age);
         }
     }
-    setGame(game);
+    wordzStore.setGame(game);
     showHand();
     showBoard();
 };
 
 const drawHand = () => {
-    const handSize = getHandSize();
+    const handSize = wordzStore.getHandSize();
+    const mode = wordzStore.getMode();
     for (let i=0; i<handSize; i++) {
-        const h = getHandPosition(i);
+        const h = wordzStore.getHandPosition(i);
         if (h.empty) {
-            const character = drawFromBag();
-            setHandPosition(i, character, false, 1);
+            const character = drawFromBag(mode);
+            wordzStore.setHandPosition(i, character, false, 1);
         }
     }
     showHand();
@@ -578,9 +442,9 @@ const showHand = () => {
     const isPlaying = !_STATUS.gameOver;
     const hand = document.getElementById('hand');
     let handContents = '';
-    const handSize = getHandSize();
+    const handSize = wordzStore.getHandSize();
     for (let i=0; i<handSize; i++) {
-        const h = getHandPosition(i);        
+        const h = wordzStore.getHandPosition(i);        
         const spannClass = h.empty ? 'hand-played' : (h.age > 1 ? 'hand-old' : '');
         let character = `<span class="${spannClass}">${h.character}</span>`;
         if (isPlaying) {
@@ -596,18 +460,11 @@ const showHand = () => {
 
 const moveCursor = (x, y) => {
     if (_STATUS.gameOver) return;
-    const size = getGameSize();
-    window.localStorage.setItem(
-        _CURSOR,
-        JSON.stringify({
-            x: Math.max(0, Math.min(size - 1, x)),
-            y: Math.max(0, Math.min(size - 1, y)),
-        }),
-    )
+    return wordzStore.moveCursor(x, y);
 }
 
 const handleKeyPress = (evt) => {
-    const cursor = getCursor();
+    const cursor = wordzStore.getCursor();
     switch (evt.which ?? evt.keyCode) {
         case 38: // UP
             moveCursor(cursor.x, cursor.y - 1);
@@ -669,37 +526,37 @@ const handleKeyPress = (evt) => {
 };
 
 const newGame = (name) => {
-    setGameName(name);
-    setGameOver(false);
-    window.localStorage.removeItem(_CURRENT_GAME);
-    window.localStorage.removeItem(_CURSOR);
-    window.localStorage.removeItem(_SCORE);
+    wordzStore.setGameName(name);
+    wordzStore.setGameOver(false);
+    wordzStore.resetProgress();
     _STATUS.gameOver = false;
     _STATUS.communicating = false;
-    _STATUS.rng = getPRNG(name);
-    const handSize = getHandSize();
+    const mode = wordzStore.getMode();
+    _STATUS.rng = getPRNG(`${mode}${name}`);
+    const handSize = wordzStore.getHandSize();
     for (let i=0; i<handSize; i++) {
-        setHandPosition(i, '.', true, 0);
+        wordzStore.setHandPosition(i, '.', true, 0);
     }
     reportGuesses([], []);
     drawHand();
     showBoard();
     increaseScore(0);
-    setBestRound(true, 0);
-    setLongestWord(true, '');
+    wordzStore.setBestRound(true, 0);
+    wordzStore.setLongestWord(true, '');
     document.getElementById('game-over').innerHTML = "";
 };
 
 const setup = () => {
     const name = generateGameName();
-    const cachedGame = getGameName();
+    const cachedGame = wordzStore.getGameName();
     if (name !== cachedGame) {
-        setPrevGameName(cachedGame.length === 0 ? 'GAME: -42' : cachedGame);
+        wordzStore.setPrevGameName(cachedGame.length === 0 ? 'GAME: -42' : cachedGame);
         newGame(name);
     } else {
-        const revealed = getCountPlayedCharacters() + getTilesInHand();
-        _STATUS.rng = getPRNG(name, revealed);
-        _STATUS.gameOver = getGameOver();
+        const mode = wordzStore.getMode();
+        const revealed = wordzStore.getCountPlayedCharacters() + wordzStore.getTilesInHand();
+        _STATUS.rng = getPRNG(`${mode}${name}`, revealed);
+        _STATUS.gameOver = wordzStore.getGameOver();
     }
     showHand();
     showBoard();
