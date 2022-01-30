@@ -45,8 +45,10 @@ const wordsToLines = (msg) => {
             if (cols === 0) {
                 lines.push([]);
                 line += 1;
+                cols = 0;
+            } else {
+                cols = size;
             }
-            cols = size;
         } else if (cols == 0) {
             if (word.length <= size) {
                 lines.push([word]);
@@ -82,7 +84,7 @@ const showMessageOnBoard = (msg) => {
         const xOff = Math.floor((size - (line?.length ?? 0)) / 2);
         for (let x=0; x<size; x++) {
             let ch = line?.[x - xOff];
-            if (ch == null) {
+            if (ch == null || ch === ' ') {
                 ch = '.';
             }
             data += `<span class="other-round-letter">${ch}</span>`;
@@ -103,11 +105,11 @@ const showRecords = () => {
     const bestRound = wordzStore.getBestRound();
     const showTime = 4000;
     showMessageOnBoard(
-        `Highscore ${bestScore}pts   Best round ${bestRound}pts   Coverage ${bestPercent}%`,
+        `Highscore  ${bestScore}pts   Round  ${bestRound}pts   Coverage  ${bestPercent}%`,
     );
     setTimeout(() => {
         showMessageOnBoard(
-            `Longest ${longestRecord}   Wins  ${wins}   Super Win ${superWins}`,
+            `Longest  ${longestRecord}   Wins  ${wins}   Super Win  ${superWins}`,
         );
         setTimeout(() => {
             showBoard();
