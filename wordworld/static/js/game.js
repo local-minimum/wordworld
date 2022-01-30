@@ -33,9 +33,9 @@ const showBoard = (foci = null) => {
     board.innerHTML = data;
 };
 
-const wordsToLines = (words) => {
-    const size = wordzStore.getGameSize();
+const wordsToLines = (msg) => {
     const words = msg.split(' ');    
+    const size = wordzStore.getGameSize();
     let lines = [];
     let line  = 0;
     let cols = 0;
@@ -72,7 +72,7 @@ const wordsToLines = (words) => {
 
 const showMessageOnBoard = (msg) => {
     const size = wordzStore.getGameSize();
-    const lines = wordsToLines(msg.split(' '));    
+    const lines = wordsToLines(msg);    
     const yOff = Math.floor((size - lines.length) / 2);
     let data = '';
     for (let y=0; y<size; y++) {
