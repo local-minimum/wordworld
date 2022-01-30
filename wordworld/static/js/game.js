@@ -42,7 +42,11 @@ const showMessageOnBoard = (msg) => {
     for (let i = 0; i<words.length; i++) {
         const word = words[i];
         if (cols == 0) {
-            if (word.length <= size) {
+            if (world.length === 0) {
+                lines.push([]);
+                line += 1;
+                cols = 0;
+            } else if (word.length <= size) {
                 lines.push([word]);
                 cols = word.length
             } else {
