@@ -33,7 +33,7 @@ const showBoard = (foci = null) => {
     board.innerHTML = data;
 };
 
-const showMessageOnBoard = (msg) => {
+const wordsToLines = (words) => {
     const size = wordzStore.getGameSize();
     const words = msg.split(' ');    
     let lines = [];
@@ -67,11 +67,16 @@ const showMessageOnBoard = (msg) => {
             line += 1;
         }
     }
-    lines = lines.map(l => l.join(''));
+    return lines.map(l => l.join(''));
+}
+
+const showMessageOnBoard = (msg) => {
+    const size = wordzStore.getGameSize();
+    const lines = wordsToLines(msg.split(' '));    
     const yOff = Math.floor((size - lines.length) / 2);
     let data = '';
     for (let y=0; y<size; y++) {
-        line = lines[y - yOff];
+        const line = lines[y - yOff];
         const xOff = Math.floor((size - (line?.length ?? 0)) / 2);
         for (let x=0; x<size; x++) {
             let ch = line?.[x - xOff];
