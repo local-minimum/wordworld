@@ -386,8 +386,8 @@ const gameOver = () => {
     const roundRecord = wordzStore.getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
     // Produce content
     const div = document.getElementById('game-over');
-    let content = "<h3>Game Over / Summary</h3>"
-    content += '<ul>'
+    let content = '<h3>Game Over <button onclick="share();">Share</button></h3>';
+    content += '<ul>';
     content += `<li>${score} points${highScore}</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
     if (currentLongest.length === 0) {
