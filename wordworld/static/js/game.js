@@ -96,6 +96,7 @@ const showMessageOnBoard = (msg) => {
 };
 
 const showRecords = () => {
+    if (_STATUS.communicating) return;
     _STATUS.communicating = true;
     const bestScore = wordzStore.getHighscore(); 
     const bestPercent = wordzStore.getBestCompletion()
