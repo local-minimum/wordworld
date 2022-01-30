@@ -323,11 +323,13 @@ const placeWithoutNeighbors = (char) => {
 }
 
 const share = () => {
+    const mode = wordzStore.getMode();
+
     const size = wordzStore.getGameSize();
     const game = wordzStore.getGame();
     const score = wordzStore.getScore();
     const percent = wordzStore.getCoverage();
-    let data = `Score: ${score}\nCoverage: ${percent}%\n`;
+    let data = `${MODE_AS_GAME_NAME[mode]}\nScore: ${score}\nCoverage: ${percent}%\n`;
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
             if (game[y]?.[x] == null) {
