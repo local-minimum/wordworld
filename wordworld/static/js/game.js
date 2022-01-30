@@ -42,12 +42,12 @@ const wordsToLines = (msg) => {
     for (let i = 0; i<words.length; i++) {
         const word = words[i];        
         if (word.length === 0) {
+            lines.push([]);
+            line += 1;
             if (cols === 0) {
-                lines.push([]);
-                line += 1;
-                cols = 0;
-            } else {
                 cols = size;
+            } else {
+                cols = 0;
             }
         } else if (cols == 0) {
             if (word.length <= size) {
