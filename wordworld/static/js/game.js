@@ -97,7 +97,7 @@ const showMessageOnBoard = (msg) => {
 
 const showRecords = () => {
     if (_STATUS.communicating) return;
-    _STATUS.communicating = true;
+    startThink();
     const bestScore = wordzStore.getHighscore(); 
     const bestPercent = wordzStore.getBestCompletion()
     const longestRecord = wordzStore.getLongestWord(false);
@@ -114,7 +114,7 @@ const showRecords = () => {
         );
         setTimeout(() => {
             showBoard();
-            _STATUS.communicating = false;
+            endThink();
         }, showTime);
     }, showTime);
 };
@@ -341,11 +341,11 @@ const share = () => {
         data += '\n';
     }
     navigator.clipboard.writeText(data);
-    _STATUS.communicating = true;
+    startThink();
     showMessageOnBoard('Copied to clipboard');    
     window.setTimeout(() => {
-        _STATUS.communicating = false;
-        showBoard();
+        endThink();
+        showBoard();        
     }, 1000);
 };
 
@@ -686,7 +686,7 @@ const displayModeName = () => {
     document.title = MODE_AS_GAME_NAME[mode];
 
     startThink();
-    // Display mode name in game
+    // Display mode name in game    
     showMessageOnBoard(MODE_AS_MODE_NAME[mode]);
     window.setTimeout(
         () => {
