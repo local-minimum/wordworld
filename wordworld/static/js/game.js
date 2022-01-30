@@ -273,7 +273,6 @@ const placeWithoutNeighbors = (char) => {
 const gameOver = () => {    
     _STATUS.gameOver = true;
     wordzStore.setGameOver(true);
-    showBoard();
     increaseScore(0);
     // Streak
     // inStreak null means have not played just refreshing
@@ -352,6 +351,7 @@ const handleAge = () => {
                 wordzStore.setHandPosition(i, '.', true);
             } else {
                 gameOver();
+                showBoard();
             }
         }
     }
@@ -412,11 +412,11 @@ const checkForValid = (canditates) => {
 
             if (score < 0) {
                 gameOver();
-                return;
+            } else {
+                handleAge();
+                drawHand();
+                showBoard();
             }
-            handleAge();
-            drawHand();
-            showBoard();
             endThink();
         })
         .catch(function (error) {
