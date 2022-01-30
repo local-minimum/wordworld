@@ -44,11 +44,7 @@ const wordsToLines = (msg) => {
         if (word.length === 0) {
             lines.push([]);
             line += 1;
-            if (cols === 0) {
-                cols = size;
-            } else {
-                cols = 0;
-            }
+            cols = 0;
         } else if (cols == 0) {
             if (word.length <= size) {
                 lines.push([word]);
