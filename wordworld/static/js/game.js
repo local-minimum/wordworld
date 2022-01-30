@@ -323,6 +323,7 @@ const placeWithoutNeighbors = (char) => {
 }
 
 const share = () => {
+    const size = wordzStore.getGameSize();
     const game = wordzStore.getGame();
     const score = wordzStore.getScore();
     const percent = wordzStore.getCoverage();
