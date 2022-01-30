@@ -142,6 +142,7 @@ const playTile = (handPosition) => {
         wordzStore.setGame(game);
     }
     showHand();
+    showCoverage();
 };
 
 const returnTiles = () => {
@@ -660,6 +661,7 @@ const setup = (mode) => {
     }
 
     // Show current status
+    showCoverage();
     showHand();
     if (_STATUS.gameOver) {
         gameOver();
