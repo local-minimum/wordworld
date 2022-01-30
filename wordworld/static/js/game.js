@@ -162,7 +162,7 @@ const returnTiles = () => {
 const showCoverage = () => {
     const coverage = wordzStore.getCoverage();
     const coverageText = `${coverage}%`;
-    const tOff = Math.floor((10 - text.length) / 2);
+    const tOff = Math.floor((10 - coverageText.length) / 2);
     let text = '' ;
     for (let i = 0; i<10; i++) {
         const ch = coverageText[i - tOff] ?? ' ';
