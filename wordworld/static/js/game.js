@@ -69,12 +69,11 @@ const showMessageOnBoard = (msg) => {
         line = lines[y - yOff];
         const xOff = Math.floor((size - (line?.length ?? 0)) / 2);
         for (let x=0; x<size; x++) {
-            const ch = line?.[x - xOff];
-            if (ch != null) {
-                data += ch;
-            } else {
-                data += '.';
+            let ch = line?.[x - xOff];
+            if (ch == null) {
+                ch = '.';
             }
+            data += <span class="other-round-letter">${ch}</span>;
         }
         data += '<br>';
     }
@@ -619,6 +618,8 @@ const displayModeName = () => {
 }
 
 const setup = (mode) => {
+    if (_STATUS.communicating) return;
+
     // Game mode
     if (mode != null) {
         wordzStore.setMode(mode);
