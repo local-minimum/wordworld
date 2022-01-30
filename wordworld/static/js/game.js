@@ -42,8 +42,6 @@ const wordsToLines = (msg) => {
     for (let i = 0; i<words.length; i++) {
         const word = words[i];        
         if (word.length === 0) {
-            lines.push([]);
-            line += 1;
             cols = size;
         } else if (cols == 0) {
             if (word.length <= size) {
@@ -101,11 +99,11 @@ const showRecords = () => {
     const bestRound = wordzStore.getBestRound();
     const showTime = 4000;
     showMessageOnBoard(
-        `Highscore ${bestScore}pts  Best round ${bestRound}pts  Coverage ${bestPercent}%`,
+        `Highscore ${bestScore}pts   Best round ${bestRound}pts   Coverage ${bestPercent}%`,
     );
     setTimeout(() => {
         showMessageOnBoard(
-            `Longest ${longestRecord}  Wins ${wins}  Super Win ${superWins}`,
+            `Longest ${longestRecord}   Wins  ${wins}   Super Win ${superWins}`,
         );
         setTimeout(() => {
             showBoard();
