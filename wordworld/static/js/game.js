@@ -322,6 +322,24 @@ const placeWithoutNeighbors = (char) => {
     return true;
 }
 
+const share = () => {
+    const game = wordzStore.getGame();
+    const score = wordzStore.getScore();
+    const percent = wordzStore.getCoverage();
+    let data = `Score: ${score}\nPercent: ${percent}\n`;
+    for (let y=0; y<size; y++) {
+        for (let x=0; x<size; x++) {
+            if (game[y]?.[x] == null) {
+                data += '⚫';
+            } else {
+                data += '🟧';
+            }
+        }
+        data += '\n';
+    }
+    navigator.clipboard.writeText(data);
+};
+
 const gameOver = () => {    
     _STATUS.gameOver = true;
     wordzStore.setGameOver(true);
