@@ -327,11 +327,11 @@ const share = () => {
     const game = wordzStore.getGame();
     const score = wordzStore.getScore();
     const percent = wordzStore.getCoverage();
-    let data = `Score: ${score}\nPercent: ${percent}\n`;
+    let data = `Score: ${score}\nCoverage: ${percent}%\n`;
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
             if (game[y]?.[x] == null) {
-                data += '⚫';
+                data += '⬛';
             } else {
                 data += '🟧';
             }
@@ -386,7 +386,7 @@ const gameOver = () => {
     const roundRecord = wordzStore.getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
     // Produce content
     const div = document.getElementById('game-over');
-    let content = '<h3>Game Over <button onclick="share();">Share</button></h3>';
+    let content = '<h3>Game Over<span class="action-buttons"><button onclick="share();">Share</button><span></h3>';
     content += '<ul>';
     content += `<li>${score} points${highScore}</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
