@@ -91,6 +91,29 @@ const showMessageOnBoard = (msg) => {
     board.innerHTML = data;
 };
 
+const showRecords = () => {
+    _STATUS.communicating = true;
+    const bestScore = wordzStore.getHighscore(); 
+    const bestPercent = wordzStore.getBestCompletion()
+    const longestRecord = wordzStore.getLongestWord(false);
+    const wins = wordzStore.getWins();
+    const superWins = wordzStore.getSuperWins();
+    const bestRound = wordzStore.getBestRound();
+    const showTime = 4000;
+    showMessageOnBoard(
+        `Highscore ${bestScore}pts  Best round ${bestRound}pts  Coverage ${bestPercent}%`,
+    );
+    setTimeout(() => {
+        showMessageOnBoard(
+            `Longest ${longestRecord}  Wins ${wins}  Super Win ${superWins}`,
+        );
+        setTimeout(() => {
+            showBoard();
+            _STATUS.communicating = false;
+        }, showTime);
+    }, showTime);
+};
+
 const boardFlasher = (foci) => {
     if (_STATUS.flash === undefined) {
         _STATUS.flash = 0;
