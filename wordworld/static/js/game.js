@@ -42,11 +42,12 @@ const showMessageOnBoard = (msg) => {
     for (let i = 0; i<words.length; i++) {
         const word = words[i];
         if (cols == 0) {
-            if (word.length < size) {
+            if (word.length <= size) {
                 lines.push([word]);
                 cols = word.length
             } else {
-                left = word.splice(0, size - 1);
+                left = word.slice(0, size - 1);
+                words[i] = word.slice(size - 1);
                 lines.push([left, '-']);
                 line += 1;
                 cols = 0;
