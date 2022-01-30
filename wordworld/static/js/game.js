@@ -167,7 +167,7 @@ const showCoverage = () => {
     for (let i = 0; i<10; i++) {
         const ch = coverageText[i - tOff] ?? ' ';
         const cls = (i + 1) * 10 <= coverage ? 'has-coverage' : '';
-        tOff += `<span class=${cls}>${ch}</span>`;
+        text += `<span class=${cls}>${ch}</span>`;
     }
     document.getElementById('coverage').innerHTML = text;
 }
