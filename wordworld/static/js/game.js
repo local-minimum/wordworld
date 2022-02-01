@@ -394,7 +394,7 @@ const gameOver = () => {
     const roundRecord = wordzStore.getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
     // Produce content
     const div = document.getElementById('game-over');
-    let content = '<h3>Game Over<span class="action-buttons" id="game-over-buttons"><button onclick="share();">Share</button><span></h3>';
+    let content = '<h3>Game Over<span class="action-buttons" id="game-over-buttons"><button onclick="share();">Share</button></span></h3>';
     content += '<ul>';
     content += `<li>${score} points${highScore}</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
@@ -695,7 +695,11 @@ const displayModeName = () => {
         },
         2000,
     );
-}
+};
+
+const clearGameOver = () => {
+    document.getElementById('game-over').innerHTML = "";
+};
 
 const setup = (mode) => {
     if (_STATUS.communicating) return;
@@ -731,6 +735,6 @@ const setup = (mode) => {
     if (_STATUS.gameOver) {
         gameOver();
     } else {
-        document.getElementById('game-over').innerHTML = "";
+        clearGameOver();
     }
 };

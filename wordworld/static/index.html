@@ -108,6 +108,18 @@
                     cursor: pointer;
                     font-family: monospace;
                 }
+                #game-over {
+                    background-color: #282828;
+                    color: #ffb000;
+                    position: relative;
+                    margin-bottom: -100%;
+                    padding: 1em 0.5em 2em;
+                    border-color: #ffb000;
+                    border-width: 2px;
+                    border-style: solid;
+                    font-size: 1.5em;
+                    width: 20em;
+                }
                 #game-over-buttons {
                     margin-left: 2em;    
                 }
@@ -184,7 +196,17 @@
         <body>
             <h1 id="game-name">Word Crux</h1>
             <h2 id="score">0000</h2>
-            <div id="game-over"></div>
+            <div id="game-over">
+                <h3>This is not game over for real</h3>
+                We are just experiencing some tech snaffus.
+                <ul>
+                    <li>It is something wrong with the game</li>
+                    <li>This is true</li>
+                </ul>
+                <div class="action-buttons">
+                    <button onclick="clearGameOver();">Close</button>
+                </div>
+            </div>
             <div id="world-container">
                 <div id="world" class="paused-animation">
                     something..<br>
