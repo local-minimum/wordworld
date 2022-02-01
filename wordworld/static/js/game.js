@@ -414,7 +414,7 @@ const gameOver = () => {
     }
     content += `<li>A total of ${superWins} superb and ${wins - superWins} normal win${wins !== 1 ? 's': ''} scored</li>`;
     content += `</ul>`;
-
+    content += `<div class="action-buttons"><button onclick="document.getElementById('rules').className = 'hidden';">Close</button></div>`;
     div.innerHTML = content;
     div.className = "game-over";
 }
