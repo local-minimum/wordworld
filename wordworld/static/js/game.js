@@ -416,6 +416,7 @@ const gameOver = () => {
     content += `</ul>`;
 
     div.innerHTML = content;
+    div.className = "game-over";
 }
 
 const handleAge = () => {
@@ -698,7 +699,9 @@ const displayModeName = () => {
 };
 
 const clearGameOver = () => {
-    document.getElementById('game-over').innerHTML = "";
+    const go = document.getElementById('game-over')
+    go.innerHTML = "";
+    go.className = "";
 };
 
 const setup = (mode) => {
