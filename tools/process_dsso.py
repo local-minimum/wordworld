@@ -1,30 +1,29 @@
 import re
 from pathlib import Path
 
-__WORD_LINE = re.compile(r'[0-9a-zåäö]+<[a-zåäö]+>.+')
+__WORD_LINE = re.compile(r'^[0-9a-zåäö]+<([a-zåäö]+)>(.+)$')
 __SIMPLE_WORD = re.compile(r'^[^- ]*$')
 __CLEAN_WORD = re.compile(r'^[a-zåäö]*$')
 
 
-def get_words_from_line(line):
-    _, words = line.split('>', 1)
-    for w in words.split(':'):
-        if '!' in w:
-            continue
-        if ',' in w:
-            for ww in w.split(','):
-                yield ww.strip()
-        else:
-            yield w.strip()
+def get_words_from_line(kind, words):
+    if kind != 'egennamn':
+        for w in words.split(':'):
+            if '!' in w:
+                continue
+            if ',' in w:
+                for ww in w.split(','):
+                    yield ww.strip()
+            else:
+                yield w.strip()
 
 
 def get_all_words(fh):
     for line in fh:
-        if not __WORD_LINE.match(line):
-            continue
-        for word in get_words_from_line(line):
-            if word:
-                yield word
+        if match:=__WORD_LINE.match(line):
+            for word in get_words_from_line(*match.groups()):
+                if word:
+                    yield word
 
 
 def get_all_simple_words(fh):
