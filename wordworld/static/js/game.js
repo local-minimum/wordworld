@@ -617,7 +617,7 @@ const rushTimer = () => {
         } else {
             const timePercent = Math.floor(100 * (1 - elapsedSeconds / allowedSeconds));
             const text = `${remainingSeconds}s`;
-            rushDiv.innerHTML = `TIME:&nbsp;&nbsp;&nbsp;&nbsp;%nbsp<div class="progress-bar">${makeProgressBar(timePercent, text, 15)}</div>`
+            rushDiv.innerHTML = `TIME:&nbsp;&nbsp;&nbsp;&nbsp;%nbsp;<div class="progress-bar">${makeProgressBar(timePercent, text, 15)}</div>`
         }
     }
     setTimeout(() => rushTimer());
