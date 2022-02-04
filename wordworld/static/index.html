@@ -184,6 +184,13 @@
                 #hud {
                     margin-top: 0.5em;
                 }
+                .chk-box {
+                    cursor: pointer;
+                }
+                .chk-box-disabled {
+                    cursor: not-allowed;
+                    color: #606060;
+                }
             </style>
             <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script src="/wordz/js/rnd.js"></script>
@@ -242,10 +249,9 @@
                     Superb wins are those with over <span class="highlight">100pts</span>.
                 </p>
                 <p>
-                    So basically you are constructing a crossword but without the need
-                    to leave any space and you may include things that are not words.
-                    However, you really shouldn't be careless as it will cost you points
-                    and may cost you the entire game.
+                    Your objective is to weave as many words as tightly as possible without
+                    including non-words. Its more worth starting with a short word and extending
+                    it over multiple rounds rather than trying for a long word from start.
 
                     Your guesses are submitted to the server, but all other data resides
                     in your browser and we don't track anything that you do. 
