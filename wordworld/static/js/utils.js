@@ -22,7 +22,7 @@ function isInStreak(current, previous) {
 
 function formatScore(value) {
     if (value < 0) {
-        return `-${String(value).padStart(3, '0')}`;
+        return String(value).padStart(4, ' ');
     }
     return String(value).padStart(4, '0');
 }

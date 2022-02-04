@@ -13,10 +13,10 @@ window.wordzStore = {
 
     // Rules
     _RULES_SCORE_ROUND: 'rules.score.round',
-    getRuleRoundScoreActive: function() { return JSON.parse(window.localStorage.setItem(this._RULES_SCORE_ROUND) ?? 'true'); },
+    getRuleRoundScoreActive: function() { return JSON.parse(window.localStorage.getItem(this._RULES_SCORE_ROUND) ?? 'true'); },
     setRuleRoundScoreActive: function(value) { window.localStorage.setItem(this._RULES_SCORE_ROUND, JSON.parse(value)); },
     _RULES_SCORE_TOTAL: 'rules.score.total',
-    getRuleTotalScoreActive: function() { return JSON.parse(window.localStorage.setItem(this._RULES_SCORE_TOTAL) ?? 'true'); },
+    getRuleTotalScoreActive: function() { return JSON.parse(window.localStorage.getItem(this._RULES_SCORE_TOTAL) ?? 'true'); },
     setRuleTotalScoreActive: function(value) { window.localStorage.setItem(this._RULES_SCORE_TOTAL, JSON.parse(value)); },
 
     // Game
