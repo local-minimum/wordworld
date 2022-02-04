@@ -610,14 +610,14 @@ const rushTimer = () => {
         const elapsedSeconds = Math.floor((new Date() - gameStart) / 1000);
         const allowedSeconds = 5 * 60;
         const remainingSeconds = allowedSeconds - elapsedSeconds; 
-        if (remainingSeconds > 0) {
+        if (remainingSeconds < 0) {
             rushDiv.innerHTML = '< Time\'s up! >';
             gameOver();
             return;
         } else {
             const timePercent = Math.floor(100 * (1 - elapsedSeconds / allowedSeconds));
             const text = `${remainingSeconds}s`;
-            rushDiv.innerHTML = `Time: ${makeProgressBar(timePercent, text, 15)}`
+            rushDiv.innerHTML = `Time:<div class="progress-bar">${makeProgressBar(timePercent, text, 15)}</div>`
         }
     }
     setTimeout(() => rushTimer());
