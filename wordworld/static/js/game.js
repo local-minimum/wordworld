@@ -215,7 +215,7 @@ const increaseScore = (value) => {
     const total = wordzStore.getScore() + value;
     wordzStore.setScore(total);
     const score = document.getElementById('score');
-    score.innerHTML = formatScore(value);
+    score.innerHTML = formatScore(total);
     return total;
 }
 
