@@ -346,9 +346,10 @@ const share = () => {
     }
     navigator.clipboard.writeText(data);
     const shareBtn = document.getElementById('share-button');
-    shareBtn?.innerHTML = "Copied!"
+    if (shareBtn == null) return;
+    shareBtn.innerHTML = "Copied!"
     window.setTimeout(() => {
-        shareBtn?.innerHTML = 'Share';
+        shareBtn.innerHTML = 'Share';
     }, 1000);
 };
 
