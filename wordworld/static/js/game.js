@@ -605,7 +605,7 @@ const rushTimer = () => {
     }
     const gameStart = wordzStore.getTimeSinceGameStart();
     if (gameStart == null) {
-        rushDiv.innerHTML = '< Timer starts at first character >';
+        rushDiv.innerHTML = '< Waiting for 1st character >';
     } else {
         const elapsedSeconds = Math.floor((new Date() - gameStart) / 1000);
         const allowedSeconds = 5 * 60;
