@@ -13,7 +13,7 @@ window.wordzStore = {
     },
     _RUSHED: 'settings.rushed',
     getRush: function() { return JSON.parse(window.localStorage.getItem(this._RUSHED) ?? 'false'); },
-    setRush: function(value) { window.localStorage.getItem(this._RUSHED, JSON.stringify(value)); },
+    setRush: function(value) { window.localStorage.setItem(this._RUSHED, JSON.stringify(value)); },
 
     // Rules
     _RULES_SCORE_ROUND: 'rules.score.round',
