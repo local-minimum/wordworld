@@ -200,13 +200,13 @@ const returnTiles = () => {
 
 const makeProgressBar = (percent, text, steps) => {
     const tOff = Math.floor((steps - text.length) / 2);
-    let progresBar = '' ;
+    let progressBar = '' ;
     for (let i = 0; i<steps; i++) {
         const ch = text[i - tOff] ?? '&nbsp;';
         const cls = percent >= (i + 1) * 100 / steps ? 'has-progress' : '';
         progressBar += `<span class=${cls}>${ch}</span>`;
     }
-    return progresBar;
+    return progressBar;
 }
 
 const showCoverage = () => {
