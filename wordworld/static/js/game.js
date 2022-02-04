@@ -755,7 +755,7 @@ const setup = (mode, rushed) => {
     // Game mode
     if (mode != null) {
         wordzStore.setMode(mode);
-        wordzStore.setRushed(rushed);
+        wordzStore.setRush(rushed);
     } else {
         wordzStore.restoreMode(rushed);
     }
