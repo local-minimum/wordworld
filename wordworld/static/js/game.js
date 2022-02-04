@@ -722,6 +722,7 @@ const setup = (mode) => {
 
     // Cleanup
     reportGuesses([], []);
+    increaseScore(0);
 
     // New or old game
     const name = generateGameName();
