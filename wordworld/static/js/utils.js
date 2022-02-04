@@ -26,3 +26,7 @@ function formatScore(value) {
     }
     return String(value).padStart(4, '0');
 }
+
+const buttonize = (content, callback) => `<span class="nav-btn" onclick="${callback}">${content}</span>`;
+
+const checkboxify = (checked, togglCallback, content, disabled) => `<div><span class="chk-box${disabled ? '-disabled' : ''}" onclick="${togglCallback}">[${checked ? 'X' : '&nbsp;'}]</span>&npsp;${content}</div>`;

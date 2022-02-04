@@ -3,9 +3,6 @@ const _STATUS = {
     communicating: false,
 };
 
-
-const buttonize = (content, callback) => `<span class="nav-btn" onclick="${callback}">${content}</span>`;
-
 const showBoard = (foci = null) => {
     const board = document.getElementById('world');
     const size = wordzStore.getGameSize();
@@ -747,3 +744,19 @@ const setup = (mode) => {
         clearGameOver();
     }
 };
+
+const showRules = () => {
+    const roundScore = wordzStore.getRuleRoundScoreActive();
+    const totalScore = wordzStore.getRuleTotalScoreActive();
+    const options = document.getElementById('rule-options');
+    let optionsContent = checkboxify(true, '', 'Must place characters next to existing characters.', true);
+    optionsContent += checkboxify(true,  '', 'Each valid word with at least 2 characters score a point per character.', true);
+    optionsContent += checkboxify(true,  '', 'Each invalid word with at least 2 characters score a negative point per character.', true);
+    optionsContent += checkboxify(true, '', 'A character stays in the hand a maximum of 2 rounds after which it is placed at random next to no other character.', true);
+    optionsContent += checkboxify(true, '', 'If a character is not played at end of second round it is placed at random next to no other tile.', true);
+    optionsContent += checkboxify(true, '', 'If said character can\'t be placed, then it\'s game over.', true);
+    optionsContent += checkboxify(roundScore, `wordzStore.setRuleRoundScoreActive(${!roundScore});showRules();`, 'The round total may not fall below zero, else it\'s game over.');
+    optionsContent += checkboxify(totalScore, `wordzStore.setRuleTotalScoreActive(${!totalScore});showRules();`, 'The total score may not fall below zero, else it\'s game over.');
+    options.innerHTML = optionsContent;
+    document.getElementById('rules').className='float-box';
+}

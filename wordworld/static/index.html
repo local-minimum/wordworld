@@ -227,22 +227,20 @@
                 <button onclick="submitTiles();showBoard();">Submit (space)</button>
                 <br><br>
                 <button onclick="showRecords();">Records</button>
-                <button onclick="document.getElementById('rules').className='float-box';">Rules</button>
+                <button onclick="showRules();">Rules</button>
                 <br><br>
                 <button onclick="setup('');">English</button>
                 <button onclick="setup('SWE-');">Svenska</button>
             </div>
             <div id="rules" class="hidden">
                 <h3>How to play</h3>
-                <ul>
-                    <li>Must place tiles next to existing tiles.</li>
-                    <li>Characters stay in hand for two rounds.</li>
-                    <li>If a character is not played at end of second round it is placed at random next to no other tile.</li>
-                    <li>If said character can't be placed, then it's game over.</li>
-                    <li>Total round score may not fall below zero, then it's game over.</li>
-                    <li>Wins are personal things, but we track games with <span class="highlight">50pts</span>.</li>
-                    <li>Superb wins are those with over <span class="highlight">100pts</span>.</li>
-                </ul>
+                <div id='rule-options'></div>
+                <p>
+                    Wins are personal things, but we track games with <span class="highlight">50pts</span>.
+                </p>
+                <p>
+                    Superb wins are those with over <span class="highlight">100pts</span>.
+                </p>
                 <p>
                     So basically you are constructing a crossword but without the need
                     to leave any space and you may include things that are not words.
