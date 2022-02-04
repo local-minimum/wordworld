@@ -608,14 +608,15 @@ const rushTimer = () => {
         rushDiv.innerHTML = '< Waiting for 1st character >';
     } else {
         const elapsedSeconds = Math.floor((new Date() - gameStart) / 1000);
-        const allowedSeconds = 5 * 60;
+        const extraSeconds = wordzStore.getRuleExtraSecondsActive() ? wordzStore.getCountPlayedCharacters() * 3 : 0;
+        const allowedSeconds = 5 * 60 + extraSeconds;
         const remainingSeconds = allowedSeconds - elapsedSeconds; 
         if (remainingSeconds < 0) {
             rushDiv.innerHTML = '< Time\'s up! >';
             gameOver();
             return;
         } else {
-            const timePercent = Math.floor(100 * (1 - elapsedSeconds / allowedSeconds));
+            const timePercent = Math.floor(100 * (remainingSeconds / allowedSeconds));
             const text = `${remainingSeconds}s`;
             rushDiv.innerHTML = `TIME:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div class="progress-bar">${makeProgressBar(timePercent, text, 15)}</div>`
         }
@@ -795,6 +796,8 @@ const setup = (mode, rushed) => {
 const showRules = () => {
     const roundScore = wordzStore.getRuleRoundScoreActive();
     const totalScore = wordzStore.getRuleTotalScoreActive();
+    const extraSeconds = wordzStore.getRuleExtraSecondsActive();
+
     const options = document.getElementById('rule-options');
     let optionsContent = checkboxify(true, '', 'Must place characters next to existing characters.', true);
     optionsContent += checkboxify(true,  '', 'Each valid word with at least 2 characters score a point per character.', true);
@@ -804,6 +807,7 @@ const showRules = () => {
     optionsContent += checkboxify(true, '', 'If said character can\'t be placed, then it\'s game over.', true);
     optionsContent += checkboxify(roundScore, `wordzStore.setRuleRoundScoreActive(${!roundScore});showRules();`, 'The round total may not fall below zero, else it\'s game over.');
     optionsContent += checkboxify(totalScore, `wordzStore.setRuleTotalScoreActive(${!totalScore});showRules();`, 'The total score may not fall below zero, else it\'s game over.');
+    optionsContent += checkboxify(extraSeconds, `wordzStore.setRuleExtraSecondsActive(${!extraSeconds});showRules();`, 'Gain 3 seconds for each character placed when playing rush.');
     options.innerHTML = optionsContent;
     document.getElementById('rules').className='float-box';
 }

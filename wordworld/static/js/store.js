@@ -22,6 +22,9 @@ window.wordzStore = {
     _RULES_SCORE_TOTAL: 'rules.score.total',
     getRuleTotalScoreActive: function() { return JSON.parse(window.localStorage.getItem(this._RULES_SCORE_TOTAL) ?? 'true'); },
     setRuleTotalScoreActive: function(value) { window.localStorage.setItem(this._RULES_SCORE_TOTAL, JSON.parse(value)); },
+    _RULES_RUSH_EXTRA_SECONDS: 'rules.rush.seconds',
+    getRuleExtraSecondsActive: function() { return JSON.parse(window.localStorage.getItem(this._RULES_RUSH_EXTRA_SECONDS) ?? 'true'); },
+    setRuleExtraSecondsActive: function(value) { window.localStorage.setItem(this._RULES_RUSH_EXTRA_SECONDS, JSON.parse(value)); },
 
     // Game
     _CURRENT_GAME: 'game.current',
