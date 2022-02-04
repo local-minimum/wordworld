@@ -683,7 +683,7 @@ const MODE_AS_GAME_NAME = {
 
 const displayModeName = () => {
     const mode = wordzStore.getMode();
-    const gameName = MODE_AS_GAME_NAME[mode.split('-')] ?? MODE_AS_GAME_NAME[''];
+    const gameName = MODE_AS_GAME_NAME[mode.split('-')[0]] ?? MODE_AS_GAME_NAME[''];
     const modeName = MODE_AS_MODE_NAME[mode.split('-')[0]] ?? MODE_AS_MODE_NAME[''];
     document.getElementById('game-name').innerHTML = gameName 
     document.title = gameName;
