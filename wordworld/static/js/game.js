@@ -161,6 +161,9 @@ const playTile = (handPosition) => {
     const hand = wordzStore.getHandPosition(handPosition);
     const game = wordzStore.getGame();    
     const cursor = wordzStore.getCursor();
+    if (wordzStore.getRush() && wordzStore.getTimeSinceGameStart() == null) {
+       wordzStore.setGameStart(); 
+    }
     if (
         !hand.empty
         && game[cursor.y]?.[cursor.x] == null
@@ -195,17 +198,21 @@ const returnTiles = () => {
     showBoard();
 }
 
+const makeProgressBar = (percent, text, steps) => {
+    const tOff = Math.floor((steps - text.length) / 2);
+    let text = '' ;
+    for (let i = 0; i<steps; i++) {
+        const ch = text[i - tOff] ?? '&nbsp;';
+        const cls = percent >= (i + 1) * 100 / steps ? 'has-progress' : '';
+        text += `<span class=${cls}>${ch}</span>`;
+    }
+    return text;
+}
+
 const showCoverage = () => {
     const coverage = wordzStore.getCoverage();
     const coverageText = `${coverage}%`;
-    const tOff = Math.floor((10 - coverageText.length) / 2);
-    let text = '' ;
-    for (let i = 0; i<10; i++) {
-        const ch = coverageText[i - tOff] ?? '&nbsp;';
-        const cls = (i + 1) * 10 <= coverage ? 'has-coverage' : '';
-        text += `<span class=${cls}>${ch}</span>`;
-    }
-    document.getElementById('coverage').innerHTML = text;
+    document.getElementById('coverage').innerHTML = makeProgressBar(coverage, coverageText, 15);
 }
 
 const increaseScore = (value) => {
@@ -321,13 +328,12 @@ const placeWithoutNeighbors = (char) => {
 }
 
 const share = () => {
-    const mode = wordzStore.getMode();
-
+    const name = getGameAndModeName();
     const size = wordzStore.getGameSize();
     const game = wordzStore.getGame();
     const score = wordzStore.getScore();
     const percent = wordzStore.getCoverage();
-    let data = `${MODE_AS_GAME_NAME[mode]}\nScore: ${score}\nCoverage: ${percent}%\n`;
+    let data = `${name.game}${rushed}\nScore: ${score}\nCoverage: ${percent}%\n`;
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
             if (game[y]?.[x] == null) {
@@ -339,11 +345,10 @@ const share = () => {
         data += '\n';
     }
     navigator.clipboard.writeText(data);
-    startThink();
-    showMessageOnBoard('Copied to clipboard');    
+    const shareBtn = document.getElementById('share-button');
+    shareBtn?.innerHTML = "Copied!"
     window.setTimeout(() => {
-        endThink();
-        showBoard();        
+        shareBtn?.innerHTML = 'Share';
     }, 1000);
 };
 
@@ -392,7 +397,7 @@ const gameOver = () => {
     const roundRecord = wordzStore.getBestRound(false) === currentRound ? '<span class="record">RECORD</span>' : '';
     // Produce content
     const div = document.getElementById('game-over');
-    let content = '<h3>Game Over<span class="action-buttons" id="game-over-buttons"><button onclick="share();">Share</button></span></h3>';
+    let content = '<h3>Game Over<span class="action-buttons" id="game-over-buttons"><button id="share-button" onclick="share();">Share</button></span></h3>';
     content += '<ul>';
     content += `<li>${formatScore(score)} points${highScore}</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
@@ -591,6 +596,32 @@ const moveCursor = (x, y) => {
     return wordzStore.moveCursor(x, y);
 }
 
+const rushTimer = () => {
+    const rushDiv = document.getElementById('rush-timer');
+    if (!wordzStore.getRush()) {
+        rushDiv.innerHTML = '';
+        return;
+    }
+    const gameStart = wordzStore.getTimeSinceGameStart();
+    if (gameStart == null) {
+        rushDiv.innerHTML = '< Timer starts at first character >';
+    } else {
+        const elapsedSeconds = Math.floor((new Date() - gameStart) / 1000);
+        const allowedSeconds = 5 * 60;
+        const remainingSeconds = allowedSeconds - elapsedSeconds; 
+        if (remainingSeconds > 0) {
+            rushDiv.innerHTML = '< Time\'s up! >';
+            gameOver();
+            return;
+        } else {
+            const timePercent = Math.floor(100 * (1 - elapsedSeconds / allowedSeconds));
+            const text = `${remainingSeconds}s`;
+            rushDiv.innerHTML = `Time: ${makeProgressBar(timePercent, text, 15)}`
+        }
+    }
+    setTimeout(() => rushTimer());
+}
+
 const handleKeyPress = (evt) => {
     const cursor = wordzStore.getCursor();
     switch (evt.which ?? evt.keyCode) {
@@ -681,16 +712,27 @@ const MODE_AS_GAME_NAME = {
     'SWE': 'Ordkrux',
 };
 
+const RUSHED_AS_NAME = {
+    '': ' Rush!',
+    'SWE': ' Rusch!',
+};
+
+const getGameAndModeName = () => {
+    const mode = wordzStore.getMode().split('-')[0];
+    const gameName = MODE_AS_GAME_NAME[mode] ?? MODE_AS_GAME_NAME[''];
+    const modeName = MODE_AS_MODE_NAME[mode] ?? MODE_AS_MODE_NAME[''];
+    const rushed = wordzStore.getRush() ? (RUSHED_AS_NAME[mode] ?? RUSHED_AS_NAME['']) : '';
+    return { game: `${gameName}${rushed}`, mode: `${modeName}${rushed}`};
+}
+
 const displayModeName = () => {
-    const mode = wordzStore.getMode();
-    const gameName = MODE_AS_GAME_NAME[mode.split('-')[0]] ?? MODE_AS_GAME_NAME[''];
-    const modeName = MODE_AS_MODE_NAME[mode.split('-')[0]] ?? MODE_AS_MODE_NAME[''];
-    document.getElementById('game-name').innerHTML = gameName 
-    document.title = gameName;
+    const name = getGameAndModeName();
+    document.getElementById('game-name').innerHTML = name.game; 
+    document.title = name.game;
 
     startThink();
     // Display mode name in game    
-    showMessageOnBoard(modeName);
+    showMessageOnBoard(name.mode);
     window.setTimeout(
         () => {
             endThink();
@@ -706,14 +748,15 @@ const clearGameOver = () => {
     go.className = "";
 };
 
-const setup = (mode) => {
+const setup = (mode, rushed) => {
     if (_STATUS.communicating) return;
 
     // Game mode
     if (mode != null) {
         wordzStore.setMode(mode);
+        wordzStore.setRushed(rushed);
     } else {
-        wordzStore.restoreMode();
+        wordzStore.restoreMode(rushed);
     }
     displayModeName();
 
@@ -742,6 +785,9 @@ const setup = (mode) => {
         gameOver();
     } else {
         clearGameOver();
+        if (rushed) {
+            rushTimer();
+        }
     }
 };
 
