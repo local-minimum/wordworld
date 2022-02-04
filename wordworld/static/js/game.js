@@ -212,10 +212,11 @@ const showCoverage = () => {
 }
 
 const increaseScore = (value) => {
-    const total = Math.max(0, wordzStore.getScore() + value);
+    const total = wordzStore.getScore() + value;
     wordzStore.setScore(total);
     const score = document.getElementById('score');
-    score.innerHTML = String(total).padStart(4, '0');
+    score.innerHTML = formatScore(value);
+    return total;
 }
 
 const horizontalWord = (game, origin) => {
@@ -396,7 +397,7 @@ const gameOver = () => {
     const div = document.getElementById('game-over');
     let content = '<h3>Game Over<span class="action-buttons" id="game-over-buttons"><button onclick="share();">Share</button></span></h3>';
     content += '<ul>';
-    content += `<li>${score} points${highScore}</li>`;
+    content += `<li>${formatScore(score)} points${highScore}</li>`;
     content += `<li>${percent} percent of board completed${recordPercent}</li>`;
     if (currentLongest.length === 0) {
         content += `<li>No valid words!</li>`;
@@ -488,9 +489,11 @@ const checkForValid = (canditates) => {
             const invalidScore = invalid.reduce((score, word) => score + word.length, 0);
             score -= invalidScore;
             reportGuesses(canditates, valid, score);
-            increaseScore(score);
+            const newTotal = increaseScore(score);
 
-            if (score < 0) {
+            if (score < 0 && wordzStore.getRuleRoundScoreActive()) {
+                gameOver();
+            } else if (newTotal < 0 && wordzStore.getRuleTotalScoreActive()) {
                 gameOver();
             } else {
                 handleAge();

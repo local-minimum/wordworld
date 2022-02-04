@@ -1,27 +1,7 @@
 window.wordzStore = {
+    // Mode
     _MODE: '',
     _LAST_MODE: 'settings.mode',
-    _SIZE: 'settings.boardSize',
-    _HAND_SIZE: 'settings.handSize',
-    _CURSOR: 'game.cursor',
-    _HAND_POSITION: 'hand.',
-    _CURRENT_GAME: 'game.current',
-    _CURRENT_NAME: 'game.current.name',
-    _CURRENT_GAME_OVER: 'game.current.over',
-    _PREVIOUS_NAME: 'game.previous.name',
-    _ACHIVEMENT_LONGEST_CURRENT: 'achivement.longest.current',
-    _ACHIVEMENT_LONGEST: 'achivement.longest',
-    _ACHIVEMENT_ROUND_CURRENT: 'achivement.round.current',
-    _ACHIVEMENT_ROUND: 'achivement.round',
-    _ACHIVEMENT_COMPLETION: 'achivement.completion',
-    _STREAK_DAYS_IN_A_ROW: 'streak.days',
-    _STREAK_WINS: 'streak.wins',
-    _WINS: 'wins',
-    _SUPER_WINS: 'wins.super',
-    _SCORE: "game.score",
-    _HIGHSCORE: "highscore",
-
-    // Mode
     getMode: function() { return this._MODE; },
     setMode: function(mode) {
         this._MODE = mode;
@@ -31,15 +11,28 @@ window.wordzStore = {
         this._MODE = window.localStorage.getItem(this._LAST_MODE) ?? ''
     },
 
+    // Rules
+    _RULES_SCORE_ROUND = 'rules.score.round',
+    getRuleRoundScoreActive: function() { return JSON.parse(window.localStorage.setItem(this._RULES_SCORE_ROUND) ?? 'true'); },
+    setRuleRoundScoreActive: function(value) { window.localStorage.setItem(this._RULES_SCORE_ROUND, JSON.parse(value)); },
+    _RULES_SCORE_TOTAL = 'rules.score.total',
+    getRuleTotalScoreActive: function() { return JSON.parse(window.localStorage.setItem(this._RULES_SCORE_TOTAL) ?? 'true'); },
+    setRuleTotalScoreActive: function(value) { window.localStorage.setItem(this._RULES_SCORE_TOTAL, JSON.parse(value)); },
+
     // Game
+    _CURRENT_GAME: 'game.current',
     getGame: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._CURRENT_GAME}`) ?? '[]'); },
     setGame: function(game) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_GAME}`, JSON.stringify(game)); },
+    _CURRENT_GAME_OVER: 'game.current.over',
     setGameOver: function(go) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_GAME_OVER}`, JSON.stringify(go)); },
     getGameOver: function() { return  JSON.parse(window.localStorage.getItem(`${this._MODE}${this._CURRENT_GAME_OVER}`) ?? 'false'); },
+    _CURRENT_NAME: 'game.current.name',
     getGameName: function() { return window.localStorage.getItem(`${this._MODE}${this._CURRENT_NAME}`) ?? ''; },
     setGameName: function(name) { return window.localStorage.setItem(`${this._MODE}${this._CURRENT_NAME}`, name); },
+    _PREVIOUS_NAME: 'game.previous.name',
     getPrevGameName: function() { return window.localStorage.getItem(`${this._MODE}${this._PREVIOUS_NAME}`) ?? ''; },
     setPrevGameName: function(name) { return window.localStorage.setItem(`${this._MODE}${this._PREVIOUS_NAME}`, name); },
+    _SIZE: 'settings.boardSize',
     getGameSize: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SIZE}`) ?? '9'); },
 
     // Progress
@@ -60,6 +53,7 @@ window.wordzStore = {
     },
    
     // Cursor
+    _CURSOR: 'game.cursor',
     getCursorStart: function() {
         const size = this.getGameSize();
         const pos = Math.floor((size - 1) / 2);
@@ -78,6 +72,7 @@ window.wordzStore = {
     },
 
     // Hand
+    _HAND_SIZE: 'settings.handSize',
     getHandSize: function() {
         return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._HAND_SIZE}`) ?? '6');
     },
@@ -92,6 +87,7 @@ window.wordzStore = {
         }
         return positions;
     },
+    _HAND_POSITION: 'hand.',
     getHandPosition: function(handPosition) { return JSON
         .parse(window.localStorage.getItem(`${this._MODE}${this._HAND_POSITION}${handPosition}`) ?? '{"character": ".", "empty": true, "age": 0}');
     },
@@ -120,24 +116,35 @@ window.wordzStore = {
     },
 
     // Score
+    _SCORE: "game.score",
     getScore: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SCORE}`) ?? '0'); },
     setScore: function(total) { return window.localStorage.setItem(`${this._MODE}${this._SCORE}`, JSON.stringify(total)); },
 
     // Stats
+    _HIGHSCORE: "highscore",
     getHighscore: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._HIGHSCORE}`) ?? '0'); },
     setHighscore: function(score) { return window.localStorage.setItem(`${this._MODE}${this._HIGHSCORE}`, JSON.stringify(score)); },
+    _ACHIVEMENT_LONGEST_CURRENT: 'achivement.longest.current',
+    _ACHIVEMENT_LONGEST: 'achivement.longest',
     getLongestWord: function(current) { return window.localStorage.getItem(`${this._MODE}${current ? this._ACHIVEMENT_LONGEST_CURRENT : this._ACHIVEMENT_LONGEST}`) ?? ''; },
     setLongestWord: function(current, word) { return window.localStorage.setItem(`${this._MODE}${current ? this._ACHIVEMENT_LONGEST_CURRENT : this._ACHIVEMENT_LONGEST}`, word); },
+    _ACHIVEMENT_ROUND_CURRENT: 'achivement.round.current',
+    _ACHIVEMENT_ROUND: 'achivement.round',
     getBestRound: function(current) { return JSON.parse(window.localStorage.getItem(`${this._MODE}${current ? this._ACHIVEMENT_ROUND_CURRENT : this._ACHIVEMENT_ROUND}`)) ?? 0; },
     setBestRound: function(current, score) { return window.localStorage.setItem(`${this._MODE}${current ? this._ACHIVEMENT_ROUND_CURRENT: this._ACHIVEMENT_ROUND}`, JSON.stringify(score)); },
+    _ACHIVEMENT_COMPLETION: 'achivement.completion',
     getBestCompletion: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._ACHIVEMENT_COMPLETION}`)) ?? 0; },
     setBestCompletion: function(percent) { return window.localStorage.setItem(`${this._MODE}${this._ACHIVEMENT_COMPLETION}`, JSON.stringify(percent)); },
+    _STREAK_DAYS_IN_A_ROW: 'streak.days',
     getStreakDays: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._STREAK_DAYS_IN_A_ROW}`)); },
     setStreakDays: function(days) { return window.localStorage.setItem(`${this._MODE}${this._STREAK_DAYS_IN_A_ROW}`, JSON.stringify(days)); },
+    _STREAK_WINS: 'streak.wins',
     getStreakWins: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._STREAK_WINS}`)); },
     setStreakWins: function(days) { return window.localStorage.setItem(`${this._MODE}${this._STREAK_WINS}`, JSON.stringify(days)); },
+    _WINS: 'wins',
     getWins: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._WINS}`) ?? '0'); },
     setWins: function(count) { return window.localStorage.setItem(`${this._MODE}${this._WINS}`, JSON.stringify(count)); },
+    _SUPER_WINS: 'wins.super',
     getSuperWins: function() { return JSON.parse(window.localStorage.getItem(`${this._MODE}${this._SUPER_WINS}`) ?? '0'); },
     setSuperWins: function(count) { return window.localStorage.setItem(`${this._MODE}${this._SUPER_WINS}`, JSON.stringify(count)); },
 }

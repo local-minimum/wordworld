@@ -18,3 +18,11 @@ function isInStreak(current, previous) {
     if (previous.length === 0) return null;
     return (gameNameToNumber(current) - gameNameToNumber(previous)) === 1;
 }
+
+
+function formatScore(value) {
+    if (value < 0) {
+        return `-${String(value).padStart(3, '0')}`;
+    }
+    return String(value).padStart(4, '0');
+}
