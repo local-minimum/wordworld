@@ -29,4 +29,4 @@ function formatScore(value) {
 
 const buttonize = (content, callback) => `<span class="nav-btn" onclick="${callback}">${content}</span>`;
 
-const checkboxify = (checked, togglCallback, content, disabled) => `<div><span class="chk-box${disabled ? '-disabled' : ''}" onclick="${togglCallback}">[${checked ? 'X' : '\u00A0'}]</span>&npsp;${content}</div>`;
+const checkboxify = (checked, togglCallback, content, disabled) => `<div><span class="chk-box${disabled ? '-disabled' : ''}" onclick="${togglCallback}">[${checked ? 'X' : '&nbsp;'}]</span>&nbsp;${content}</div>`;
