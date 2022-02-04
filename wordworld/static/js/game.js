@@ -333,7 +333,7 @@ const share = () => {
     const game = wordzStore.getGame();
     const score = wordzStore.getScore();
     const percent = wordzStore.getCoverage();
-    let data = `${name.game}${rushed}\nScore: ${score}\nCoverage: ${percent}%\n`;
+    let data = `${name.game}\nScore: ${score}\nCoverage: ${percent}%\n`;
     for (let y=0; y<size; y++) {
         for (let x=0; x<size; x++) {
             if (game[y]?.[x] == null) {
