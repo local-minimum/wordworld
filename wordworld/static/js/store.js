@@ -9,7 +9,7 @@ window.wordzStore = {
     },
     restoreMode: function(rushed) {
         this._MODE = window.localStorage.getItem(this._LAST_MODE) ?? '';
-        this.setRush(rushed);
+        if (rushed != null) this.setRush(rushed);
     },
     _RUSHED: 'settings.rushed',
     getRush: function() { return JSON.parse(window.localStorage.getItem(this._RUSHED) ?? 'false'); },
