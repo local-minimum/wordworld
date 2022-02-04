@@ -673,22 +673,24 @@ const newGame = (name) => {
 
 const MODE_AS_MODE_NAME = {
     '': 'English',
-    'SWE-': 'Svenska',
+    'SWE': 'Svenska',
 };
 
 const MODE_AS_GAME_NAME = {
     '': 'Word Crux',
-    'SWE-': 'Ordkrux',
+    'SWE': 'Ordkrux',
 };
 
 const displayModeName = () => {
     const mode = wordzStore.getMode();
-    document.getElementById('game-name').innerHTML = MODE_AS_GAME_NAME[mode];
-    document.title = MODE_AS_GAME_NAME[mode];
+    const gameName = MODE_AS_GAME_NAME[mode.split('-')] ?? MODE_AS_GAME_NAME[''];
+    const modeName = MODE_AS_MODE_NAME[mode.split('-')[0]] ?? MODE_AS_MODE_NAME[''];
+    document.getElementById('game-name').innerHTML = gameName 
+    document.title = gameName;
 
     startThink();
     // Display mode name in game    
-    showMessageOnBoard(MODE_AS_MODE_NAME[mode]);
+    showMessageOnBoard(modeName);
     window.setTimeout(
         () => {
             endThink();
