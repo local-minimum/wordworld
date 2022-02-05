@@ -602,6 +602,8 @@ const rushTimer = () => {
     if (!wordzStore.getRush()) {
         rushDiv.innerHTML = '';
         return;
+    } else if (_STATUS.gameOver) {
+        return;
     }
     const gameStart = wordzStore.getTimeSinceGameStart();
     if (gameStart == null) {
