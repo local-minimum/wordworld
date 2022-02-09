@@ -4,3 +4,6 @@ services:
     build: .
     ports: ["5032:5000"]
     restart: "unless-stopped"
+    volumes:
+      - ./wordworld/static:/app/wordworld/static
+      - ./data:/data

@@ -1,13 +1,13 @@
 from flask import Flask, send_from_directory, request, jsonify
 _CAP_WORD_LENGTH = 10
 
-with open('/app/wordworld/words.txt', 'r') as fh:
+with open('/data/words.txt', 'r') as fh:
     all_words = {
         w.strip() for w in fh.readlines()
         if len(w) <= _CAP_WORD_LENGTH
     }
 
-with open('/app/wordworld/ord.txt', 'r') as fh:
+with open('/data/ord.txt', 'r') as fh:
     alla_ord = {
         w.strip() for w in fh.readlines()
         if len(w) <= _CAP_WORD_LENGTH
