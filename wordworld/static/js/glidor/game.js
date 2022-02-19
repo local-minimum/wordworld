@@ -114,6 +114,7 @@ const setup = (lang) => {
     if (gameId !== glidorStore.getGameName()) {
         glidorStore.setCurrent(null);
         glidorStore.setGameName(gameId);
+        console.log('Starting', gameId);
         axios
             .get([WORD_URL[lang], gameId].join('/'))
             .then(function (response) {
