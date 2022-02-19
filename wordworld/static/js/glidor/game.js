@@ -83,10 +83,10 @@ const ERRORS = {
     },
 }
 
-const showPopper = (innerHtml) => {
+const showPopper = (innerHtml, showClass = '') => {
     const popper = document.getElementById('popper');
     popper.innerHTML = innerHtml;
-    popper.className = '';
+    popper.className = showClass;
 };
 
 const hidePopper = () => {
@@ -95,7 +95,7 @@ const hidePopper = () => {
 };
 
 const displayError = (lang, errType) => {
-    showPopper(ERRORS[errType][lang]);
+    showPopper(ERRORS[errType][lang], 'error-popper');
     setTimeout(hidePopper, 5 * 1000);
 };
 
