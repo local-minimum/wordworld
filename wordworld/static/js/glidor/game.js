@@ -72,7 +72,34 @@ const scoreCurrentWord = (current) => {
     current.push([]);
 }
 
-const handleInput = (chr) => {
+const ERRORS = {
+    invalidCharacters: {
+        EN: 'No known word contains the suggested combination of characters.',
+        SWE: 'Inget känt ord innehåller de föreslagna bokstäverna.',
+    },
+    existsWord: {
+        EN: 'There\'s a word spelled as the suggestion.',
+        SWE: 'Det finns ett ord med den föreslagna stavningen.'
+    },
+}
+
+const showPopper = (innerHtml) => {
+    const popper = document.getElementById('popper');
+    popper.innerHTML = innerHtml;
+    popper.className = '';
+};
+
+const hidePopper = () => {
+    const popper = document.getElementById('popper');
+    popper.className = 'hidden';
+};
+
+const displayError = (lang, errType) => {
+    showPopper(ERRORS[errType][lang]);
+    setTimeout(hidePopper, 5 * 1000);
+};
+
+const handleInput = (lang, chr) => {
     const current = glidorStore.getCurrent();
     const activeRow = current[current.length - 1];
     if (current.length > ATTEMPTS) {
@@ -83,9 +110,22 @@ const handleInput = (chr) => {
         activeRow.splice(activeRow.length - 1, 1);
     } else if (chr === '⏎') {
         if (activeRow.length !== WORD_LENGTH) return;
-        // Todo: validate allowed 
-        console.log('Submit');
-        scoreCurrentWord(current);
+        axios
+            .post(WORD_URL[lang])
+            .then(() => {
+                scoreCurrentWord(current);
+                glidorStore.setCurrent(current);
+                drawTiles();
+                redrawKeyboard();
+            })
+            .catch((reason) => {
+                const status = reason?.response?.status;
+                if (status == 404) {
+                    displayError(lang, 'invalidCharacters');
+                } else if (status == 403) {
+                    displayError(lang, 'existsWord');
+                }
+            });
     } else if (activeRow.length >= WORD_LENGTH) {
         return;
     } else {
@@ -120,11 +160,11 @@ const setup = (lang) => {
                 if (response?.data == null) return;
                 glidorStore.setGameName(gameId);
                 glidorStore.setCurrentTarget(response.data.word.toUpperCase());
-                constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
+                constructKeyboard(KEYBOARDS[lang], (e) => handleInput(lang, e.target.innerText));
                 drawTiles();
             });
     } else {
-        constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
+        constructKeyboard(KEYBOARDS[lang], (e) => handleInput(lang, e.target.innerText));
         drawTiles();
     }    
 }
