@@ -12,8 +12,9 @@ def send_fonts(path):
 def send_js(path):
     return send_from_directory('static/js', path)
 
+
 @app.route('/style/<path:path>')
-def send_js(path):
+def send_style(path):
     return send_from_directory('static/style', path)
 
 
