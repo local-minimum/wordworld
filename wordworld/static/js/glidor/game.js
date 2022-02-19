@@ -207,7 +207,7 @@ const setup = (lang) => {
     } else {
         constructKeyboard(KEYBOARDS[lang], (e) => handleInput(lang, e.target.innerText));
         drawTiles();
-        if (IsGameOver()) {
+        if (isGameOver()) {
             showGameOver();
         }
     }    
