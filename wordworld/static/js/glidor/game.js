@@ -145,7 +145,7 @@ const handleInput = (lang, chr) => {
 }
 
 const DAY = 1000 * 60 * 60 * 24;
-const START = new Date(2022, 1, 6);
+const START = new Date(2022, 2, 19);
 
 function getGameID() {
     const now = new Date();
