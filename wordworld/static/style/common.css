@@ -1,0 +1,147 @@
+:root {
+    --correct: "#467726";
+    --misplaced: "#24593D";
+    --backround-color: "#132C30";
+    --text-color: "#EF536A";
+    --content-max: 350px;
+}
+
+#root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--backround-color);
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+#outer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+#popper {
+    position: fixed;
+    z-index: 1400;
+    inset: 12px;
+}
+
+#header {
+    background-color: var(--text-color);
+    color: var(--backround-color);
+    border-radius: 4px;
+    margin: 5px auto 0px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    max-width: var(--content-max);
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    max-width: var(--content-max);
+}
+
+.board-wrapper {
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.board-wrapper, .board {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+}
+
+.board {
+    box-sizing: border-box;
+    max-height: 425px;
+    max-width: 100%;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.five-row {
+    display: grid;
+    flex-grow: 1;
+    gap: .25rem;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(6, 1r);
+}
+
+.tile {
+    align-items: center;
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: inline-flex;
+    font-size: 2rem;
+    font-weight: 700;
+    justify-content: center;
+    line-height: 2rem;
+    text-transform: uppercase;
+    user-select: none;
+    width: 100%;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.incorrect {
+    color: var(--backround-color);
+    background-color: var(--text-color);
+    border-color: var(--text-color);
+}
+
+.correct {
+    background-color: var(--correct);
+    border-color: var(--correct);    
+}
+
+.partial {
+    background-color: var(--misplaced);
+    border-color: var(--misplaced);    
+}
+
+.empty {
+    border-color: var(--misplaced);
+}
+
+#keyboard {
+    align-self: center;
+    margin-bottom: 5px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: space-around;
+    line-height: 1.75rem;
+    margin: 0 auto 2px;
+    touch-action: manipulation;
+    width: 98%;
+}
+
+.keyboard-key {
+    align-items: center;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 4px;
+    display: flex;
+    flex: 1 1;
+    font-size: 1.1rem;
+    font-weight: 500;
+    justify-content: center;
+    padding: 8px 6px;
+    width: 100%;
+}
