@@ -1,5 +1,9 @@
 from flask import Flask, send_from_directory, request, jsonify, abort
-from .data import all_words, alla_ord, five_sorted_chars, fem_sorterade_tecken, get_target_non_word
+from .data import (
+    all_words, alla_ord, five_sorted_chars, fem_sorterade_tecken,
+    alla_fem_sorterade_tecken, all_five_sorted_chars,
+    get_target_non_word
+)
 app = Flask(__name__)
 
 
@@ -52,7 +56,7 @@ def check_not_word():
     if len(word) != 5 or word in all_words[5]:
         abort(403)
     chrs = ''.join(sorted(word))
-    if chrs in five_sorted_chars:
+    if chrs in all_five_sorted_chars:
         return '', 204
     abort(404)
 
@@ -68,7 +72,7 @@ def kolla_inte_ord():
     if len(word) != 5 or word in alla_ord[5]:
         abort(403)
     chrs = ''.join(sorted(word))
-    if chrs in fem_sorterade_tecken:
+    if chrs in alla_fem_sorterade_tecken:
         return '', 204
     abort(404)
 
