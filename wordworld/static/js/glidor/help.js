@@ -71,7 +71,7 @@ const copyShare = (lang) => {
 
 const showGameOver = (lang) => {
     showPopper(
-        `You made it in ${getGuessCount()} guesses.<br><button id="share-button" onclick="copyShare(${lang});">Share</button>`
+        `You made it in ${getGuessCount()} guesses.<br><button id="share-button" onclick="copyShare('${lang}');">Share</button>`
     );
 }
 
