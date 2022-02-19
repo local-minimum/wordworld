@@ -74,10 +74,8 @@ const scoreCurrentWord = (lang, current) => {
         }
     }
     if (correct === WORD_LENGTH) {        
-        showPopper(
-            `You made it in ${current.length} guesses.<br><button id="share-button" onclick="copyShare(${lang});">Share</button>`
-        );
         while (current.length <= ATTEMPTS) {
+            showGameOver(lang);
             current.push([]);
         }
     }
@@ -186,39 +184,6 @@ const GAME_MODE = {
     SWE: 'Glidor',
 };
 
-const getShareText = (lang) => {
-    const n = glidorStore.getGameName().split('-')[1];
-    const current = glidorStore.getCurrent();
-    const guesses = current.reduce((acc, g) => acc + (g.length > 0 ? 1 : 0), 0);
-    let text = `${GAME_MODE[lang]} ${n}: ${guesses}/${ATTEMPTS}\n`;
-    for (let y=0; y<guesses; y++) {
-        const row = current[y];
-        for (let x=0; x<WORD_LENGTH; x++) {
-            const pos = row[x];
-            if (pos.correct) {
-                text += '🟩';
-            } else if (pos.partial) {
-                text += '🟧';
-            } else {
-                text += '⬛';
-            }
-        }
-        data += '\n';
-    }
-    return text;
-};
-
-const copyShare = (lang) => {
-    const text = getShareText(lang);
-    navigator.clipboard.writeText(text);
-    const shareBtn = document.getElementById('share-button');
-    if (shareBtn == null) return;
-    shareBtn.innerHTML = "Copied!"
-    setTimeout(() => {
-        shareBtn.innerHTML = 'Share';
-    }, 1000);
-}
-
 const setup = (lang) => {
     injectHelpBtn(lang);
     if (!glidorStore.getSeenHelp()) {
@@ -242,5 +207,8 @@ const setup = (lang) => {
     } else {
         constructKeyboard(KEYBOARDS[lang], (e) => handleInput(lang, e.target.innerText));
         drawTiles();
+        if (IsGameOver()) {
+            showGameOver();
+        }
     }    
 }

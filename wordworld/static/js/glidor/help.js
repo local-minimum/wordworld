@@ -30,3 +30,53 @@ const injectHelpBtn = (lang) => {
     btn.className = 'header-button';
     document.getElementById('header').appendChild(btn);
 }
+
+const getGuessCount = () => {
+    const current = glidorStore.getCurrent();
+    return current.reduce((acc, g) => acc + (g.length > 0 ? 1 : 0), 0);
+};
+
+const getShareText = (lang) => {
+    const n = glidorStore.getGameName().split('-')[1];
+    const current = glidorStore.getCurrent();
+    const guesses = getGuessCount();
+    let text = `${GAME_MODE[lang]} ${n}: ${guesses}/${ATTEMPTS}\n`;
+    for (let y=0; y<guesses; y++) {
+        const row = current[y];
+        for (let x=0; x<WORD_LENGTH; x++) {
+            const pos = row[x];
+            if (pos.correct) {
+                text += '🟩';
+            } else if (pos.partial) {
+                text += '🟧';
+            } else {
+                text += '⬛';
+            }
+        }
+        data += '\n';
+    }
+    return text;
+};
+
+const copyShare = (lang) => {
+    const text = getShareText(lang);
+    navigator.clipboard.writeText(text);
+    const shareBtn = document.getElementById('share-button');
+    if (shareBtn == null) return;
+    shareBtn.innerHTML = "Copied!"
+    setTimeout(() => {
+        shareBtn.innerHTML = 'Share';
+    }, 1000);
+}
+
+const showGameOver = (lang) => {
+    showPopper(
+        `You made it in ${getGuessCount()} guesses.<br><button id="share-button" onclick="copyShare(${lang});">Share</button>`
+    );
+}
+
+const isGameOver = () => {
+    const current = glidorStore.getCurrent();
+    if (current.length >= ATTEMPTS) return true;
+    return current[current.length - 1].filter(p => p.correct) === WORD_LENGTH;
+}
