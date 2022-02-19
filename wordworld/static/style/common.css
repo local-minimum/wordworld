@@ -1,15 +1,15 @@
-body, #rood {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
 :root{
     --correct: "#467726";
     --misplaced: "#24593D";
     --backround-color: "#132C30";
     --text-color: "#EF536A";
     --content-max: 350px;
+}
+
+body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 #root {
