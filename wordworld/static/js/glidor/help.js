@@ -77,6 +77,6 @@ const showGameOver = (lang) => {
 
 const isGameOver = () => {
     const current = glidorStore.getCurrent();
-    if (current.length >= ATTEMPTS) return true;
+    if (current.length > ATTEMPTS) return true;
     return current[current.length - 1].filter(p => p.correct) === WORD_LENGTH;
 }
