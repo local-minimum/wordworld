@@ -6,16 +6,19 @@ function shuffleArray(arr) {
 }
 
 const shuffleName = () => {
-    const parts = document.title.split(' - ');
-    const name = parts[0].split();
+    let parts = document.title.split(' - ');
+    const name = parts[0].split('');
     shuffleArray(name);
-    const newName = name.join("");
-    console.log(newName);
+    let newName = name.join('');
+    newName = newName.charAt(0).toUpperCase() + newName.slice(1).toLowerCase();
     if (GAME_MODE[newName] === undefined) {
         parts[0] = newName;
         newTitle = parts.join(' - ');
         document.title = newTitle;
-        document.getElementById('header-name').innerText = newTitle;
+        const head = document.getElementById('header-name');
+        parts = head.innerText.split(' - ');
+        parts[0] = newName;
+        head.innerText = parts.join(' - ');
     }
 };
 
