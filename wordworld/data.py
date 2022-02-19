@@ -14,7 +14,7 @@ def store_words(container, fh):
         l = len(w)
         if (l > _CAP_WORD_LENGTH):
             continue
-        container[l].add(w)
+        container[l].add(w.lower())
 
 
 def get_sorted_chars_in_words(container, outlaw, length=5):

@@ -37,7 +37,7 @@ def send_glidor():
 @app.route('/check', methods=["POST"])
 def check_words():
     words = request.get_json()
-    return jsonify([word.upper() in all_words[len(word)] for word in words])
+    return jsonify([word.lower() in all_words[len(word)] for word in words])
 
 
 @app.route('/kolla', methods=["POST"])
@@ -48,7 +48,7 @@ def kolla_ord():
 
 @app.route('/check/drewol', methods=["POST"])
 def check_not_word():
-    word = request.get_json()['word'].strip().upper()
+    word = request.get_json()['word'].strip().lower()
     if len(word) != 5 or word in all_words[5]:
         abort(403)
     chrs = ''.join(sorted(word))
