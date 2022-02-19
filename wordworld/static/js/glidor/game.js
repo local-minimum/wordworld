@@ -42,12 +42,20 @@ const drawTiles = () => {
 const scoreCurrentWord = (current) => {
     const targetWord = glidorStore.getCurrentTarget().split('').map(v => ({ value: v }));
     const activeRow = current[current.length - 1];
+    let correct = 0;
     // Check correct
     for (let i = 0; i < activeRow.length; i++) {
         const chr = activeRow[i];
         if (chr.value === targetWord[i].value) {
             chr.correct = true; 
             targetWord[i].used = true;
+            correct += 1;
+        }
+    }
+    if (correct === WORD_LENGTH) {        
+        showPopper(`You made it in ${current.length} guesses`);
+        while (current.length <= ATTEMPTS) {
+            current.push([]);
         }
     }
     // Check partial 
@@ -149,7 +157,13 @@ const WORD_URL = {
     SWE: 'kolla/glidor',
 };
 
+const GAME_MODE = {
+    EN: 'drewol',
+    SWE: 'glidor',
+};
+
 const setup = (lang) => {
+    glidorStore.setGameMode(GAME_MODE[lang]);
     const gameId = getGameID();
     if (gameId !== glidorStore.getGameName()) {
         glidorStore.setCurrent(null);
