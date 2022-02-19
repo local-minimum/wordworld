@@ -31,7 +31,7 @@ def kolla_ord():
     return jsonify([word.lower() in alla_ord[len(word)] for word in words])
 
 
-@app.route('/check/drewol')
+@app.route('/check/drewol', methods=["POST"])
 def check_not_word():
     word = request.get_json()['word'].strip().upper()
     if len(word) != 5 or word in all_words[5]:
@@ -42,7 +42,7 @@ def check_not_word():
     abort(404)
 
 
-@app.route('/kolla/glidor')
+@app.route('/kolla/glidor', methods=["POST"])
 def kolla_inte_ord():
     word = request.get_json()['word'].strip().lower()
     if len(word) != 5 or word in alla_ord[5]:
