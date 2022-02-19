@@ -119,7 +119,7 @@ const setup = (lang) => {
             .then((response) => {
                 if (response?.data == null) return;
                 glidorStore.setGameName(gameId);
-                glidorStore.setCurrentTarget(response.data.word);
+                glidorStore.setCurrentTarget(response.data.word.toUpperCase());
                 constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
                 drawTiles();
             });
