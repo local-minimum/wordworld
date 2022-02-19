@@ -1,5 +1,8 @@
 from collections import defaultdict
 from random import Random
+import logging
+
+logging.basicConfig(level=logging.INFO)
 _CAP_WORD_LENGTH = 10
 
 all_words: dict[int, set[str]] = defaultdict(set)
@@ -46,9 +49,15 @@ with open('/data/ord.txt', 'r') as fh:
 
 with open('/data/fwords.txt', 'r') as fh:
     store_words(all_fwords, fh)
-    
 
+with open('/data/ford.txt', 'r') as fh:
+    store_words(alla_ford, fh)
+    
+logging.info(f'f-words {len(all_fwords[5])} before filter')
 all_fwords[5] = all_fwords[5].intersection(all_words[5])
+logging.info(f'f-words {len(all_fwords[5])}')
+logging.info(f'f-ord {len(alla_ford[5])} before filter')
 alla_ford[5] = alla_ford[5].intersection(alla_ford[5])
+logging.info(f'f-ord {len(alla_ford[5])}')
 five_sorted_chars = get_sorted_chars_in_words(all_fwords, all_words)
 fem_sorterade_tecken = get_sorted_chars_in_words(alla_ford, alla_ord)
