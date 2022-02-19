@@ -1,4 +1,10 @@
-:root {
+body, #rood {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+:root{
     --correct: "#467726";
     --misplaced: "#24593D";
     --backround-color: "#132C30";
@@ -7,9 +13,6 @@
 }
 
 #root {
-    height: 100%;
-    margin: 0;
-    padding: 0;
     background-color: var(--backround-color);
     color: var(--text-color);
     font-size: 14px;
