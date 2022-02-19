@@ -21,11 +21,20 @@ const getKeyStatus = () => {
     const incorrect = [];
     glidorStore.getCurrent()
         .forEach(row => row.forEach(item => {
-            if (item.correct) {
+            if (item.correct && !correct.some(v => v === item.value)) {
                 correct.push(item.value);
-            } else if (item.partial) {
+            } else if (
+                item.partial
+                && !correct.some(v => v === item.value)
+                && !partial.some(v => v === item.value)
+            ) {
                 partial.push(item.value);
-            } else if (item.incorrect) {
+            } else if (
+                item.incorrect
+                && !correct.some(v => v === item.value)
+                && !correct.some(v => v === item.value)
+                && !incorrect.some(v => v === item.value)
+            ) {
                 incorrect.push(item.value);
             }
         }));        
