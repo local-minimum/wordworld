@@ -1,8 +1,8 @@
-element {
-    --correct: "#467726";
-    --misplaced: "#24593D";
-    --backround-color: "#132C30";
-    --text-color: "#EF536A";
+:root {
+    --correct: #467726;
+    --misplaced: #24593D;
+    --backround-color: #132C30;
+    --text-color: #EF536A;
     --content-max: 350px;
 }
 
