@@ -1,5 +1,5 @@
 const WORD_LENGTH = 5;
-const ATTEMPTS = 8;
+const ATTEMPTS = 9;
 
 const removeChildren = (parent) => {
     while (parent.lastChild) {

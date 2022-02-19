@@ -3,7 +3,9 @@ from random import Random
 _CAP_WORD_LENGTH = 10
 
 all_words: dict[int, set[str]] = defaultdict(set)
+all_fwords: dict[int, set[str]] = defaultdict(set)
 alla_ord: dict[int, set[str]] = defaultdict(set)
+alla_ford: dict[int, set[str]] = defaultdict(set)
 
 
 def store_words(container, fh):
@@ -41,6 +43,8 @@ with open('/data/words.txt', 'r') as fh:
 with open('/data/ord.txt', 'r') as fh:
     store_words(alla_ord, fh)
 
-
-five_sorted_chars = get_sorted_chars_in_words(all_words)
-fem_sorterade_tecken = get_sorted_chars_in_words(alla_ord)
+with open('/data/fwords.txt', 'r') as fh:
+    store_words(all_fwords, fh)
+    
+five_sorted_chars = get_sorted_chars_in_words(all_fwords)
+fem_sorterade_tecken = get_sorted_chars_in_words(alla_ford)
