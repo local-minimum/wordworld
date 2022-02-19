@@ -111,7 +111,7 @@ const handleInput = (lang, chr) => {
     } else if (chr === '⏎') {
         if (activeRow.length !== WORD_LENGTH) return;
         axios
-            .post(WORD_URL[lang])
+            .post(WORD_URL[lang], { word: activeRow.map(c => c.value).join('') })
             .then(() => {
                 scoreCurrentWord(current);
                 glidorStore.setCurrent(current);
