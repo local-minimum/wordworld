@@ -53,7 +53,7 @@ const getShareText = (lang) => {
                 text += '⬛';
             }
         }
-        data += '\n';
+        text += '\n';
     }
     return text;
 };
