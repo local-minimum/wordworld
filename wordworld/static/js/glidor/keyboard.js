@@ -81,11 +81,11 @@ const redrawKeyboard = () => {
 }
 
 const isValidKey = (lang, key) => {
-    if ('⌫⏎-'.some(v => v === key)) return false;
+    if ('⌫⏎-'.split('').some(v => v === key)) return false;
     const keyb = KEYBOARDS[lang];
     let found = false;
     for (let i=0; i<keyb.length; i++) {
-        if (keyb[i].some(v => v === key)) {
+        if (keyb[i].split('').some(v => v === key)) {
             found = true;
             break;
         }
