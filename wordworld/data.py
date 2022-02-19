@@ -17,8 +17,9 @@ def store_words(container, fh):
         container[l].add(w)
 
 
-def get_sorted_chars_in_words(container, length=5):
-    return {''.join(sorted(w)) for w in container[length]}
+def get_sorted_chars_in_words(container, outlaw, length=5):
+    canditates = {''.join(sorted(w)) for w in container[length]}
+    return {c for c in canditates if c not in outlaw[length]}
 
 
 def get_target_non_word(game_id, valid, invalid, attempts = 10):
@@ -46,5 +47,8 @@ with open('/data/ord.txt', 'r') as fh:
 with open('/data/fwords.txt', 'r') as fh:
     store_words(all_fwords, fh)
     
-five_sorted_chars = get_sorted_chars_in_words(all_fwords)
-fem_sorterade_tecken = get_sorted_chars_in_words(alla_ford)
+
+all_fwords[5] = all_fwords[5].intersection(all_words[5])
+alla_ford[5] = alla_ford[5].intersection(alla_ford[5])
+five_sorted_chars = get_sorted_chars_in_words(all_fwords, all_words)
+fem_sorterade_tecken = get_sorted_chars_in_words(alla_ford, alla_ord)
