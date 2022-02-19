@@ -1,18 +1,5 @@
-from flask import Flask, send_from_directory, request, jsonify
-_CAP_WORD_LENGTH = 10
-
-with open('/data/words.txt', 'r') as fh:
-    all_words = {
-        w.strip() for w in fh.readlines()
-        if len(w) <= _CAP_WORD_LENGTH
-    }
-
-with open('/data/ord.txt', 'r') as fh:
-    alla_ord = {
-        w.strip() for w in fh.readlines()
-        if len(w) <= _CAP_WORD_LENGTH
-    }
-
+from flask import Flask, send_from_directory, request, jsonify, abort
+from .data import all_words, alla_ord, five_sorted_chars, fem_sorterade_tecken
 app = Flask(__name__)
 
 
@@ -35,10 +22,32 @@ def send_home():
 @app.route('/check', methods=["POST"])
 def check_words():
     words = request.get_json()
-    return jsonify([word.upper() in all_words for word in words])
+    return jsonify([word.upper() in all_words[len(word)] for word in words])
 
 
 @app.route('/kolla', methods=["POST"])
 def kolla_ord():
     words = request.get_json()
-    return jsonify([word.lower() in alla_ord for word in words])
+    return jsonify([word.lower() in alla_ord[len(word)] for word in words])
+
+
+@app.route('/check/drewol')
+def check_not_word():
+    word = request.get_json()['word'].strip().upper()
+    if len(word) != 5 or word in all_words[5]:
+        abort(403)
+    chrs = ''.join(sorted(word))
+    if chrs in five_sorted_chars:
+        return '', 204
+    abort(404)
+
+
+@app.route('/kolla/glidor')
+def kolla_inte_ord():
+    word = request.get_json()['word'].strip().lower()
+    if len(word) != 5 or word in alla_ord[5]:
+        abort(403)
+    chrs = ''.join(sorted(word))
+    if chrs in fem_sorterade_tecken:
+        return '', 204
+    abort(404)
