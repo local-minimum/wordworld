@@ -11,6 +11,26 @@ body {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+button {
+    padding: 0.5rem 1rem;
+    border-width: 2px;
+    border-style: solid;
+    border-radius: 4px;
+    border-color: var(--correct);
+    color: var(--correct);
+    background-color: var(--backround-color);
+    cursor: pointer;
+}
+
+#header button {
+    float: right;
+    background-color: var(--text-color);
+    color: var(--backround-color);
+    margin-top: -0.25rem;
+    margin-bottom: -0.25rem;
+    border-color: var(--backround-color);
+}
+
 body, #root {
     height: 100%;
     margin: 0;

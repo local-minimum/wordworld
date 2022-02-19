@@ -14,4 +14,8 @@ window.glidorStore = {
     _CURRENT_TARGET: 'current.target',
     getCurrentTarget: function getCurrentTarget() { return localStorage.getItem(`${this._GAME_MODE}.${this._CURRENT_TARGET}`); },
     setCurrentTarget: function setCurrentTarget(target) { localStorage.setItem(`${this._GAME_MODE}.${this._CURRENT_TARGET}`, target); },
+
+    _SEEN_HELP: 'help',
+    setSeenHelp: function setSeenHelp() { localStorage.setItem(`${this._GAME_MODE}.${this._SEEN_HELP}`, '')},
+    getSeenHelp: function setSeenHelp() { return localStorage.getItem(`${this._GAME_MODE}.${this._SEEN_HELP}`) != null},
 }

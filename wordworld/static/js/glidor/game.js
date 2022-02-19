@@ -185,6 +185,11 @@ const GAME_MODE = {
 };
 
 const setup = (lang) => {
+    injectHelpBtn(lang);
+    if (!glidorStore.getSeenHelp()) {
+        glidorStore.setSeenHelp();
+        showHelp(lang);
+    }
     glidorStore.setGameMode(GAME_MODE[lang]);
     const gameId = getGameID();
     if (gameId !== glidorStore.getGameName()) {
