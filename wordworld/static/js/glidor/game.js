@@ -10,6 +10,7 @@ const shuffleName = () => {
     const name = parts[0].split();
     shuffleArray(name);
     const newName = name.join("");
+    console.log(newName);
     if (GAME_MODE[newName] === undefined) {
         parts[0] = newName;
         newTitle = parts.join(' - ');
