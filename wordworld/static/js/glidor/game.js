@@ -95,3 +95,35 @@ const handleInput = (chr) => {
     drawTiles();
     redrawKeyboard();
 }
+
+const DAY = 1000 * 60 * 60 * 24;
+const START = new Date(2022, 1, 6);
+
+function getGameID() {
+    const now = new Date();
+    return `GAME-${Math.floor((now - START) / DAY)}`;
+}
+
+const WORD_URL = {
+    EN: 'check/drewol',
+    SWE: 'kolla/glidor',
+};
+
+const setup = (lang) => {
+    const gameId = getGameID();
+    if (gameId !== glidorStore.getGameName()) {
+        glidorStore.setCurrent(null);
+        glidorStore.setGameName(gameId);
+        axios
+            .get([WORD_URL[lang], gameId].join('/'))
+            .then(function (response) {
+                if (response.data != null);
+                console.log(reponse.data);
+                constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
+                drawTiles();
+            });
+    } else {
+        constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
+        drawTiles();
+    }    
+}

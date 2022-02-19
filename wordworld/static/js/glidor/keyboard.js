@@ -8,7 +8,12 @@ const EN_KEYBOARD = [
     'QWERTYUIOP',
     '-ASDFGHJKL-',
     '-ZXCVBNM⌫⏎-',
-]
+];
+
+const KEYBOARDS = {
+    EN: EN_KEYBOARD,
+    SWE: SWE_KEYBOARD,
+};
 
 const getKeyStatus = () => {
     const correct = [];

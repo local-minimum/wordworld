@@ -1,5 +1,5 @@
 from flask import Flask, send_from_directory, request, jsonify, abort
-from .data import all_words, alla_ord, five_sorted_chars, fem_sorterade_tecken
+from .data import all_words, alla_ord, five_sorted_chars, fem_sorterade_tecken, get_target_non_word
 app = Flask(__name__)
 
 
@@ -57,6 +57,11 @@ def check_not_word():
     abort(404)
 
 
+@app.route('/check/drewol/<game>')
+def get_drewol_word(game):
+    return get_target_non_word(game, five_sorted_chars, all_words[5])
+
+
 @app.route('/kolla/glidor', methods=["POST"])
 def kolla_inte_ord():
     word = request.get_json()['word'].strip().lower()
@@ -66,3 +71,8 @@ def kolla_inte_ord():
     if chrs in fem_sorterade_tecken:
         return '', 204
     abort(404)
+
+
+@app.route('/kolla/glidor/<game>')
+def get_glidor_word(game):
+    return get_target_non_word(game, fem_sorterade_tecken, alla_ord[5])
