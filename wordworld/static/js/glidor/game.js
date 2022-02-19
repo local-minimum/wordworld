@@ -83,20 +83,20 @@ const ERRORS = {
     },
 }
 
-const showPopper = (innerHtml, showClass = '') => {
-    const popper = document.getElementById('popper');
+const showPopper = (innerHtml, popperId = 'popper') => {
+    const popper = document.getElementById(popperId);
     popper.innerHTML = innerHtml;
-    popper.className = showClass;
+    popper.className = '';
 };
 
-const hidePopper = () => {
-    const popper = document.getElementById('popper');
+const hidePopper = (popperId = 'popper') => {
+    const popper = document.getElementById(popperId);
     popper.className = 'hidden';
 };
 
 const displayError = (lang, errType) => {
     showPopper(ERRORS[errType][lang], 'error-popper');
-    setTimeout(hidePopper, 5 * 1000);
+    setTimeout(() => hidePopper('error-popper'), 3.5 * 1000);
 };
 
 const handleInput = (lang, chr) => {
