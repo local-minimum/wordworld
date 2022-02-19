@@ -118,7 +118,6 @@ const setup = (lang) => {
             .get([WORD_URL[lang], gameId].join('/'))
             .then((response) => {
                 if (response?.data == null) return;
-                console.log(reponse.data.word);
                 glidorStore.setGameName(gameId);
                 glidorStore.setCurrentTarget(response.data.word);
                 constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
