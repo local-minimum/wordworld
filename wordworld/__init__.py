@@ -59,7 +59,7 @@ def check_not_word():
 
 @app.route('/check/drewol/<game>')
 def get_drewol_word(game):
-    return get_target_non_word(game, five_sorted_chars, all_words[5])
+    return jsonify(word=get_target_non_word(game, five_sorted_chars, all_words[5]))
 
 
 @app.route('/kolla/glidor', methods=["POST"])
@@ -75,4 +75,4 @@ def kolla_inte_ord():
 
 @app.route('/kolla/glidor/<game>')
 def get_glidor_word(game):
-    return get_target_non_word(game, fem_sorterade_tecken, alla_ord[5])
+    return jsonify(word=get_target_non_word(game, fem_sorterade_tecken, alla_ord[5]))

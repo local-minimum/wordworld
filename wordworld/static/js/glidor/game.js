@@ -113,13 +113,14 @@ const setup = (lang) => {
     const gameId = getGameID();
     if (gameId !== glidorStore.getGameName()) {
         glidorStore.setCurrent(null);
-        glidorStore.setGameName(gameId);
         console.log('Starting', gameId);
         axios
             .get([WORD_URL[lang], gameId].join('/'))
             .then(function (response) {
                 if (response.data != null);
-                console.log(reponse.data);
+                console.log(reponse.data.word);
+                glidorStore.setGameName(gameId);
+                glidorStore.setCurrentTarget(response.data.word);
                 constructKeyboard(KEYBOARDS[lang], (e) => handleInput(e.target.innerText));
                 drawTiles();
             });
