@@ -79,3 +79,37 @@ const redrawKeyboard = () => {
         }
     }
 }
+
+const isValidKey = (lang, key) => {
+    if ('⌫⏎-'.some(v => v === key)) return false;
+    const keyb = KEYBOARDS[lang];
+    let found = false;
+    for (let i=0; i<keyb.length; i++) {
+        if (keyb[i].some(v => v === key)) {
+            found = true;
+            break;
+        }
+    }
+    if (!found) return false;
+    const keyStatus = getKeyStatus();
+    return !keyStatus.incorrect.some(v => v === key);
+}
+
+const handleKeyPress = (lang, evt) => {
+    if (isGameOver()) return;
+    const key = evt.key.toUpperCase();
+    const current = glidorStore.getCurrent();
+    const activeRow = current[current.length - 1];
+    if (key === 'BACKSPACE') {
+        activeRow.splice(activeRow.length - 1, 1);
+    } else if (key === 'ENTER') {
+        if (activeRow.length !== WORD_LENGTH) return;
+        return checkWord(lang, current, activeRow);
+    } else if (key.length === 1) {
+        if (activeRow.length >= WORD_LENGTH) return;
+        if (isValidKey(lang, key)) activeRow.push({ value: key });
+    }
+    glidorStore.setCurrent(current);
+    drawTiles();
+    redrawKeyboard();
+}

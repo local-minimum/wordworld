@@ -128,6 +128,27 @@ const displayError = (lang, errType) => {
     setTimeout(() => hidePopper('error-popper'), 3.5 * 1000);
 };
 
+const checkWord = (lang, current, activeRow) => {
+    axios
+        .post(WORD_URL[lang], { word: activeRow.map(c => c.value).join('') })
+        .then(() => {
+            scoreCurrentWord(lang, current);
+            glidorStore.setCurrent(current);
+            drawTiles();
+            redrawKeyboard();
+            shuffleName();
+        })
+        .catch((reason) => {
+            const status = reason?.response?.status;
+            if (status == 404) {
+                displayError(lang, 'invalidCharacters');
+            } else if (status == 403) {
+                displayError(lang, 'existsWord');
+            }
+        });
+
+}
+
 const handleInput = (lang, chr) => {
     const current = glidorStore.getCurrent();
     const activeRow = current[current.length - 1];
@@ -139,23 +160,7 @@ const handleInput = (lang, chr) => {
         activeRow.splice(activeRow.length - 1, 1);
     } else if (chr === '⏎') {
         if (activeRow.length !== WORD_LENGTH) return;
-        axios
-            .post(WORD_URL[lang], { word: activeRow.map(c => c.value).join('') })
-            .then(() => {
-                scoreCurrentWord(lang, current);
-                glidorStore.setCurrent(current);
-                drawTiles();
-                redrawKeyboard();
-                shuffleName();
-            })
-            .catch((reason) => {
-                const status = reason?.response?.status;
-                if (status == 404) {
-                    displayError(lang, 'invalidCharacters');
-                } else if (status == 403) {
-                    displayError(lang, 'existsWord');
-                }
-            });
+        return checkWord(lang, current, activeRow);
     } else if (activeRow.length >= WORD_LENGTH) {
         return;
     } else {
@@ -185,6 +190,7 @@ const GAME_MODE = {
 };
 
 const setup = (lang) => {
+    document.onkeydown = (evt) => handleKeyPress(lang, evt);
     injectHelpBtn(lang);
     if (!glidorStore.getSeenHelp()) {
         glidorStore.setSeenHelp();
