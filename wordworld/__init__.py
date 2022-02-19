@@ -19,6 +19,16 @@ def send_home():
     return send_from_directory('static', 'index.html')
 
 
+@app.route('/drewol')
+def send_drewol():
+    return send_from_directory('static', 'drewol.html')
+
+
+@app.route('/glidor')
+def send_glidor():
+    return send_from_directory('static', 'glidor.html')
+
+
 @app.route('/check', methods=["POST"])
 def check_words():
     words = request.get_json()
