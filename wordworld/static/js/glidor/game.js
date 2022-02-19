@@ -1,6 +1,23 @@
 const WORD_LENGTH = 5;
 const ATTEMPTS = 9;
 
+function shuffleArray(arr) {
+  arr.sort(() => Math.random() - 0.5);
+}
+
+const shuffleName = () => {
+    const parts = document.title.split(' - ');
+    const name = parts[0].split();
+    shuffleArray(name);
+    const newName = name.join("");
+    if (GAME_MODE[newName] === undefined) {
+        parts[0] = newName;
+        newTitle = parts.join(' - ');
+        document.title = newTitle;
+        document.getElementById('header-name').innerText = newTitle;
+    }
+};
+
 const removeChildren = (parent) => {
     while (parent.lastChild) {
         parent.removeChild(parent.lastChild);
@@ -125,6 +142,7 @@ const handleInput = (lang, chr) => {
                 glidorStore.setCurrent(current);
                 drawTiles();
                 redrawKeyboard();
+                shuffleName();
             })
             .catch((reason) => {
                 const status = reason?.response?.status;
@@ -158,8 +176,8 @@ const WORD_URL = {
 };
 
 const GAME_MODE = {
-    EN: 'drewol',
-    SWE: 'glidor',
+    EN: 'Drewol',
+    SWE: 'Glidor',
 };
 
 const setup = (lang) => {
