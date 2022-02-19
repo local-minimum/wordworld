@@ -92,7 +92,7 @@ body, #root {
     flex-grow: 1;
     gap: .25rem;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(6, 1r);
+    grid-template-rows: repeat(8, 1r);
 }
 
 .tile {
@@ -147,6 +147,7 @@ body, #root {
     margin: 0 auto 2px;
     touch-action: manipulation;
     width: 98%;
+    gap: 2px;
 }
 
 .keyboard-key {
@@ -161,4 +162,10 @@ body, #root {
     justify-content: center;
     padding: 8px 6px;
     width: 100%;
+    cursor: pointer;
+    user-select: none;
+}
+
+.empty-key {
+    flex: 0.5 1;
 }

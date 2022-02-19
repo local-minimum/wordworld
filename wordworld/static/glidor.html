@@ -4,6 +4,9 @@
             <title>glidor - Inte wordle på svenska</title>
             <meta charset="utf-8">
             <link href="style/common.css" rel="stylesheet">
+            <script src="js/glidor/keyboard.js"></script>
+            <script src="js/glidor/store.js"></script>
+            <script src="js/glidor/game.js"></script>
         </head>
         <body>            
             <div id="root">
@@ -15,22 +18,22 @@
                     <div class="container">
                         <div class="board-wrapper">
                             <div class="board">
-                                <div class="five-row">
-                                    <span class="tile correct">A</span>
-                                    <span class="tile incorrect">B</span>
-                                    <span class="tile incorrect">C</span>
-                                    <span class="tile partial">D</span>
-                                    <span class="tile correct">E</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
-                                    <span class="tile empty">&nbsp;</span>
+                                <div class="five-row" id="tiles">
+                                    <span class="tile correct">W</span>
+                                    <span class="tile incorrect">H</span>
+                                    <span class="tile incorrect">A</span>
+                                    <span class="tile partial">T</span>
+                                    <span class="tile correct"></span>
+                                    <span class="tile empty">W</span>
+                                    <span class="tile empty">H</span>
+                                    <span class="tile empty">E</span>
+                                    <span class="tile empty">N</span>
+                                    <span class="tile empty">T</span>
+                                    <span class="tile empty">W</span>
+                                    <span class="tile empty">R</span>
+                                    <span class="tile empty">O</span>
+                                    <span class="tile empty">N</span>
+                                    <span class="tile empty">G</span>
                                     <span class="tile empty">&nbsp;</span>
                                     <span class="tile empty">&nbsp;</span>
                                     <span class="tile empty">&nbsp;</span>
@@ -57,7 +60,6 @@
                     </div>
                     <div id="keyboard">
                         <div class="keyboard-row">
-                            <span class="keyboard-key">Q</span>
                         </div>
                     </div>
                 </div>
@@ -67,7 +69,9 @@
             document.addEventListener(
                 'DOMContentLoaded',
                 () => {
-                    // setup();
+                    glidorStore.setCurrentTarget('ASTET')
+                    constructKeyboard(SWE_KEYBOARD, (e) => handleInput(e.target.innerText));
+                    drawTiles();
                     // document.onkeydown = handleKeyPress;
                 }
             );
