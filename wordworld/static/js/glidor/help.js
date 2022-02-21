@@ -86,6 +86,7 @@ const showGameOver = (lang) => {
     axios
         .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
         .then((response) => {
+            console.log(response);
             if (response?.data == null) {
                 showPopper(`${payload}${targetText}${btn}`);
                 return;
