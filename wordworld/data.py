@@ -73,4 +73,3 @@ alla_fem_sorterade_tecken = get_sorted_chars_in_words(alla_ord, alla_ord)
 logging.info(f'f-nonguesses {len(alla_fem_sorterade_tecken)}')
 anagram_words_lookup = load_anagram_resolver(all_fwords)
 anagram_ord_lookup = load_anagram_resolver(alla_ford)
-_example = list(anagram_words_lookup.keys())[0]

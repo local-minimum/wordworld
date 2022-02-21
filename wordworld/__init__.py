@@ -67,7 +67,7 @@ def check_not_word():
 
 @app.route('/check/drewol/reverse', methods=["POST"])
 def reverse_anagram():
-    word = request.get_json()['anagram'].strip().lower()
+    word = ''.join(sorted(request.get_json()['anagram'].strip().lower()))
     logging.info(
         f'Someone reverse checked drewol \'{word}\' got {anagram_words_lookup[word]}',
     )
@@ -93,7 +93,7 @@ def kolla_inte_ord():
 
 @app.route('/check/glidor/reverse', methods=["POST"])
 def bak_anagram():
-    word = request.get_json()['anagram'].strip().lower()
+    word = ''.join(sorted(request.get_json()['anagram'].strip().lower()))
     logging.info(f'Someone reverse checked glidor \'{word}\' for {anagram_ord_lookup[word]}')
     return jsonify(anagram_ord_lookup[word])
 
