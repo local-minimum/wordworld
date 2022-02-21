@@ -1,9 +1,9 @@
 const HELP_TEXT = {
     EN: [
         'This is not like wordle, this is really quite hard.',
-        'Each day scrabled letters of a true word are selected. They can never be a word.',
-        'You try inputing guesses that are not words, but are scrambled letters of real words.',
-        'If a letter has been revealed not to belong in the word, you may not use it in future guesses.',
+        'Each day scrambled letters of a true word are selected. They can never be a word.',
+        'You try inputing guesses that are not words, but are scrambled letters of real words too.',
+        'If a letter has been revealed not to belong in the solution, you may not use it in future guesses.',
         'You may however skip using green or yellow letters in future guesses to maximize information gleaned.',
         'Green = Correct placement, Yellow = In the word, but wrong place, Red = Not in the word.',
     ],
