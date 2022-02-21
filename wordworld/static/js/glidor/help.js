@@ -90,14 +90,14 @@ const showGameOver = (lang) => {
         .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
         .then((response) => {
             if (response?.data == null) {
-                showPopper(`${payload}${targetText}${btn}`);
+                showPopper(`${payload}${targetText}${btns}`);
                 return;
             }
             const words =  response.data.map(w => w.toUpperCase()).join(', ');
-            showPopper(`${payload}${targetText}<p>This was an anagram of: ${words}</p>${btn}`)
+            showPopper(`${payload}${targetText}<p>This was an anagram of: ${words}</p>${btns}`)
         })
         .catch(() => {
-            showPopper(`${payload}${targetText}${btn}`);
+            showPopper(`${payload}${targetText}${btns}`);
         });
 }
 
