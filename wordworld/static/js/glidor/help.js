@@ -79,18 +79,13 @@ const showGameOver = (lang) => {
     if (failed) {
         payload = `<p class="intro">You didn't make it today, but perhaps you'll have better luck tomorrow.</p>`;
     } else {
-        payload = `<p class="intro">You maed it in ${guesses} guesses!</p>`;
+        payload = `<p class="intro">You made it in ${guesses} guesses!</p>`;
     }
     const btn = `<button id="share-button" onclick="copyShare('${lang}');">Share</button>`;
     let targetText = `<p>The target word was <span class="target">${target}</span></p>`;
     axios
         .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
         .then((response) => {
-            console.log(response);
-            if (response?.data == null) {
-                showPopper(`${payload}${targetText}${btn}`);
-                return;
-            }
             const words =  ', '.join(response.data);
             showPopper(`${payload}${targetText}<p>This was an anagram of:${words}</p>${btn}`)
         })
