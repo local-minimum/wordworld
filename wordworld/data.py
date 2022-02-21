@@ -74,4 +74,3 @@ logging.info(f'f-nonguesses {len(alla_fem_sorterade_tecken)}')
 anagram_words_lookup = load_anagram_resolver(all_fwords)
 anagram_ord_lookup = load_anagram_resolver(alla_ford)
 _example = list(anagram_words_lookup.keys())[0]
-logging.info(f'reverse example: {_example}: {anagram_words_lookup[_example]}')
