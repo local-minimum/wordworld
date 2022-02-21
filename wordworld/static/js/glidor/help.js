@@ -90,8 +90,8 @@ const showGameOver = (lang) => {
                 showPopper(`${payload}${targetText}${btn}`);
                 return;
             }
-            const words =  response.data.join(', ');
-            showPopper(`${payload}${targetText}<p>This was an anagram of:${words}</p>${btn}`)
+            const words =  response.data.map(w => w.toUpperCase()).join(', ');
+            showPopper(`${payload}${targetText}<p>This was an anagram of: ${words}</p>${btn}`)
         })
         .catch(() => {
             showPopper(`${payload}${targetText}${btn}`);
