@@ -94,6 +94,11 @@ body, #root {
     top: 2rem;
 }
 
+#popper,#error-popper button {
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+}
+
 #header {
     background-color: var(--text-color);
     color: var(--backround-color);
