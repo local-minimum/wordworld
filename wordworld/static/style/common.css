@@ -146,7 +146,7 @@ body, #root {
     flex-grow: 1;
     gap: .25rem;
     grid-template-columns: repeat(5, 1fr);
-    grid-template-rows: repeat(8, 1r);
+    grid-template-rows: repeat(8, 1fr);
 }
 
 .tile {
