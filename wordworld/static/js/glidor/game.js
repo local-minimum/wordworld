@@ -99,6 +99,9 @@ const scoreCurrentWord = (lang, current) => {
     }
     // next line
     current.push([]);
+    if (current.length > ATTEMPTS) {
+        showGameOver(lang);
+    }
 }
 
 const ERRORS = {

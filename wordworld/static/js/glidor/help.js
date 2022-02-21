@@ -33,7 +33,9 @@ const injectHelpBtn = (lang) => {
 
 const getGuessCount = () => {
     const current = glidorStore.getCurrent();
-    return current.reduce((acc, g) => acc + (g.length > 0 ? 1 : 0), 0);
+    let count = current.reduce((acc, g) => acc + (g.length > 0 ? 1 : 0), 0);
+    count += (current[current.length - 1].every(v => v.correct) ? 0 : 1)
+    return count;
 };
 
 const getShareText = (lang) => {
@@ -70,9 +72,30 @@ const copyShare = (lang) => {
 }
 
 const showGameOver = (lang) => {
-    showPopper(
-        `You made it in ${getGuessCount()} guesses.<br><button id="share-button" onclick="copyShare('${lang}');">Share</button>`
-    );
+    const guesses = getGuessCount();
+    const target =  glidorStore.getCurrentTarget();
+    const failed = guesses > ATTEMPTS;
+    let payload = '';
+    if (failed) {
+        payload = `<p class="intro">You didn't make it today, but perhaps you'll have better luck tomorrow.</p>`;
+    } else {
+        payload = `<p class="intro">You maed it in ${guesses} guesses!</p>`;
+    }
+    const btn = `<button id="share-button" onclick="copyShare('${lang}');">Share</button>`;
+    let targetText = `<p>The target word was <span class="target">${target}</span></p>`;
+    axios
+        .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
+        .then((response) => {
+            if (response?.data == null) {
+                showPopper(`${payload}${targetText}${btn}`);
+                return;
+            }
+            const words =  ', '.join(response.data);
+            showPopper(`${payload}${targetText}<p>This was an anagram of:${words}</p>${btn}`)
+        })
+        .catch(() => {
+            showPopper(`${payload}${targetText}${btn}`);
+        });
 }
 
 const isGameOver = () => {
