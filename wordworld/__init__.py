@@ -91,7 +91,7 @@ def kolla_inte_ord():
     abort(404)
 
 
-@app.route('/check/glidor/reverse', methods=["POST"])
+@app.route('/kolla/glidor/reverse', methods=["POST"])
 def bak_anagram():
     word = ''.join(sorted(request.get_json()['anagram'].strip().lower()))
     logging.info(f'Someone reverse checked glidor \'{word}\' for {anagram_ord_lookup[word]}')
