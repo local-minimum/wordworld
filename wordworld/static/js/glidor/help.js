@@ -86,7 +86,11 @@ const showGameOver = (lang) => {
     axios
         .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
         .then((response) => {
-            const words =  ', '.join(response.data);
+            if (response?.data == null) {
+                showPopper(`${payload}${targetText}${btn}`);
+                return;
+            }
+            const words =  response.data.join(', ');
             showPopper(`${payload}${targetText}<p>This was an anagram of:${words}</p>${btn}`)
         })
         .catch(() => {
