@@ -2,6 +2,7 @@ from flask import Flask, send_from_directory, request, jsonify, abort
 from .data import (
     all_words, alla_ord, five_sorted_chars, fem_sorterade_tecken,
     alla_fem_sorterade_tecken, all_five_sorted_chars,
+    anagram_ord_lookup, anagram_words_lookup,
     get_target_non_word
 )
 app = Flask(__name__)
@@ -61,6 +62,12 @@ def check_not_word():
     abort(404)
 
 
+@app.route('/check/drewol/reverse', methods=["POST"])
+def reverse_anagram():
+    word = request.get_json()['anagram'].strip().lower()
+    return anagram_words_lookup[word]
+
+
 @app.route('/check/drewol/<game>')
 def get_drewol_word(game):
     return jsonify(word=get_target_non_word(game, five_sorted_chars, all_words[5]))
@@ -75,6 +82,12 @@ def kolla_inte_ord():
     if chrs in alla_fem_sorterade_tecken:
         return '', 204
     abort(404)
+
+
+@app.route('/check/glidor/reverse', methods=["POST"])
+def bak_anagram():
+    word = request.get_json()['anagram'].strip().lower()
+    return anagram_ord_lookup[word]
 
 
 @app.route('/kolla/glidor/<game>')

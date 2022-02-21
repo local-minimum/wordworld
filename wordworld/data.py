@@ -40,6 +40,11 @@ def get_target_non_word(game_id, valid, invalid, attempts = 10):
     return every[0]
 
 
+def load_anagram_resolver(all_words, length=5):
+    lookup = defaultdict(list)
+    for w in all_words[length]:
+        lookup[''.join(sorted(w))].append(w)
+
 
 with open('/data/words.txt', 'r') as fh:
     store_words(all_words, fh)
@@ -65,3 +70,5 @@ logging.info(f'f-nonguesses {len(all_five_sorted_chars)}')
 fem_sorterade_tecken = get_sorted_chars_in_words(alla_ford, alla_ord)
 alla_fem_sorterade_tecken = get_sorted_chars_in_words(alla_ord, alla_ord)
 logging.info(f'f-nonguesses {len(alla_fem_sorterade_tecken)}')
+anagram_words_lookup = load_anagram_resolver(all_fwords)
+anagram_ord_lookup = load_anagram_resolver(alla_ford)
