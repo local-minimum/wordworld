@@ -44,6 +44,7 @@ def load_anagram_resolver(all_words, length=5):
     lookup = defaultdict(list)
     for w in all_words[length]:
         lookup[''.join(sorted(w))].append(w)
+    return lookup
 
 
 with open('/data/words.txt', 'r') as fh:
