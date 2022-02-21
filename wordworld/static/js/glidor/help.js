@@ -34,7 +34,6 @@ const injectHelpBtn = (lang) => {
 const getGuessCount = () => {
     const current = glidorStore.getCurrent();
     let count = current.reduce((acc, g) => acc + (g.length > 0 ? 1 : 0), 0);
-    count += (current[current.length - 1].every(v => v.correct) ? 0 : 1)
     return count;
 };
 
@@ -86,11 +85,14 @@ const THE_TARGET_TEXT = { EN: 'The target word was', SWE: 'Det sökta ordet var'
 const ANGAGRAM_TEXT = { EN: 'This was an anagram of', SWE: 'Detta var ett anagram av' };
 
 const showGameOver = (lang) => {
+    const current = glidorStore.getCurrent();
+    const won = current
+        .reduce((acc, row) => acc || (row.length === WORD_LENGTH && row.every(w => w.correct)), false);
     const guesses = getGuessCount();
     const target =  glidorStore.getCurrentTarget();
     const failed = guesses > ATTEMPTS;
     let payload = '';
-    if (failed) {
+    if (!won) {
         payload = `<p class="intro">${FAIL_TEXT[lang]}</p>`;
     } else {
         payload = `<p class="intro">${MADE_IT_PT1_TEXT[lang]} ${guesses} ${MADE_IT_PT2_TEXT[lang]}!</p>`;
