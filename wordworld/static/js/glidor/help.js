@@ -60,16 +60,30 @@ const getShareText = (lang) => {
     return text;
 };
 
+const SHARE_TEXT = { EN: 'Share', SWE: 'Dela' };
+const COPIED_TEXT = { EN: 'Copied!', SWE: 'Kopierad!' };
+
 const copyShare = (lang) => {
     const text = getShareText(lang);
     navigator.clipboard.writeText(text);
     const shareBtn = document.getElementById('share-button');
     if (shareBtn == null) return;
-    shareBtn.innerHTML = "Copied!"
+    shareBtn.innerHTML = COPIED_TEXT[lang];
     setTimeout(() => {
-        shareBtn.innerHTML = 'Share';
+        shareBtn.innerHTML = SHARE_TEXT[lang];
     }, 1000);
-}
+};
+
+const FAIL_TEXT = {
+    EN: `You didn't make it today, but perhaps you'll have better luck tomorrow.`,
+    SWE: `Du lyckades inte idag, men förhoppningsvis går det bättre imorgon.`,
+};
+
+const MADE_IT_PT1_TEXT = { EN: 'You made it in', SWE: 'Du hittade det på' };
+const MADE_IT_PT2_TEXT = { EN: 'guesses', SWE: 'gissningar' };
+const CLOSE_TEXT = { EN: 'Close', SWE: 'Stäng' };
+const THE_TARGET_TEXT = { EN: 'The target word was', SWE: 'Det sökta ordet var' };
+const ANGAGRAM_TEXT = { EN: 'This was an anagram of', SWE: 'Detta var ett anagram av' };
 
 const showGameOver = (lang) => {
     const guesses = getGuessCount();
@@ -77,15 +91,15 @@ const showGameOver = (lang) => {
     const failed = guesses > ATTEMPTS;
     let payload = '';
     if (failed) {
-        payload = `<p class="intro">You didn't make it today, but perhaps you'll have better luck tomorrow.</p>`;
+        payload = `<p class="intro">${FAIL_TEXT[lang]}</p>`;
     } else {
-        payload = `<p class="intro">You made it in ${guesses} guesses!</p>`;
+        payload = `<p class="intro">${MADE_IT_PT1_TEXT[lang]} ${guesses} ${MADE_IT_PT2_TEXT[lang]}!</p>`;
     }
     const btns = [
-        `<button id="share-button" onclick="copyShare('${lang}');">Share</button>`,
-        `<button onClick="hidePopper()">Close</button>`,
+        `<button id="share-button" onclick="copyShare('${lang}');">${SHARE_TEXT[lang]}</button>`,
+        `<button onClick="hidePopper()">${CLOSE_TEXT[lang]}</button>`,
     ].join('');
-    let targetText = `<p>The target word was <span class="target">${target}</span></p>`;
+    let targetText = `<p>${THE_TARGET_TEXT[lang]} <span class="target">${target}</span></p>`;
     axios
         .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
         .then((response) => {
@@ -94,7 +108,7 @@ const showGameOver = (lang) => {
                 return;
             }
             const words =  response.data.map(w => w.toUpperCase()).join(', ');
-            showPopper(`${payload}${targetText}<p>This was an anagram of: ${words}</p>${btns}`)
+            showPopper(`${payload}${targetText}<p>${ANGAGRAM_TEXT[lang]}: ${words}</p>${btns}`)
         })
         .catch(() => {
             showPopper(`${payload}${targetText}${btns}`);

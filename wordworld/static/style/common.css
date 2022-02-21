@@ -94,7 +94,7 @@ body, #root {
     top: 2rem;
 }
 
-#popper,#error-popper button {
+#popper button {
     margin-left: 0.5em;
     margin-right: 0.5em;
 }
