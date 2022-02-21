@@ -81,7 +81,10 @@ const showGameOver = (lang) => {
     } else {
         payload = `<p class="intro">You made it in ${guesses} guesses!</p>`;
     }
-    const btn = `<button id="share-button" onclick="copyShare('${lang}');">Share</button>`;
+    const btns = [
+        `<button id="share-button" onclick="copyShare('${lang}');">Share</button>`,
+        `<button onClick="hidePopper()">Close</button>`,
+    ].join('');
     let targetText = `<p>The target word was <span class="target">${target}</span></p>`;
     axios
         .post(`${WORD_URL[lang]}/reverse`, { 'anagram': target })
