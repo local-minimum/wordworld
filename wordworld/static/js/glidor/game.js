@@ -75,9 +75,11 @@ const scoreCurrentWord = (lang, current) => {
     }
     if (correct === WORD_LENGTH) {        
         while (current.length <= ATTEMPTS) {
-            showGameOver(lang);
             current.push([]);
         }
+        glidorStore.setCurrent(current);
+        showGameOver(lang);
+        return
     }
     // Check partial 
     for (let i = 0; i< activeRow.length; i++) {
@@ -100,6 +102,7 @@ const scoreCurrentWord = (lang, current) => {
     // next line
     current.push([]);
     if (current.length > ATTEMPTS) {
+        glidorStore.setCurrent(current);
         showGameOver(lang);
     }
 }
