@@ -156,12 +156,12 @@ const checkWord = (lang, current, activeRow) => {
 }
 
 const handleInput = (lang, chr) => {
-    const current = glidorStore.getCurrent();
-    const activeRow = current[current.length - 1];
-    if (current.length > ATTEMPTS) {
+    if (isGameOver()) {
         console.warn('Tries to cheat gameover');
         return;
     }
+    const current = glidorStore.getCurrent();
+    const activeRow = current[current.length - 1];
     if (chr === '⌫') {
         activeRow.splice(activeRow.length - 1, 1);
     } else if (chr === '⏎') {

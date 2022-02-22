@@ -81,7 +81,11 @@ const redrawKeyboard = () => {
         for (let j = 0; j<keyboardRow.children.length; j++) {
             const key = keyboardRow.children[j];
             if (key.className === 'empty-key') continue;
-            if (keyStatus.incorrect.some(k => k === key.innerText)) {
+            if (
+                !keyStatus.correct.some(k => k === key.innerText)
+                && !keyStatus.partial.some(k => k === key.innerText)
+                && keyStatus.incorrect.some(k => k === key.innerText)
+            ) {
                 key.onclick = undefined;
             }
             key.className = keyStatusClass(key.innerText, keyStatus);
