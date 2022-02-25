@@ -27,7 +27,7 @@ def get_sorted_chars_in_words(container, outlaw, length=5):
 
 def get_target_non_word(game_id, valid, invalid, attempts = 10):
     rng = Random(hash(game_id))
-    every = list(valid)
+    every = sorted(list(valid))
     rng.shuffle(every)
     canditate = [c for c in every[0]]
     rng.shuffle(canditate)
