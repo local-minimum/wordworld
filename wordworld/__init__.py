@@ -56,8 +56,8 @@ def kolla_ord():
 
 @app.route('/check/drewol', methods=["POST"])
 def check_not_word():
-    logging.info('Someone guessed a drewol word')
     word = request.get_json()['word'].strip().lower()
+    logging.info(f'Someone guessed a drewol word {word}')
     if len(word) != 5 or word in all_words[5]:
         abort(403)
     chrs = ''.join(sorted(word))
@@ -83,8 +83,8 @@ def get_drewol_word(game):
 
 @app.route('/kolla/glidor', methods=["POST"])
 def kolla_inte_ord():
-    logging.info('Someone guessed a glidor word')
     word = request.get_json()['word'].strip().lower()
+    logging.info(f'Someone guessed a glidor word {word}')
     if len(word) != 5 or word in alla_ord[5]:
         abort(403)
     chrs = ''.join(sorted(word))

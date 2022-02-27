@@ -58,7 +58,7 @@ with open('/data/fwords.txt', 'r') as fh:
 
 with open('/data/ford.txt', 'r') as fh:
     store_words(alla_ford, fh)
-    
+
 logging.info(f'f-words {len(all_fwords[5])} before filter')
 all_fwords[5] = all_fwords[5].intersection(all_words[5])
 logging.info(f'f-words {len(all_fwords[5])}')
@@ -66,10 +66,10 @@ logging.info(f'f-ord {len(alla_ford[5])} before filter')
 alla_ford[5] = alla_ford[5].intersection(alla_ford[5])
 logging.info(f'f-ord {len(alla_ford[5])}')
 five_sorted_chars = get_sorted_chars_in_words(all_fwords, all_words)
-all_five_sorted_chars = get_sorted_chars_in_words(all_words, all_words)
+all_five_sorted_chars = get_sorted_chars_in_words(all_words, defaultdict(set))
 logging.info(f'f-nonguesses {len(all_five_sorted_chars)}')
 fem_sorterade_tecken = get_sorted_chars_in_words(alla_ford, alla_ord)
-alla_fem_sorterade_tecken = get_sorted_chars_in_words(alla_ord, alla_ord)
+alla_fem_sorterade_tecken = get_sorted_chars_in_words(alla_ord, defaultdict(set))
 logging.info(f'f-nonguesses {len(alla_fem_sorterade_tecken)}')
 anagram_words_lookup = load_anagram_resolver(all_fwords)
 anagram_ord_lookup = load_anagram_resolver(alla_ford)
